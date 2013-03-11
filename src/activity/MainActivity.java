@@ -305,8 +305,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 						+ values[0], -MAX_WIDTH);
 				layoutParams_1.leftMargin = Math.max(layoutParams_1.leftMargin
 						+ values[0], window_width - MAX_WIDTH);
-				Log.v(TAG, "layout_left×ó" + layoutParams.leftMargin
-						+ ",layout_right×ó" + layoutParams_1.leftMargin);
+				Log.v(TAG, "layout_left" + layoutParams.leftMargin
+						+ ",layout_right" + layoutParams_1.leftMargin);
 			}
 			layout_right.setLayoutParams(layoutParams_1);
 			layout_left.setLayoutParams(layoutParams);

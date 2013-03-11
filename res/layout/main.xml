@@ -24,7 +24,7 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp" />
         </AbsoluteLayout>
-
+        
         <layout.MenuLayout
             android:id="@+id/mylaout"
             android:layout_width="fill_parent"
