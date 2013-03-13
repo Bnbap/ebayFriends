@@ -39,11 +39,11 @@ public final class R {
         public static final int nav_setting=0x7f020003;
     }
     public static final class id {
-        public static final int iv_set=0x7f070005;
-        public static final int layout_left=0x7f070004;
-        public static final int layout_right=0x7f070001;
-        public static final int lv_set=0x7f070003;
-        public static final int mylaout=0x7f070002;
+        public static final int iv_set=0x7f070002;
+        public static final int layout_content=0x7f070001;
+        public static final int layout_menu=0x7f070003;
+        public static final int lv_set=0x7f070005;
+        public static final int mylaout=0x7f070004;
         public static final int tv_item=0x7f070000;
     }
     public static final class layout {

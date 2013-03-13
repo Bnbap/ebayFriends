@@ -5,42 +5,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/layout_right"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_marginLeft="50dp"
-        android:orientation="vertical" >
-
-        <AbsoluteLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey21"
-            android:padding="10dp" >
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="Setting"
-                android:textColor="@android:color/background_light"
-                android:textSize="20sp" />
-        </AbsoluteLayout>
-        
-        <layout.MenuLayout
-            android:id="@+id/mylaout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
-
-            <ListView
-                android:id="@+id/lv_set"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-            </ListView>
-        </layout.MenuLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_left"
+        android:id="@+id/layout_content"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white"
@@ -74,5 +39,42 @@
             android:scaleType="fitXY"
             android:src="@drawable/bg_guide_5" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="50dp"
+        android:orientation="vertical" >
+
+        <AbsoluteLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey21"
+            android:padding="10dp" >
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Setting"
+                android:textColor="@android:color/background_light"
+                android:textSize="20sp" />
+        </AbsoluteLayout>
+        
+        <layout.MenuLayout
+            android:id="@+id/mylaout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+
+            <ListView
+                android:id="@+id/lv_set"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/black" >
+
+            </ListView>
+        </layout.MenuLayout>
+    </LinearLayout>
+
 
 </RelativeLayout>
