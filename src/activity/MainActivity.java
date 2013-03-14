@@ -2,7 +2,9 @@ package activity;
 
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
+import activity.item.ItemDetailActivity;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -41,20 +44,27 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 	private GestureDetector mGestureDetector;
 	private boolean isScrolling = false;
-	private float mScrollX; 
+	private float mScrollX;
 	private int window_width;
 
 	private String TAG = "jj";
 
 	private View view = null;
 
-	private String title[] = { "1", "2", "3", "4", "5",
-			"6" ,"7","8","9","7","8","9","7","8","9","7","8","9"};
+	private String title[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
+			"7", "8", "9", "7", "8", "9", "7", "8", "9" };
 
 	private MenuLayout mylaout;
 
 	/***
 	 */
+
+	// change to Item Details activity
+	void displayItemDetails(View view) {
+		Intent intent = new Intent(this, ItemDetailActivity.class);
+		startActivity(intent);
+	}
+
 	void InitView() {
 		contentLayout = (LinearLayout) findViewById(R.id.layout_content);
 		menuLayout = (LinearLayout) findViewById(R.id.layout_menu);
@@ -89,7 +99,14 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		menuLayout.setOnTouchListener(this);
 		contentLayout.setOnTouchListener(this);
-		iv_set.setOnTouchListener(this);
+	//	iv_set.setOnTouchListener(this);
+		iv_set.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				displayItemDetails(v);
+			}
+		});
 		mGestureDetector = new GestureDetector(this);
 		mGestureDetector.setIsLongpressEnabled(false);
 		getMAX_WIDTH();
@@ -109,7 +126,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 	void doScrolling(float distanceX) {
 		isScrolling = true;
 		mScrollX += distanceX;
-		Log.e(TAG, "mScrollX=" + mScrollX+",distanceX= "+distanceX);
+		Log.e(TAG, "mScrollX=" + mScrollX + ",distanceX= " + distanceX);
 		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 				.getLayoutParams();
 		RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
@@ -184,17 +201,16 @@ public class MainActivity extends Activity implements OnTouchListener,
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
-		
 		view = v;
 
 		if (MotionEvent.ACTION_UP == event.getAction() && isScrolling == true) {
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 					.getLayoutParams();
 			if (layoutParams.rightMargin < -window_width / 2) {
-				Log.e("jj","speed");
+				Log.e("jj", "speed");
 				new AsynMove().execute(SPEED);
 			} else {
-				Log.e("jj","-speed");
+				Log.e("jj", "-speed");
 				new AsynMove().execute(-SPEED);
 			}
 		}
@@ -269,7 +285,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		@Override
 		protected Void doInBackground(Integer... params) {
-			Log.e("jj","AsynMove");
+			Log.e("jj", "AsynMove");
 			int times = 0;
 			if (MAX_WIDTH % Math.abs(params[0]) == 0)
 				times = MAX_WIDTH / Math.abs(params[0]);
@@ -300,15 +316,16 @@ public class MainActivity extends Activity implements OnTouchListener,
 			if (values[0] > 0) {
 				layoutParams.rightMargin = Math.min(layoutParams.rightMargin
 						+ values[0], 0);
-				layoutParams_1.rightMargin = Math.min(layoutParams_1.rightMargin
-						+ values[0], window_width);
+				layoutParams_1.rightMargin = Math.min(
+						layoutParams_1.rightMargin + values[0], window_width);
 				Log.v(TAG, "content.rightMargin" + layoutParams.rightMargin
 						+ ",menu_rightMargin" + layoutParams_1.rightMargin);
 			} else {
 				layoutParams.rightMargin = Math.max(layoutParams.rightMargin
 						+ values[0], -MAX_WIDTH);
-				layoutParams_1.rightMargin = Math.max(layoutParams_1.rightMargin
-						+ values[0], window_width - MAX_WIDTH);
+				layoutParams_1.rightMargin = Math.max(
+						layoutParams_1.rightMargin + values[0], window_width
+								- MAX_WIDTH);
 				Log.v(TAG, "content.rightMargin" + layoutParams.rightMargin
 						+ ",menu_rightMargin" + layoutParams_1.rightMargin);
 			}

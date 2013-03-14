@@ -22,6 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:clickable="true"
+                android:onClick="displayItemDetails"
                 android:src="@drawable/nav_setting" />
 
             <TextView
@@ -39,6 +41,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/bg_guide_5" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/layout_menu"
         android:layout_width="wrap_content"
@@ -59,7 +62,7 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp" />
         </AbsoluteLayout>
-        
+
         <layout.MenuLayout
             android:id="@+id/mylaout"
             android:layout_width="fill_parent"
@@ -71,10 +74,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@color/black" >
-
             </ListView>
         </layout.MenuLayout>
     </LinearLayout>
-
 
 </RelativeLayout>
