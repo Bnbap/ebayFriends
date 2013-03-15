@@ -29,6 +29,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/i1" >
+        </ImageView>
+
         <LinearLayout
             android:id="@+id/loadingLayout"
             android:layout_width="wrap_content"
