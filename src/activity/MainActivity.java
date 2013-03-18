@@ -85,9 +85,10 @@ public class MainActivity extends Activity implements OnTouchListener,
 			public void doLoosen() {
 				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 						.getLayoutParams();
-				Log.e("jj", "layoutParams.rightMargin="
-						+ layoutParams.rightMargin);
-				if (layoutParams.rightMargin < -window_width / 2) {
+				Log.e("doloosen","rightMargin="+layoutParams.rightMargin+",  -MAX_WIDTH / 2="+ (-MAX_WIDTH / 2));
+//				Log.e("jj", "layoutParams.rightMargin="
+//						+ layoutParams.rightMargin);
+				if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
 					new AsynMove().execute(-SPEED);
 				} else {
 					new AsynMove().execute(SPEED);
@@ -125,8 +126,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 	 */
 	void doScrolling(float distanceX) {
 		isScrolling = true;
-		mScrollX += distanceX;
-		Log.e(TAG, "mScrollX=" + mScrollX + ",distanceX= " + distanceX);
+		mScrollX = distanceX;
+//		Log.e(TAG, "mScrollX=" + mScrollX + ",distanceX= " + distanceX);
 		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 				.getLayoutParams();
 		RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
@@ -143,8 +144,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 			layoutParams.rightMargin = 0;
 			layoutParams_1.rightMargin = window_width;
 		}
-		Log.v(TAG, "content.rightMargin=" + layoutParams.rightMargin
-				+ ",menu.rightMargin =" + layoutParams_1.rightMargin);
+//		Log.v(TAG, "content.rightMargin=" + layoutParams.rightMargin
+//				+ ",menu.rightMargin =" + layoutParams_1.rightMargin);
 
 		contentLayout.setLayoutParams(layoutParams);
 		menuLayout.setLayoutParams(layoutParams_1);
@@ -175,8 +176,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 					layoutParams_2.width = MAX_WIDTH;
 					mylaout.setLayoutParams(layoutParams_2);
 
-					Log.v(TAG, "MAX_WIDTH=" + MAX_WIDTH + "width="
-							+ window_width);
+//					Log.v(TAG, "MAX_WIDTH=" + MAX_WIDTH + "width="
+//							+ window_width);
 					hasMeasured = true;
 				}
 				return true;
@@ -190,7 +191,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 					.getLayoutParams();
-			if (layoutParams.rightMargin < 0) {
+			if (layoutParams.rightMargin < -MAX_WIDTH/2) {
 				new AsynMove().execute(-SPEED);
 				return false;
 			}
@@ -206,7 +207,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 		if (MotionEvent.ACTION_UP == event.getAction() && isScrolling == true) {
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 					.getLayoutParams();
-			if (layoutParams.rightMargin < -window_width / 2) {
+			if (layoutParams.rightMargin > -MAX_WIDTH / 2) {
 				Log.e("jj", "speed");
 				new AsynMove().execute(SPEED);
 			} else {
@@ -246,7 +247,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 		if (view != null && view == iv_set) {
 			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 					.getLayoutParams();
-			if (layoutParams.rightMargin < 0) {
+			Log.e("jj","rightMargin="+layoutParams.rightMargin+", -Max_width/2="+ -MAX_WIDTH/2 );
+			if (layoutParams.rightMargin < -MAX_WIDTH/2) {
 				new AsynMove().execute(-SPEED);
 				lv_set.setSelection(0);
 			} else {
@@ -255,7 +257,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 		} else if (view != null && view == contentLayout) {
 			RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) contentLayout
 					.getLayoutParams();
-			if (layoutParams.rightMargin >= 0) {
+			if (layoutParams.rightMargin >= -MAX_WIDTH/2) {
 				new AsynMove().execute(SPEED);
 			}
 		}
@@ -318,16 +320,16 @@ public class MainActivity extends Activity implements OnTouchListener,
 						+ values[0], 0);
 				layoutParams_1.rightMargin = Math.min(
 						layoutParams_1.rightMargin + values[0], window_width);
-				Log.v(TAG, "content.rightMargin" + layoutParams.rightMargin
-						+ ",menu_rightMargin" + layoutParams_1.rightMargin);
+//				Log.v(TAG, "content.rightMargin" + layoutParams.rightMargin
+//						+ ",menu_rightMargin" + layoutParams_1.rightMargin);
 			} else {
 				layoutParams.rightMargin = Math.max(layoutParams.rightMargin
 						+ values[0], -MAX_WIDTH);
 				layoutParams_1.rightMargin = Math.max(
 						layoutParams_1.rightMargin + values[0], window_width
 								- MAX_WIDTH);
-				Log.v(TAG, "content.rightMargin" + layoutParams.rightMargin
-						+ ",menu_rightMargin" + layoutParams_1.rightMargin);
+//				Log.v(TAG, "content.rightMargin" + layoutParams.rightMargin
+//						+ ",menu_rightMargin" + layoutParams_1.rightMargin);
 			}
 			menuLayout.setLayoutParams(layoutParams_1);
 			contentLayout.setLayoutParams(layoutParams);
