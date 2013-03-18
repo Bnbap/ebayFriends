@@ -32,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="activity.newsfeed.NewsFeedActivity" />
+        <activity android:name="activity.notification.NotificationActivity" />
+        <activity android:name="activity.profile.ProfileActivity" />
     </application>
 
 </manifest>

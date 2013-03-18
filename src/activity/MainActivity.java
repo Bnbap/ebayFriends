@@ -3,6 +3,9 @@ package activity;
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
 import activity.item.ItemDetailActivity;
+import activity.newsfeed.NewsFeedActivity;
+import activity.notification.NotificationActivity;
+import activity.profile.ProfileActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,41 +34,40 @@ import com.ebay.ebayfriend.R;
 
 public class MainActivity extends Activity implements OnTouchListener,
 		GestureDetector.OnGestureListener, OnItemClickListener {
-	private boolean hasMeasured = false;
-	private LinearLayout contentLayout;
-	private LinearLayout menuLayout;
-	private ImageView iv_set;
-	private ListView lv_set;
+	protected boolean hasMeasured = false;
+	protected LinearLayout contentLayout;
+	protected LinearLayout menuLayout;
+	protected ImageView iv_set;
+	protected ListView lv_set;
 
-	private int MAX_WIDTH = 0;
-	private final static int SPEED = 30;
+	protected int MAX_WIDTH = 0;
+	protected final static int SPEED = 30;
 
-	private final static int sleep_time = 5;
+	protected final static int sleep_time = 5;
 
-	private GestureDetector mGestureDetector;
-	private boolean isScrolling = false;
-	private float mScrollX;
-	private int window_width;
+	protected GestureDetector mGestureDetector;
+	protected boolean isScrolling = false;
+	protected float mScrollX;
+	protected int window_width;
 
-	private String TAG = "jj";
+	protected String TAG = "jj";
 
-	private View view = null;
+	protected View view = null;
 
-	private String title[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
-			"7", "8", "9", "7", "8", "9", "7", "8", "9" };
+	protected String title[] = { "News Feed","Notifications","My Profiles","Setting","About" };
 
-	private MenuLayout mylaout;
+	protected MenuLayout mylaout;
 
 	/***
 	 */
 
 	// change to Item Details activity
-	void displayItemDetails(View view) {
+	protected void displayItemDetails(View view) {
 		Intent intent = new Intent(this, ItemDetailActivity.class);
 		startActivity(intent);
 	}
 
-	void InitView() {
+	protected void InitView() {
 		contentLayout = (LinearLayout) findViewById(R.id.layout_content);
 		menuLayout = (LinearLayout) findViewById(R.id.layout_menu);
 		iv_set = (ImageView) findViewById(R.id.iv_set);
@@ -124,7 +126,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 	/***
 	 */
-	void doScrolling(float distanceX) {
+	protected void doScrolling(float distanceX) {
 		isScrolling = true;
 		mScrollX = distanceX;
 //		Log.e(TAG, "mScrollX=" + mScrollX + ",distanceX= " + distanceX);
@@ -153,7 +155,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 	/***
 	 */
-	void getMAX_WIDTH() {
+	protected void getMAX_WIDTH() {
 		ViewTreeObserver viewTreeObserver = contentLayout.getViewTreeObserver();
 		viewTreeObserver.addOnPreDrawListener(new OnPreDrawListener() {
 			@Override
@@ -343,6 +345,28 @@ public class MainActivity extends Activity implements OnTouchListener,
 			long id) {
 		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 				.getLayoutParams();
+		switch(position){
+		case 0:
+			Intent newsFeedIntent = new Intent();
+			newsFeedIntent.setClass(this, NewsFeedActivity.class);
+			startActivity(newsFeedIntent);
+			break;
+		case 1:
+			Intent notificationIntent = new Intent();
+			notificationIntent.setClass(this, NotificationActivity.class);
+			startActivity(notificationIntent);
+			break;
+		case 2:
+			Intent profileIntent = new Intent();
+			profileIntent.setClass(this, ProfileActivity.class);
+			startActivity(profileIntent);
+			break;
+		case 3:
+			break;
+		default:
+			break;
+			
+		}
 		if (layoutParams.rightMargin == -MAX_WIDTH)
 			Toast.makeText(MainActivity.this, title[position], 1).show();
 	}

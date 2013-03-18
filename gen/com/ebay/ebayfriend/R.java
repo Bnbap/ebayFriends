@@ -60,15 +60,16 @@ public final class R {
         public static final int info=0x7f080002;
         public static final int iv_set=0x7f08000c;
         public static final int layout_content=0x7f08000b;
-        public static final int layout_menu=0x7f08000d;
+        public static final int layout_menu=0x7f08000e;
         public static final int list=0x7f08000a;
         public static final int loading=0x7f080007;
         public static final int loadingLayout=0x7f080006;
-        public static final int lv_set=0x7f08000f;
-        public static final int mylaout=0x7f08000e;
+        public static final int lv_set=0x7f080010;
+        public static final int mylaout=0x7f08000f;
         public static final int title=0x7f080001;
         public static final int toolbarLayout=0x7f080009;
         public static final int tv_item=0x7f080003;
+        public static final int window_title=0x7f08000d;
     }
     public static final class layout {
         public static final int comments_list=0x7f030000;
