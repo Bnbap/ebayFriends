@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ebay.ebayfriend"
     android:versionCode="1"
@@ -35,6 +36,10 @@
         <activity android:name="activity.newsfeed.NewsFeedActivity" />
         <activity android:name="activity.notification.NotificationActivity" />
         <activity android:name="activity.profile.ProfileActivity" />
+        <activity
+            android:name="activity.buy.BuyActivity"
+            android:label="@string/title_activity_buy" >
+        </activity>
     </application>
 
 </manifest>

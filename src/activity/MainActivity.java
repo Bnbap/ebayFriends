@@ -2,6 +2,7 @@ package activity;
 
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
+import activity.buy.BuyActivity;
 import activity.item.ItemDetailActivity;
 import activity.newsfeed.NewsFeedActivity;
 import activity.notification.NotificationActivity;
@@ -24,6 +25,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -57,6 +59,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 	protected String title[] = { "News Feed","Notifications","My Profiles","Setting","About" };
 
 	protected MenuLayout mylaout;
+	
+//	private Button   buy_button;
 
 	/***
 	 */
@@ -113,6 +117,18 @@ public class MainActivity extends Activity implements OnTouchListener,
 		mGestureDetector = new GestureDetector(this);
 		mGestureDetector.setIsLongpressEnabled(false);
 		getMAX_WIDTH();
+		
+//		buy_button = (Button) this.findViewById(R.id.buy);
+//		buy_button.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				Intent intent = new Intent(MainActivity.this, BuyActivity.class);
+//				startActivity(intent);
+//			}
+//			
+//		});
 	}
 
 	@Override
