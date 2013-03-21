@@ -2,7 +2,6 @@ package activity;
 
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
-import activity.buy.BuyActivity;
 import activity.item.ItemDetailActivity;
 import activity.newsfeed.NewsFeedActivity;
 import activity.notification.NotificationActivity;
@@ -25,7 +24,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,6 +31,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ebay.ebayfriend.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class MainActivity extends Activity implements OnTouchListener,
 		GestureDetector.OnGestureListener, OnItemClickListener {
@@ -59,6 +59,9 @@ public class MainActivity extends Activity implements OnTouchListener,
 	protected String title[] = { "News Feed","Notifications","My Profiles","Setting","About" };
 
 	protected MenuLayout mylaout;
+	
+	// the global image loader
+	protected ImageLoader imageLoader = ImageLoader.getInstance();
 	
 //	private Button   buy_button;
 
@@ -92,8 +95,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 						.getLayoutParams();
 				Log.e("doloosen","rightMargin="+layoutParams.rightMargin+",  -MAX_WIDTH / 2="+ (-MAX_WIDTH / 2));
-//				Log.e("jj", "layoutParams.rightMargin="
-//						+ layoutParams.rightMargin);
+
 				if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
 					new AsynMove().execute(-SPEED);
 				} else {
@@ -106,11 +108,10 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		menuLayout.setOnTouchListener(this);
 		contentLayout.setOnTouchListener(this);
-	//	iv_set.setOnTouchListener(this);
+
 		iv_set.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				displayItemDetails(v);
 			}
 		});
@@ -118,17 +119,6 @@ public class MainActivity extends Activity implements OnTouchListener,
 		mGestureDetector.setIsLongpressEnabled(false);
 		getMAX_WIDTH();
 		
-//		buy_button = (Button) this.findViewById(R.id.buy);
-//		buy_button.setOnClickListener(new OnClickListener(){
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				// TODO Auto-generated method stub
-//				Intent intent = new Intent(MainActivity.this, BuyActivity.class);
-//				startActivity(intent);
-//			}
-//			
-//		});
 	}
 
 	@Override
@@ -137,7 +127,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		InitView();
-
+		imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 	}
 
 	/***
