@@ -10,12 +10,12 @@
     tools:context=".MainActivity" >
 
 
-    <ListView
+    <activity.newsfeed.PullToRefreshListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"
-        android:dividerHeight="20.0sp"	 >
-    </ListView>
+        android:dividerHeight="20.0sp"	 />
+
 
 </LinearLayout>

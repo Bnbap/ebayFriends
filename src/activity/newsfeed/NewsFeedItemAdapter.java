@@ -39,6 +39,10 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 		public ImageView image;
 		public ImageView icon;
 	}
+	
+	public List<NewsFeedItem> getItemList(){
+		return newsFeedList;
+	}
 
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		NewsFeedItem currentNewsFeed = newsFeedList.get(position);
