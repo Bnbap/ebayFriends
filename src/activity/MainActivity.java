@@ -31,6 +31,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ebay.ebayfriend.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class MainActivity extends Activity implements OnTouchListener,
 		GestureDetector.OnGestureListener, OnItemClickListener {
@@ -57,6 +59,11 @@ public class MainActivity extends Activity implements OnTouchListener,
 	protected String title[] = { "News Feed","Notifications","My Profiles","Setting","About" };
 
 	protected MenuLayout mylaout;
+	
+	// the global image loader
+	protected ImageLoader imageLoader = ImageLoader.getInstance();
+	
+//	private Button   buy_button;
 
 	/***
 	 */
@@ -88,8 +95,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 						.getLayoutParams();
 				Log.e("doloosen","rightMargin="+layoutParams.rightMargin+",  -MAX_WIDTH / 2="+ (-MAX_WIDTH / 2));
-//				Log.e("jj", "layoutParams.rightMargin="
-//						+ layoutParams.rightMargin);
+
 				if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
 					new AsynMove().execute(-SPEED);
 				} else {
@@ -102,17 +108,17 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		menuLayout.setOnTouchListener(this);
 		contentLayout.setOnTouchListener(this);
-	//	iv_set.setOnTouchListener(this);
+
 		iv_set.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				displayItemDetails(v);
 			}
 		});
 		mGestureDetector = new GestureDetector(this);
 		mGestureDetector.setIsLongpressEnabled(false);
 		getMAX_WIDTH();
+		
 	}
 
 	@Override
@@ -121,7 +127,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		InitView();
-
+		imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 	}
 
 	/***
