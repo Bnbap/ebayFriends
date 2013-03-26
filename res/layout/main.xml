@@ -31,16 +31,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="eBayFriend"
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp" />
         </RelativeLayout>
 
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/bg_guide_5" />
     </LinearLayout>
 
     <LinearLayout
