@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.ebay.ebayfriend.R;
