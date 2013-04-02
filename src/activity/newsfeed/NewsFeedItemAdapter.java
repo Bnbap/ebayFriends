@@ -96,24 +96,12 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				try {
-					mediaPlayer.setDataSource(AUDIO_PATH); // setup song from
-															// http://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3
-															// URL to
-															// mediaplayer data
-															// source
-					mediaPlayer.prepareAsync(); // you must call this method
-												// after setup the datasource in
-												// setDataSource method. After
-												// calling prepare() the
-												// instance of MediaPlayer
-												// starts load data from URL to
-												// internal buffer.
+					mediaPlayer.setDataSource(AUDIO_PATH);
+					mediaPlayer.prepareAsync();
 					holder.playButton.setText("||");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				mediaFileLengthInMilliseconds = mediaPlayer.getDuration();
-				Log.d("play", mediaFileLengthInMilliseconds + "");
 			}
 		});
 
