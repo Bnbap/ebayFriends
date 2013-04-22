@@ -8,6 +8,7 @@ import activity.newsfeed.NewsFeedFragment;
 import activity.notification.NotificationFragment;
 import activity.profile.ProfileFragment;
 import activity.setting.SettingFragment;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
