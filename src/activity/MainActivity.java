@@ -2,12 +2,15 @@ package activity;
 
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
+import activity.about.AboutFragment;
 import activity.item.ItemDetailActivity;
-import activity.newsfeed.NewsFeedActivity;
-import activity.notification.NotificationActivity;
-import activity.profile.ProfileActivity;
-import android.annotation.SuppressLint;
+import activity.newsfeed.NewsFeedFragment;
+import activity.notification.NotificationFragment;
+import activity.profile.ProfileFragment;
+import activity.setting.SettingFragment;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
@@ -30,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.ebay.ebayfriend.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -321,30 +323,33 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout.getLayoutParams();
-		switch (position) {
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+				.getLayoutParams();
+		Fragment fragment = null;
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		switch(position){
 		case 0:
-			Intent newsFeedIntent = new Intent();
-			newsFeedIntent.setClass(this, NewsFeedActivity.class);
-			startActivity(newsFeedIntent);
+			fragment = new NewsFeedFragment();
 			break;
 		case 1:
-			Intent notificationIntent = new Intent();
-			notificationIntent.setClass(this, NotificationActivity.class);
-			startActivity(notificationIntent);
+			fragment = new NotificationFragment();
 			break;
 		case 2:
-			Intent profileIntent = new Intent();
-			profileIntent.setClass(this, ProfileActivity.class);
-			startActivity(profileIntent);
+			fragment = new ProfileFragment();
 			break;
 		case 3:
+			fragment = new SettingFragment();
 			break;
-		default:
+		case 4:
+			fragment = new AboutFragment();
 			break;
 		}
-		if (layoutParams.rightMargin == -MAX_WIDTH)
-			Toast.makeText(MainActivity.this, title[position], Toast.LENGTH_SHORT).show();
+		transaction.replace(R.id.content,fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+
+		new AsynMove().execute(SPEED);
 	}
 }

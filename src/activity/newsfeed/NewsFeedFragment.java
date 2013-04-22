@@ -3,8 +3,8 @@ package activity.newsfeed;
 import java.util.ArrayList;
 import java.util.List;
 
-import activity.MainActivity;
 import activity.newsfeed.PullToRefreshListView.OnRefreshListener;
+import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,26 +13,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ebay.ebayfriend.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class NewsFeedActivity extends MainActivity{
+
+public class NewsFeedFragment extends Fragment {
 
 	private PullToRefreshListView lv;
 	private List<NewsFeedItem> itemList;
 	private NewsFeedItemAdapter adapter;
-
+	protected ImageLoader imageLoader = ImageLoader.getInstance();
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		InitView();
-		TextView windowTitleView = (TextView) findViewById(R.id.window_title);
-		windowTitleView.setText("News Feed");
-
-		View content = findViewById(R.id.content);
-		LayoutInflater inflater = getLayoutInflater();
-		((ViewGroup) content).addView(inflater.inflate(R.layout.newsfeed, null));
-		lv = (PullToRefreshListView) findViewById(R.id.listview);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+	        Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.newsfeed,container,false);
+		TextView windowTitleView = (TextView)getActivity().findViewById(R.id.window_title);
+		windowTitleView.setText("News Feeding");
+		lv = (PullToRefreshListView) view.findViewById(R.id.listview);
 		lv.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
@@ -40,9 +37,9 @@ public class NewsFeedActivity extends MainActivity{
 			}
 		});
 		itemList = getlist();
-		adapter = new NewsFeedItemAdapter(this, itemList, imageLoader);
+		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader);
 		lv.setAdapter(adapter);
-
+		return view;
 	}
 
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
