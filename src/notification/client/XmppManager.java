@@ -233,6 +233,7 @@ public class XmppManager {
 					taskTracker.decrease();
 				}
 			} else {
+				runTask();//解决服务器重启后的重练问题
 				taskList.add(runnable);
 			}
 		}
