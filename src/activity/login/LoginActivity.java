@@ -129,7 +129,7 @@ public class LoginActivity extends Activity {
 		DefaultHttpClient mHttpClient = new DefaultHttpClient();
 
 		// post http request
-		HttpPost mPost = new HttpPost(" ");
+		HttpPost mPost = new HttpPost("http://10.0.2.2/web/php/login.php");
 		List<BasicNameValuePair> pairs = new ArrayList<BasicNameValuePair>();
 		pairs.add(new BasicNameValuePair("username", username));
 		pairs.add(new BasicNameValuePair("password", password));
