@@ -21,18 +21,20 @@ import org.json.JSONObject;
 import android.content.Entity;
 import android.util.Log;
 
-public class PostRequest extends Request{
+public class PostRequest {
 
+	protected String HTTP_URL;
 	protected JSONObject param;
+	protected HttpPost mPost;
 
 	public PostRequest(String url, JSONObject param) {
-		HTTP_URL = url;
+		this.HTTP_URL = url;
 		this.param = param;
 		StringEntity entity;
 		try {
 			entity = new StringEntity(param.toString());
-			requestBase = new HttpPost(HTTP_URL);
-			((HttpPost)requestBase).setEntity(entity);
+			mPost = new HttpPost(HTTP_URL);
+			mPost.setEntity(entity);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -41,7 +43,7 @@ public class PostRequest extends Request{
 	public List<Cookie> getCookieList() {
 		try {
 			DefaultHttpClient mHttpClient = new DefaultHttpClient();
-			HttpResponse response = mHttpClient.execute(requestBase);
+			HttpResponse response = mHttpClient.execute(mPost);
 			int res = response.getStatusLine().getStatusCode();
 			if (res == 200) {
 				HttpEntity entity = response.getEntity();
