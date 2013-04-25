@@ -53,12 +53,19 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		/**debug
+		 * 
+		 * 
+		 */
+		startMainActivity();
+		/**debug
 		if (isSessionExist()) {
 			startMainActivity();
 		} else {
 			setContentView(R.layout.login);
 			initView();
 		}
+		**/
 	}
 
 	// check if the session object was stored in file before
