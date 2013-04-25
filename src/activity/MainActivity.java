@@ -1,5 +1,7 @@
 package activity;
 
+import java.util.HashMap;
+
 import notification.client.NotificationAccess;
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
@@ -42,6 +44,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class MainActivity extends Activity implements OnTouchListener,
 		GestureDetector.OnGestureListener, OnItemClickListener {
+	
+	public static String sessionid;
 	protected boolean hasMeasured = false;
 	protected LinearLayout contentLayout;
 	protected LinearLayout menuLayout;
@@ -61,6 +65,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 	protected String TAG = "jj";
 
 	protected View view = null;
+	
 
 	protected String title[] = { "News Feed", "Notifications", "My Profiles",
 			"Setting", "About" };
@@ -136,6 +141,9 @@ public class MainActivity extends Activity implements OnTouchListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		HashMap<String,String> map = (HashMap<String, String>) savedInstanceState.getSerializable("sessionid");
+		sessionid = map.get("sessionid");
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		InitView(savedInstanceState);

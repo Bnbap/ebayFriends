@@ -157,7 +157,7 @@ public class LoginActivity extends Activity {
 			e.printStackTrace();
 		}
 		
-		PostRequest postRequest = new PostRequest(HTTP_ADDRESS,param);
+		PostRequest postRequest = new PostRequest(HTTP_ADDRESS,null,param);
 		List<Cookie> cookies = postRequest.getCookieList();
 		for (int i = 0; i < cookies.size(); i++) {
 			if ("sessionid".equals(cookies.get(i).getName())) {
