@@ -130,7 +130,7 @@ public class LoginActivity extends Activity {
 		map.putSerializable("sessionid", session);
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("session", map);
-		intent.putExtra("NOTIFICATION_FLAG", false);
+		intent.putExtra("NOTIFICATION", false);
 		startActivity(intent);
 	}
 
