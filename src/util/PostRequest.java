@@ -25,9 +25,8 @@ public class PostRequest extends Request{
 
 	protected JSONObject param;
 
-	public PostRequest(String url,String sessionid, JSONObject param) {
+	public PostRequest(String url, JSONObject param) {
 		this.HTTP_URL = url;
-		this.sessionid=sessionid;
 		this.param = param;
 		StringEntity entity;
 		try {
