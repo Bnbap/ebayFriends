@@ -108,6 +108,15 @@ public class LoginActivity extends Activity {
 		myHandler = new MyHandler();
 		btLogin = (Button) findViewById(R.id.login_btLogin);
 		btLogin.setOnClickListener(loginClick);
+		Button sbButton = (Button) findViewById(R.id.login_btSB);
+		sbButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				startMainActivity();
+			}
+			
+		});
 	}
 
 	OnClickListener loginClick = new OnClickListener() {

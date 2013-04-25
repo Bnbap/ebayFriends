@@ -43,4 +43,10 @@
         android:layout_marginTop="70dp"
         android:text="Login" />
 
+    <Button
+        android:id="@+id/login_btSB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SB" />
+
 </LinearLayout>
