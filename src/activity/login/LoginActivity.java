@@ -149,7 +149,7 @@ public class LoginActivity extends Activity {
 		}
 		
 		PostRequest postRequest = new PostRequest(HTTP_ADDRESS,param);
-		List<Cookie> cookies = postRequest.getCookie();
+		List<Cookie> cookies = postRequest.getCookieList();
 		for (int i = 0; i < cookies.size(); i++) {
 			if ("sessionid".equals(cookies.get(i).getName())) {
 				session.put("s_sessionid", cookies.get(i)
