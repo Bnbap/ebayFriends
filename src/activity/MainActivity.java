@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 		startActivity(intent);
 	}
 
-	protected void InitView() {
+	protected void InitView(Bundle savedInstanceState) {
 		contentLayout = (LinearLayout) findViewById(R.id.layout_content);
 		menuLayout = (LinearLayout) findViewById(R.id.layout_menu);
 		iv_set = (ImageView) findViewById(R.id.iv_set);
@@ -116,6 +116,13 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 		mGestureDetector = new GestureDetector(this, this);
 		mGestureDetector.setIsLongpressEnabled(false);
 		getMAX_WIDTH();
+		
+		boolean isNotification = savedInstanceState.getBoolean("NOTIFICATION");
+		if(isNotification){
+			changeFragment(1);
+		}else{
+			changeFragment(0);
+		}
 
 	}
 
@@ -124,7 +131,7 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
-		InitView();
+		InitView(savedInstanceState);
 		imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 	}
 
@@ -326,6 +333,10 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		changeFragment(position);
+	}
+	
+	private void changeFragment(int position){
 		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 				.getLayoutParams();
 		Fragment fragment = null;
