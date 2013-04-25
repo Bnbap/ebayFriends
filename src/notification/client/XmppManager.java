@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
-import android.util.Log;
 
 /**
  * This class is to manage the XMPP connection between client and server.
@@ -73,8 +72,8 @@ public class XmppManager {
 
 		xmppHost = sharedPrefs.getString(Constants.XMPP_HOST, "10.0.2.2");
 		xmppPort = sharedPrefs.getInt(Constants.XMPP_PORT, 5222);
-		username = sharedPrefs.getString(Constants.XMPP_USERNAME, "");
-		password = sharedPrefs.getString(Constants.XMPP_PASSWORD, "");
+		username = sharedPrefs.getString(Constants.XMPP_USERNAME, "zhanghang");
+		password = sharedPrefs.getString(Constants.XMPP_PASSWORD, "zhanghang");
 
 		connectionListener = new PersistentConnectionListener(this);
 		notificationPacketListener = new NotificationPacketListener(this);
@@ -190,10 +189,10 @@ public class XmppManager {
 		taskTracker.decrease();
 	}
 
-	private String newRandomUUID() {
-		String uuidRaw = UUID.randomUUID().toString();
-		return uuidRaw.replaceAll("-", "");
-	}
+//	private String newRandomUUID() {
+//		String uuidRaw = UUID.randomUUID().toString();
+//		return uuidRaw.replaceAll("-", "");
+//	}
 
 	private boolean isConnected() {
 		return connection != null && connection.isConnected();
@@ -233,7 +232,7 @@ public class XmppManager {
 					taskTracker.decrease();
 				}
 			} else {
-				runTask();//解决服务器重启后的重练问题
+				runTask();
 				taskList.add(runnable);
 			}
 		}
@@ -306,8 +305,8 @@ public class XmppManager {
 		public void run() {
 
 			if (!xmppManager.isRegistered()) {
-				final String newUsername = newRandomUUID();
-				final String newPassword = newRandomUUID();
+				final String newUsername = "zhanghang";
+				final String newPassword = "zhanghang";
 
 				Registration registration = new Registration();
 

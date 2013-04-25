@@ -33,7 +33,7 @@ public final class ServiceManager {
         this.context = context;
 
         if (context instanceof Activity) {
-            Activity callbackActivity = (Activity) context;
+			Activity callbackActivity = (Activity) context;
             callbackActivityPackageName = callbackActivity.getPackageName();
             callbackActivityClassName = callbackActivity.getClass().getName();
         }
