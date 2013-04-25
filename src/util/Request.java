@@ -10,11 +10,13 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 public class Request {
+	protected String sessionid;
 	protected String HTTP_URL;
 	protected HttpRequestBase requestBase;
 	public String getContent() {
 		try {
 			DefaultHttpClient mHttpClient = new DefaultHttpClient();
+			requestBase.setHeader("Cookie","sessionid="+sessionid);
 			HttpResponse response = mHttpClient.execute(requestBase);
 			int res = response.getStatusLine().getStatusCode();
 			if (res == 200) {
