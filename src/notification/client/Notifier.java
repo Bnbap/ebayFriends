@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
-import activity.notification.*;
+import activity.MainActivity;
 
 /**
  * This class is to notify the user of messages with NotificationManager.
@@ -73,13 +73,13 @@ public class Notifier {
 			// intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			// }
 
-			Intent intent = new Intent(context,
-					NotificationDetailsActivity.class);
+			Intent intent = new Intent(context, MainActivity.class);
 			intent.putExtra(Constants.NOTIFICATION_ID, notificationId);
 			intent.putExtra(Constants.NOTIFICATION_API_KEY, apiKey);
 			intent.putExtra(Constants.NOTIFICATION_TITLE, title);
 			intent.putExtra(Constants.NOTIFICATION_MESSAGE, message);
 			intent.putExtra(Constants.NOTIFICATION_URI, uri);
+			intent.putExtra(Constants.NOTIFICATION_FLAG, true);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
