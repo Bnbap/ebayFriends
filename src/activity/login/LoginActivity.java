@@ -135,10 +135,10 @@ public class LoginActivity extends Activity {
 
 	// start MainActivity
 	private void startMainActivity() {
-		Bundle map = new Bundle();
-		map.putSerializable("sessionid", session);
+//		Bundle map = new Bundle();
+//		map.putSerializable("sessionid", session);
 		Intent intent = new Intent(this, MainActivity.class);
-		intent.putExtra("session", map);
+		intent.putExtra("session", session);
 		intent.putExtra("NOTIFICATION", false);
 		startActivity(intent);
 	}

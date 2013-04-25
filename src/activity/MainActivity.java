@@ -142,8 +142,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		HashMap<String,String> map = (HashMap<String, String>) savedInstanceState.getSerializable("sessionid");
-		sessionid = map.get("sessionid");
+		HashMap<String,String> map = (HashMap<String, String>) getIntent().getSerializableExtra("session");
+		sessionid = map.get("s_sessionid");
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		InitView(savedInstanceState);
