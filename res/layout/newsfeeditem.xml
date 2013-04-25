@@ -10,42 +10,45 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:contentDescription="@string/hello_world"
+        android:scaleType="centerCrop" />
+    
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:scaleType="centerCrop"
-         />
+        android:layout_below="@+id/image"
+        android:layout_marginTop="-25dp"
+        android:layout_marginLeft="10dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/hello_world" />
+
+    <ImageButton
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image"
+        android:layout_alignRight="@+id/image"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="-30dp"
+        android:background="@null"
+        android:src="@drawable/playbutton" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image"
-        android:layout_centerHorizontal="true"
-        android:layout_alignLeft="@+id/play"
-        android:layout_marginTop="35dp"
+        android:layout_below="@+id/icon"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="@string/hello_world"
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/play"
-        android:layout_width="196dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
-        android:text="@string/newsfeed_play"
-        android:textSize="15dp" />
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_marginLeft="10dp"
-        android:layout_alignBottom="@+id/play"
-        android:layout_alignParentLeft="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/hello_world"
-        />
+    
 
 </RelativeLayout>

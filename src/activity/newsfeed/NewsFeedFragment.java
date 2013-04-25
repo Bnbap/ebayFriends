@@ -37,7 +37,7 @@ public class NewsFeedFragment extends Fragment {
 			}
 		});
 		itemList = getlist();
-		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader);
+		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader, lv);
 		lv.setAdapter(adapter);
 		return view;
 	}
