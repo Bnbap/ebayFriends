@@ -53,19 +53,12 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		/**debug
-		 * 
-		 * 
-		 */
-		startMainActivity();
-		/**debug
 		if (isSessionExist()) {
 			startMainActivity();
 		} else {
 			setContentView(R.layout.login);
 			initView();
 		}
-		**/
 	}
 
 	// check if the session object was stored in file before
@@ -115,6 +108,15 @@ public class LoginActivity extends Activity {
 		myHandler = new MyHandler();
 		btLogin = (Button) findViewById(R.id.login_btLogin);
 		btLogin.setOnClickListener(loginClick);
+		Button sbButton = (Button) findViewById(R.id.login_btSB);
+		sbButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				startMainActivity();
+			}
+			
+		});
 	}
 
 	OnClickListener loginClick = new OnClickListener() {
