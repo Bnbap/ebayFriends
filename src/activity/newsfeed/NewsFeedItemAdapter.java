@@ -11,12 +11,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -55,7 +53,6 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 		public void onClick(View v) {
 			try {
 				int currentPosition = lv.getPositionForView(v) - 1;
-				Log.e("click", "Position: " + currentPosition + " clicked");
 				NewsFeedItem currentItem = newsFeedList.get(currentPosition);
 				if(currentPosition != preparePosition){//Different one
 					if(preparePosition != -1){// last not stop
@@ -95,7 +92,6 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 		public void onCompletion(MediaPlayer arg0) {
 			newsFeedList.get(preparePosition).setPlayState(NewsFeedItem.STOP);
 			preparePosition = -1;
-			Log.e("media player", "now stop");
 			adapter.notifyDataSetChanged();
 		}	
 	}
@@ -109,7 +105,6 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 		public void onPrepared(MediaPlayer mp) {
 			mp.start();
 			newsFeedList.get(preparePosition).setPlayState(NewsFeedItem.PLAYING);
-			Log.e("media player", "Position: " + preparePosition + " prepared and now playing");
 			adapter.notifyDataSetChanged();
 		}
 	}
@@ -161,11 +156,9 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 		int playState = currentNewsFeed.getPlayState();
 		if(playState == NewsFeedItem.PLAYING){
 			holder.playButton.setImageResource(R.drawable.pausebutton);
-			Log.e("set image", "set position: " + position + "to Pause");
 		}
 		else{
 			holder.playButton.setImageResource(R.drawable.playbutton);
-			Log.e("set image", "set position: " + position + "to Play");
 		}
 		holder.playButton.invalidate();
 

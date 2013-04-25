@@ -6,7 +6,7 @@ package notification.client;
  */
 public class Constants {
 
-	public static final String NOTIFICATION_FLAG = "IS_NOTIFICATION";
+	public static final String NOTIFICATION_FLAG = "NOTIFICATION";
 
 	public static final String SHARED_PREFERENCE_NAME = "notification_client_preferences";
 
