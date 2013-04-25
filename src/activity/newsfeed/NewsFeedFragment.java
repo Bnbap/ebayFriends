@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import util.GetRequest;
+import activity.MainActivity;
 import activity.newsfeed.PullToRefreshListView.OnRefreshListener;
 import android.app.Fragment;
 import android.os.AsyncTask;
