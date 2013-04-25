@@ -1,5 +1,6 @@
 package activity;
 
+import notification.client.NotificationAccess;
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
 import activity.about.AboutFragment;
@@ -39,8 +40,8 @@ import com.ebay.ebayfriend.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-public class MainActivity extends Activity implements OnTouchListener, GestureDetector.OnGestureListener,
-		OnItemClickListener {
+public class MainActivity extends Activity implements OnTouchListener,
+		GestureDetector.OnGestureListener, OnItemClickListener {
 	protected boolean hasMeasured = false;
 	protected LinearLayout contentLayout;
 	protected LinearLayout menuLayout;
@@ -61,7 +62,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 
 	protected View view = null;
 
-	protected String title[] = { "News Feed", "Notifications", "My Profiles", "Setting", "About" };
+	protected String title[] = { "News Feed", "Notifications", "My Profiles",
+			"Setting", "About" };
 
 	protected MenuLayout mylaout;
 
@@ -75,12 +77,15 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 	}
 
 	protected void InitView(Bundle savedInstanceState) {
+		NotificationAccess.getInstance().setCallBackActivity(this);
+		NotificationAccess.getInstance().startNotificationService();
 		contentLayout = (LinearLayout) findViewById(R.id.layout_content);
 		menuLayout = (LinearLayout) findViewById(R.id.layout_menu);
 		iv_set = (ImageView) findViewById(R.id.iv_set);
 		lv_set = (ListView) findViewById(R.id.lv_set);
 		mylaout = (MenuLayout) findViewById(R.id.mylaout);
-		lv_set.setAdapter(new ArrayAdapter<String>(this, R.layout.item, R.id.tv_item, title));
+		lv_set.setAdapter(new ArrayAdapter<String>(this, R.layout.item,
+				R.id.tv_item, title));
 
 		mylaout.setOnScrollListener(new OnScrollListener() {
 			@Override
@@ -92,7 +97,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 			public void doLoosen() {
 				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 						.getLayoutParams();
-				Log.e("doloosen", "rightMargin=" + layoutParams.rightMargin + ",  -MAX_WIDTH / 2=" + (-MAX_WIDTH / 2));
+				Log.e("doloosen", "rightMargin=" + layoutParams.rightMargin
+						+ ",  -MAX_WIDTH / 2=" + (-MAX_WIDTH / 2));
 
 				if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
 					new AsynMove().execute(-SPEED);
@@ -116,11 +122,12 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 		mGestureDetector = new GestureDetector(this, this);
 		mGestureDetector.setIsLongpressEnabled(false);
 		getMAX_WIDTH();
-		
-		boolean isNotification = savedInstanceState.getBoolean("NOTIFICATION");
-		if(isNotification){
+
+		boolean isNotification = getIntent().getBooleanExtra("NOTIFICATION",
+				false);
+		if (isNotification) {
 			changeFragment(1);
-		}else{
+		} else {
 			changeFragment(0);
 		}
 
@@ -141,8 +148,10 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 		isScrolling = true;
 		mScrollX = distanceX;
 
-		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout.getLayoutParams();
-		RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout.getLayoutParams();
+		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+				.getLayoutParams();
+		RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
+				.getLayoutParams();
 		layoutParams.rightMargin += mScrollX;
 		layoutParams_1.rightMargin = window_width + layoutParams.rightMargin;
 		if (layoutParams.rightMargin <= -MAX_WIDTH) {
@@ -178,7 +187,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 							.getLayoutParams();
 					RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
 							.getLayoutParams();
-					ViewGroup.LayoutParams layoutParams_2 = mylaout.getLayoutParams();
+					ViewGroup.LayoutParams layoutParams_2 = mylaout
+							.getLayoutParams();
 					layoutParams.width = window_width;
 					contentLayout.setLayoutParams(layoutParams);
 
@@ -198,7 +208,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout.getLayoutParams();
+			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+					.getLayoutParams();
 			if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
 				new AsynMove().execute(-SPEED);
 				return false;
@@ -213,7 +224,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 		view = v;
 
 		if (MotionEvent.ACTION_UP == event.getAction() && isScrolling == true) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout.getLayoutParams();
+			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+					.getLayoutParams();
 			if (layoutParams.rightMargin > -MAX_WIDTH / 2) {
 				Log.e("jj", "speed");
 				new AsynMove().execute(SPEED);
@@ -231,7 +243,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 
 		int position = lv_set.pointToPosition((int) e.getX(), (int) e.getY());
 		if (position != ListView.INVALID_POSITION) {
-			View child = lv_set.getChildAt(position - lv_set.getFirstVisiblePosition());
+			View child = lv_set.getChildAt(position
+					- lv_set.getFirstVisiblePosition());
 			if (child != null)
 				child.setPressed(true);
 		}
@@ -251,8 +264,10 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		if (view != null && view == iv_set) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout.getLayoutParams();
-			Log.e("jj", "rightMargin=" + layoutParams.rightMargin + ", -Max_width/2=" + -MAX_WIDTH / 2);
+			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+					.getLayoutParams();
+			Log.e("jj", "rightMargin=" + layoutParams.rightMargin
+					+ ", -Max_width/2=" + -MAX_WIDTH / 2);
 			if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
 				new AsynMove().execute(-SPEED);
 				lv_set.setSelection(0);
@@ -271,7 +286,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 	}
 
 	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
 		doScrolling(distanceX);
 		return false;
 	}
@@ -282,7 +298,8 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 	}
 
 	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
 		return false;
 	}
 
@@ -314,14 +331,21 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 		 */
 		@Override
 		protected void onProgressUpdate(Integer... values) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout.getLayoutParams();
-			RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout.getLayoutParams();
+			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+					.getLayoutParams();
+			RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
+					.getLayoutParams();
 			if (values[0] > 0) {
-				layoutParams.rightMargin = Math.min(layoutParams.rightMargin + values[0], 0);
-				layoutParams_1.rightMargin = Math.min(layoutParams_1.rightMargin + values[0], window_width);
+				layoutParams.rightMargin = Math.min(layoutParams.rightMargin
+						+ values[0], 0);
+				layoutParams_1.rightMargin = Math.min(
+						layoutParams_1.rightMargin + values[0], window_width);
 			} else {
-				layoutParams.rightMargin = Math.max(layoutParams.rightMargin + values[0], -MAX_WIDTH);
-				layoutParams_1.rightMargin = Math.max(layoutParams_1.rightMargin + values[0], window_width - MAX_WIDTH);
+				layoutParams.rightMargin = Math.max(layoutParams.rightMargin
+						+ values[0], -MAX_WIDTH);
+				layoutParams_1.rightMargin = Math.max(
+						layoutParams_1.rightMargin + values[0], window_width
+								- MAX_WIDTH);
 			}
 			menuLayout.setLayoutParams(layoutParams_1);
 			contentLayout.setLayoutParams(layoutParams);
@@ -335,13 +359,14 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 			long id) {
 		changeFragment(position);
 	}
-	
-	private void changeFragment(int position){
+
+	private void changeFragment(int position) {
 		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
 				.getLayoutParams();
 		Fragment fragment = null;
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		switch(position){
+		FragmentTransaction transaction = getFragmentManager()
+				.beginTransaction();
+		switch (position) {
 		case 0:
 			fragment = new NewsFeedFragment();
 			break;
@@ -358,7 +383,7 @@ public class MainActivity extends Activity implements OnTouchListener, GestureDe
 			fragment = new AboutFragment();
 			break;
 		}
-		transaction.replace(R.id.content,fragment);
+		transaction.replace(R.id.content, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 
