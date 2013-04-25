@@ -9,11 +9,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import activity.MainActivity;
 public class Request {
 	protected String sessionid;
 	protected String HTTP_URL;
 	protected HttpRequestBase requestBase;
 	public String getContent() {
+		sessionid = MainActivity.sessionid;
 		try {
 			DefaultHttpClient mHttpClient = new DefaultHttpClient();
 			requestBase.setHeader("Cookie","sessionid="+sessionid);
