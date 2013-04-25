@@ -12,7 +12,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class Request {
 	protected String HTTP_URL;
 	protected HttpRequestBase requestBase;
-	public String getCookie() {
+	public String getContent() {
 		try {
 			DefaultHttpClient mHttpClient = new DefaultHttpClient();
 			HttpResponse response = mHttpClient.execute(requestBase);
