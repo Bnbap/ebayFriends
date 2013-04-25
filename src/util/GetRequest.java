@@ -9,4 +9,5 @@ public class GetRequest extends Request{
 		HTTP_URL = url;
 		requestBase = new HttpGet(url);
 	}
+	
 }

@@ -65,12 +65,13 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 				    preparePosition = currentPosition;
 				}
 				else{// The same one, prepared
+					int currentState = currentItem.getPlayState();
 					if(mediaPlayer.isPlaying()){
 						mediaPlayer.pause();	
-						currentItem.setPlayState(NewsFeedItem.STOP);
+						currentItem.setPlayState(NewsFeedItem.PAUSED);
 						adapter.notifyDataSetChanged();
 					}
-					else{
+					else if(currentState == NewsFeedItem.PAUSED){
 						mediaPlayer.start();
 						currentItem.setPlayState(NewsFeedItem.PLAYING);
 						adapter.notifyDataSetChanged();
@@ -182,6 +183,11 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 				options, animateFirstListener);
 
 		return view;
+	}
+	
+	public void updateList(List<NewsFeedItem> newsFeedList){
+		this.newsFeedList = newsFeedList;
+		this.notifyDataSetChanged();
 	}
 
 	@Override

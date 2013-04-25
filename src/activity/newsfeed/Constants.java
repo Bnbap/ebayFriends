@@ -2,6 +2,7 @@ package activity.newsfeed;
 
 public final class Constants {
 
+	public static final String GET_NEWSFEED_URL_PREFIX = "http://192.168.47.19:8080/news/getNewsList?num=";
 	public static final String[] IMAGES = new String[] {
 			// Heavy images
 			"http://cf6.thingd.com/default/287003521_57819ea5f53c.jpg",
