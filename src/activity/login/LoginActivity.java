@@ -70,6 +70,7 @@ public class LoginActivity extends Activity {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("NOTIFICATION", false);
 		startActivity(intent);
+		finish();
 	}
 
 	class CheckSessionThread extends Thread {
