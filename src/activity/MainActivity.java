@@ -1,7 +1,5 @@
 package activity;
 
-import java.util.HashMap;
-
 import notification.client.NotificationAccess;
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
@@ -44,8 +42,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class MainActivity extends Activity implements OnTouchListener,
 		GestureDetector.OnGestureListener, OnItemClickListener {
-	
-	public static String sessionid;
+
 	protected boolean hasMeasured = false;
 	protected LinearLayout contentLayout;
 	protected LinearLayout menuLayout;
@@ -62,12 +59,14 @@ public class MainActivity extends Activity implements OnTouchListener,
 	protected float mScrollX;
 	protected int window_width;
 
-	protected String TAG = "jj";
+	protected String TAG = "MainActivity";
 
 	protected View view = null;
-	
 
-	protected String title[] = { "News Feed", "Notifications", "My Profiles",
+	/**
+	 * show on the window of different fragments
+	 */
+	protected String windowsTitle[] = { "News Feed", "Notifications", "My Profiles",
 			"Setting", "About" };
 
 	protected MenuLayout mylaout;
@@ -90,7 +89,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 		lv_set = (ListView) findViewById(R.id.lv_set);
 		mylaout = (MenuLayout) findViewById(R.id.mylaout);
 		lv_set.setAdapter(new ArrayAdapter<String>(this, R.layout.item,
-				R.id.tv_item, title));
+				R.id.tv_item, windowsTitle));
 
 		mylaout.setOnScrollListener(new OnScrollListener() {
 			@Override
@@ -98,6 +97,9 @@ public class MainActivity extends Activity implements OnTouchListener,
 				doScrolling(distanceX);
 			}
 
+			/**
+			 * when the user's finger move off from the screen
+			 */
 			@Override
 			public void doLoosen() {
 				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
@@ -114,10 +116,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 		});
 
 		lv_set.setOnItemClickListener(this);
-
 		menuLayout.setOnTouchListener(this);
 		contentLayout.setOnTouchListener(this);
-
 		iv_set.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -130,6 +130,9 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		boolean isNotification = getIntent().getBooleanExtra("NOTIFICATION",
 				false);
+		
+		//if is switch from notification, show the notification fragment;
+		// else show the news feed fragment
 		if (isNotification) {
 			changeFragment(1);
 		} else {
@@ -141,9 +144,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		HashMap<String,String> map = (HashMap<String, String>) getIntent().getSerializableExtra("session");
-		sessionid = map.get("s_sessionid");
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
 		InitView(savedInstanceState);
@@ -369,8 +370,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 	}
 
 	private void changeFragment(int position) {
-		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-				.getLayoutParams();
+//		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+//				.getLayoutParams();
 		Fragment fragment = null;
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
