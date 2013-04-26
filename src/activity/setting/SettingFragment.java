@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +19,7 @@ import com.ebay.ebayfriend.R;
 
 public class SettingFragment extends Fragment implements OnItemClickListener{
 	private ListView lv;
-	String[] settingItems = {"Log out","clean session"};
+	String[] settingItems = {"Log out","clean history"};
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -53,7 +50,7 @@ public class SettingFragment extends Fragment implements OnItemClickListener{
 			break;
 		case 1:
 			LoginUtil.deleteFile();
-			Toast.makeText(getActivity(), "clean session successfully", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "clean history successfully", Toast.LENGTH_SHORT).show();
 			break;
 			
 		}
