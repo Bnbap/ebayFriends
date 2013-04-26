@@ -18,13 +18,14 @@ import org.json.JSONObject;
 public class LoginUtil {
 
 	private static HashMap<String, String> session;
-	private String FILE_NAME = "session";
+	private static String FILE_NAME = "session";
 	private String HTTP_ADDRESS = "http://192.168.47.19:8080/users/login";
-	private String filePath;
+	private static String filePath;
 
-	public static HashMap<String,String> getSession(){
+	public static HashMap<String, String> getSession() {
 		return session;
 	}
+
 	public LoginUtil(String filePath) {
 		this.filePath = filePath;
 	}
@@ -93,5 +94,17 @@ public class LoginUtil {
 			}
 		}
 		return false;
+	}
+
+	public static void removeSession() {
+		// TODO Auto-generated method stub
+		session.clear();
+		session = null;
+	}
+
+	public static void deleteFile() {
+		// TODO Auto-generated method stub
+		File sessionFile = new File(filePath + File.separator + FILE_NAME);
+		sessionFile.delete();
 	}
 }
