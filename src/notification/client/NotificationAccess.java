@@ -17,6 +17,28 @@ public class NotificationAccess {
 	private Activity callBackActivity;
 	private static NotificationAccess instance;
 	private Socket socket = null;
+	private NotifyUserThread nut = null;
+	private NotifyManyUsersThread nmut = null;
+	private String username;
+	private String password;
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	private String notifyUsername;
+	private String[] notifyUsernames;
 
 	/**
 	 * Returns the singleton instance of NotificationAccess.
@@ -43,36 +65,101 @@ public class NotificationAccess {
 	public void startNotificationService() {
 		// Start the notification service
 		ServiceManager serviceManager = new ServiceManager(callBackActivity);
+		serviceManager.setUsername(username);
+		serviceManager.setPassword(password);
 		serviceManager.setNotificationIcon(R.drawable.notification);
 		serviceManager.startService();
 	}
 
 	public void notifyUser() {
-		try {
-			socket = new Socket("10.0.2.2", 1234);
-			// 向服务器发送消息
-			PrintWriter out = new PrintWriter(new BufferedWriter(
-					new OutputStreamWriter(socket.getOutputStream())), true);
-			out.println("++++++++haofohwohiowfhoiohwhfsjafhkjs-=-=-=-");
+		this.notifyUsername = "zhanghang";
+		nut = new NotifyUserThread();
+		nut.start();
 
-			// 接收来自服务器的消息
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-			String msg = br.readLine();
+	}
 
-			if (msg != null) {
-				Log.e(msg, msg);
-			} else {
-				Log.e("数据错误!", "数据错误!");
+	public void notifyManyUsers() {
+		String[] s = new String[3];
+		s[0] = "123";
+		s[1] = "456";
+		s[2] = "789";
+		this.notifyUsernames = s;
+		nmut = new NotifyManyUsersThread();
+		nmut.start();
+	}
+
+	private class NotifyUserThread extends Thread {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				socket = new Socket("10.0.2.2", 1234);
+
+				// 向服务器发送消息
+				PrintWriter out = new PrintWriter(new BufferedWriter(
+						new OutputStreamWriter(socket.getOutputStream())), true);
+				out.println("notifyUser " + notifyUsername);
+				out.flush();
+
+				// 接收来自服务器的消息
+				// BufferedReader br = new BufferedReader(new InputStreamReader(
+				// socket.getInputStream()));
+				// String msg = br.readLine();
+				//
+				// if (msg != null) {
+				// Log.e(msg, msg);
+				// } else {
+				// Log.e("数据错误!", "数据错误!");
+				// }
+				// 关闭流
+				out.close();
+				// br.close();
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				Log.e("notifyUser失败", e.toString());
 			}
-			// 关闭流
-			out.close();
-			br.close();
-			// 关闭Socket
-			socket.close();
-		} catch (Exception e) {
-			// TODO: handle exception
-			Log.e("没连上","没连上");
+
 		}
+
+	}
+
+	private class NotifyManyUsersThread extends Thread {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				socket = new Socket("10.0.2.2", 1234);
+
+				// 向服务器发送消息
+				PrintWriter out = new PrintWriter(new BufferedWriter(
+						new OutputStreamWriter(socket.getOutputStream())), true);
+				out.println("notifyManyUsers " + notifyUsernames.toString());
+				out.flush();
+
+				// 接收来自服务器的消息
+				// BufferedReader br = new BufferedReader(new
+				// InputStreamReader(
+				// socket.getInputStream()));
+				// String msg = br.readLine();
+				//
+				// if (msg != null) {
+				// Log.e(msg, msg);
+				// } else {
+				// Log.e("数据错误!", "数据错误!");
+				// }
+				// 关闭流
+				out.close();
+				// br.close();
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				Log.e("notifyUser失败", e.toString());
+			}
+
+		}
+
 	}
 }

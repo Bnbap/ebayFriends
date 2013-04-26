@@ -10,104 +10,126 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-/** 
- * This class is to manage the notification service and to load the configuration.
+/**
+ * This class is to manage the notification service and to load the
+ * configuration.
  */
 public final class ServiceManager {
 
-    private Context context;
+	private Context context;
 
-    private SharedPreferences sharedPrefs;
+	private SharedPreferences sharedPrefs;
 
-    private String apiKey;
+	private String apiKey;
 
-    private String xmppHost;
+	private String xmppHost;
 
-    private String xmppPort;
+	private String xmppPort;
 
-    private String callbackActivityPackageName;
+	private String username;
 
-    private String callbackActivityClassName;
+	public String getUsername() {
+		return username;
+	}
 
-    public ServiceManager(Context context) {
-        this.context = context;
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-        if (context instanceof Activity) {
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	private String password;
+
+	private String callbackActivityPackageName;
+
+	private String callbackActivityClassName;
+
+	public ServiceManager(Context context) {
+		this.context = context;
+
+		if (context instanceof Activity) {
 			Activity callbackActivity = (Activity) context;
-            callbackActivityPackageName = callbackActivity.getPackageName();
-            callbackActivityClassName = callbackActivity.getClass().getName();
-        }
+			callbackActivityPackageName = callbackActivity.getPackageName();
+			callbackActivityClassName = callbackActivity.getClass().getName();
+		}
 
-        apiKey = getMetaDataValue("NOTIFICATION_API_KEY");
-        if (apiKey == null) {
-                  throw new RuntimeException();
-            }
+		apiKey = getMetaDataValue("NOTIFICATION_API_KEY");
+		if (apiKey == null) {
+			throw new RuntimeException();
+		}
 
-        xmppHost = "10.0.2.2";
-        xmppPort = "5222";
+		xmppHost = "10.0.2.2";
+		xmppPort = "5222";
 
-        sharedPrefs = context.getSharedPreferences(
-                Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        Editor editor = sharedPrefs.edit();
-        editor.putString(Constants.API_KEY, apiKey);
-        editor.putString(Constants.XMPP_HOST, xmppHost);
-        editor.putInt(Constants.XMPP_PORT, Integer.parseInt(xmppPort));
-        editor.putString(Constants.CALLBACK_ACTIVITY_PACKAGE_NAME,
-                callbackActivityPackageName);
-        editor.putString(Constants.CALLBACK_ACTIVITY_CLASS_NAME,
-                callbackActivityClassName);
-        editor.commit();
-        // Log.i(LOGTAG, "sharedPrefs=" + sharedPrefs.toString());
-    }
+		sharedPrefs = context.getSharedPreferences(
+				Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+		Editor editor = sharedPrefs.edit();
+		editor.putString(Constants.API_KEY, apiKey);
+		editor.putString(Constants.XMPP_HOST, xmppHost);
+		editor.putInt(Constants.XMPP_PORT, Integer.parseInt(xmppPort));
+		editor.putString(Constants.USERNAME, username);
+		editor.putString(Constants.PASSWORD, password);
+		editor.putString(Constants.CALLBACK_ACTIVITY_PACKAGE_NAME,
+				callbackActivityPackageName);
+		editor.putString(Constants.CALLBACK_ACTIVITY_CLASS_NAME,
+				callbackActivityClassName);
+		editor.commit();
+		// Log.i(LOGTAG, "sharedPrefs=" + sharedPrefs.toString());
+	}
 
-    public void startService() {
-        Thread serviceThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = NotificationService.getIntent();
-                context.startService(intent);
-            }
-        });
-        serviceThread.start();
-    }
+	public void startService() {
+		Thread serviceThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Intent intent = NotificationService.getIntent();
+				context.startService(intent);
+			}
+		});
+		serviceThread.start();
+	}
 
-    public void stopService() {
-        Intent intent = NotificationService.getIntent();
-        context.stopService(intent);
-    }
+	public void stopService() {
+		Intent intent = NotificationService.getIntent();
+		context.stopService(intent);
+	}
 
-    
-        private String getMetaDataValue(String name) {
-            Object value = null;
-            PackageManager packageManager = context.getPackageManager();
-            ApplicationInfo applicationInfo;
-            try {
-                applicationInfo = packageManager.getApplicationInfo(context
-                        .getPackageName(), 128);
-                if (applicationInfo != null && applicationInfo.metaData != null) {
-                    value = applicationInfo.metaData.get(name);
-                }
-            } catch (NameNotFoundException e) {
-                throw new RuntimeException(
-                        "Could not read the name in the manifest file.", e);
-            }
-            if (value == null) {
-                throw new RuntimeException("The name '" + name
-                        + "' is not defined in the manifest file's meta data.");
-            }
-            return value.toString();
-        }
+	private String getMetaDataValue(String name) {
+		Object value = null;
+		PackageManager packageManager = context.getPackageManager();
+		ApplicationInfo applicationInfo;
+		try {
+			applicationInfo = packageManager.getApplicationInfo(
+					context.getPackageName(), 128);
+			if (applicationInfo != null && applicationInfo.metaData != null) {
+				value = applicationInfo.metaData.get(name);
+			}
+		} catch (NameNotFoundException e) {
+			throw new RuntimeException(
+					"Could not read the name in the manifest file.", e);
+		}
+		if (value == null) {
+			throw new RuntimeException("The name '" + name
+					+ "' is not defined in the manifest file's meta data.");
+		}
+		return value.toString();
+	}
 
-    public void setNotificationIcon(int iconId) {
-        Editor editor = sharedPrefs.edit();
-        editor.putInt(Constants.NOTIFICATION_ICON, iconId);
-        editor.commit();
-    }
+	public void setNotificationIcon(int iconId) {
+		Editor editor = sharedPrefs.edit();
+		editor.putInt(Constants.NOTIFICATION_ICON, iconId);
+		editor.commit();
+	}
 
-    public static void viewNotificationSettings(Context context) {
-        Intent intent = new Intent().setClass(context,
-                NotificationSettingsActivity.class);
-        context.startActivity(intent);
-    }
+	public static void viewNotificationSettings(Context context) {
+		Intent intent = new Intent().setClass(context,
+				NotificationSettingsActivity.class);
+		context.startActivity(intent);
+	}
 
 }

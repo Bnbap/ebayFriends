@@ -72,8 +72,8 @@ public class XmppManager {
 
 		xmppHost = sharedPrefs.getString(Constants.XMPP_HOST, "10.0.2.2");
 		xmppPort = sharedPrefs.getInt(Constants.XMPP_PORT, 5222);
-		username = sharedPrefs.getString(Constants.XMPP_USERNAME, "zhanghang");
-		password = sharedPrefs.getString(Constants.XMPP_PASSWORD, "zhanghang");
+		username = sharedPrefs.getString(Constants.USERNAME, "zhanghang");
+		password = sharedPrefs.getString(Constants.PASSWORD, "zhanghang");
 
 		connectionListener = new PersistentConnectionListener(this);
 		notificationPacketListener = new NotificationPacketListener(this);
@@ -189,10 +189,10 @@ public class XmppManager {
 		taskTracker.decrease();
 	}
 
-//	private String newRandomUUID() {
-//		String uuidRaw = UUID.randomUUID().toString();
-//		return uuidRaw.replaceAll("-", "");
-//	}
+	// private String newRandomUUID() {
+	// String uuidRaw = UUID.randomUUID().toString();
+	// return uuidRaw.replaceAll("-", "");
+	// }
 
 	private boolean isConnected() {
 		return connection != null && connection.isConnected();
@@ -204,8 +204,8 @@ public class XmppManager {
 	}
 
 	private boolean isRegistered() {
-		return sharedPrefs.contains(Constants.XMPP_USERNAME)
-				&& sharedPrefs.contains(Constants.XMPP_PASSWORD);
+		return sharedPrefs.contains(Constants.USERNAME)
+				&& sharedPrefs.contains(Constants.PASSWORD);
 	}
 
 	private void submitConnectTask() {
@@ -240,8 +240,8 @@ public class XmppManager {
 
 	private void removeAccount() {
 		Editor editor = sharedPrefs.edit();
-		editor.remove(Constants.XMPP_USERNAME);
-		editor.remove(Constants.XMPP_PASSWORD);
+		editor.remove(Constants.USERNAME);
+		editor.remove(Constants.PASSWORD);
 		editor.commit();
 	}
 
@@ -330,9 +330,9 @@ public class XmppManager {
 								xmppManager.setPassword(newPassword);
 
 								Editor editor = sharedPrefs.edit();
-								editor.putString(Constants.XMPP_USERNAME,
+								editor.putString(Constants.USERNAME,
 										newUsername);
-								editor.putString(Constants.XMPP_PASSWORD,
+								editor.putString(Constants.PASSWORD,
 										newPassword);
 								editor.commit();
 								xmppManager.runTask();

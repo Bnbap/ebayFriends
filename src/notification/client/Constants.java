@@ -22,9 +22,9 @@ public class Constants {
 
 	public static final String XMPP_PORT = "XMPP_PORT";
 
-	public static final String XMPP_USERNAME = "XMPP_USERNAME";
+	public static final String USERNAME = "USERNAME";
 
-	public static final String XMPP_PASSWORD = "XMPP_PASSWORD";
+	public static final String PASSWORD = "PASSWORD";
 
 	// public static final String USER_KEY = "USER_KEY";
 
