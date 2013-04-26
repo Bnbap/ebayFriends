@@ -27,9 +27,9 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
     private static final int TAP_TO_REFRESH = 1;
     private static final int PULL_TO_REFRESH = 2;
     private static final int RELEASE_TO_REFRESH = 3;
-    private static final int REFRESHING = 4;
+    protected static final int REFRESHING = 4;
 
-    private static final String TAG = "PullToRefreshListView";
+    protected static final String TAG = "PullToRefreshListView";
 
     private OnRefreshListener mOnRefreshListener;
 
@@ -37,7 +37,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
      * Listener that will receive notifications every time the list scrolls.
      */
     private OnScrollListener mOnScrollListener;
-    private LayoutInflater mInflater;
+    protected LayoutInflater mInflater;
 
     private RelativeLayout mRefreshView;
     private TextView mRefreshViewText;
@@ -45,8 +45,8 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
     private ProgressBar mRefreshViewProgress;
     private TextView mRefreshViewLastUpdated;
 
-    private int mCurrentScrollState;
-    private int mRefreshState;
+    protected int mCurrentScrollState;
+    protected int mRefreshState;
 
     private RotateAnimation mFlipAnimation;
     private RotateAnimation mReverseFlipAnimation;

@@ -14,6 +14,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,19 +30,18 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 @SuppressLint("NewApi")
-public class NewsFeedItemAdapter extends BaseAdapter {
+public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 	private List<NewsFeedItem> newsFeedList = null;
 	private Activity activity;
 	private ImageLoader imageLoader;
-	// play music para
-	static final String AUDIO_PATH = "http://rainite.com/young4you.mp3";
 	private MediaPlayer mediaPlayer;
 	// Indicate the current mediaPlayer in the list position.
 	private int preparePosition = -1;
 	private ListView lv;
 	private OnClickListener playListener;
+	private int currentPage = 0;
 
 	private class PlayButtonListener implements OnClickListener{
 		BaseAdapter adapter;
@@ -112,6 +112,7 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 	
 	public NewsFeedItemAdapter(Activity activity,
 		 final List<NewsFeedItem> newsFeedList, ImageLoader imageLoader, final ListView lv) {
+		super(activity, R.layout.newsfeeditem, newsFeedList);
 		this.newsFeedList = newsFeedList;
 		this.activity = activity;
 		this.imageLoader = imageLoader;
@@ -195,7 +196,7 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public NewsFeedItem getItem(int position) {
 		return newsFeedList.get(position);
 	}
 
@@ -203,7 +204,19 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-
+	
+	public int getCurrentPage(){
+		return currentPage;
+	}
+	
+	public void incrementCurrentPage(){
+		currentPage++;
+	}
+	
+	public void resetPage(){
+		currentPage = 0;
+	}
+	
 	private static class AnimateFirstDisplayListener extends
 			SimpleImageLoadingListener {
 

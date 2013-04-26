@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import util.GetRequest;
+import activity.newsfeed.PullAndLoadListView.OnLoadMoreListener;
 import activity.newsfeed.PullToRefreshListView.OnRefreshListener;
 import android.app.Fragment;
 import android.os.AsyncTask;
@@ -23,7 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class NewsFeedFragment extends Fragment {
 
-	private PullToRefreshListView lv;
+	private PullAndLoadListView lv;
 	private List<NewsFeedItem> itemList;
 	private NewsFeedItemAdapter adapter;
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
@@ -36,65 +37,106 @@ public class NewsFeedFragment extends Fragment {
 				R.id.window_title);
 		windowTitleView.setText("News Feeding");
 		itemList = new ArrayList<NewsFeedItem>();
-		lv = (PullToRefreshListView) view.findViewById(R.id.listview);
+		lv = (PullAndLoadListView) view.findViewById(R.id.listview);
 		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader,
 				lv);
 		lv.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				new GetDataTask(adapter, lv).execute();
+				new RefreshNewsFeedTask(adapter, lv).execute();
+			}
+		});
+		lv.setOnLoadMoreListener(new OnLoadMoreListener() {
+
+			@Override
+			public void onLoadMore() {
+				new MoreNewsFeedTask(adapter, lv).execute();
 			}
 		});
 		lv.setAdapter(adapter);
-		new GetDataTask(adapter, lv).execute();
+		new RefreshNewsFeedTask(adapter, lv).execute();
 		return view;
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
+	private class RefreshNewsFeedTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
 		private NewsFeedItemAdapter adapter;
 		private PullToRefreshListView lv;
 		
-		public GetDataTask(NewsFeedItemAdapter adapter, PullToRefreshListView lv) {
+		public RefreshNewsFeedTask(NewsFeedItemAdapter adapter, PullToRefreshListView lv) {
 			this.adapter = adapter;
 			this.lv = lv;
 		}
 		@Override
 		protected List<NewsFeedItem> doInBackground(Void... params) {
-			// Simulates a background job.
-			List<NewsFeedItem> list = new ArrayList<NewsFeedItem>();
-			String getURL = Constants.GET_NEWSFEED_URL_PREFIX + 0;
-			GetRequest getRequest = new GetRequest(getURL);
-			String jsonResult = getRequest.getContent();
-			
-			if (jsonResult == null) {
-				Log.e("NewsFeedFragment", "Json Parse Error");
-			} else {
-				try {
-					JSONArray itemArray = new JSONArray(jsonResult);
-					for (int i = 0; i < itemArray.length(); i++) {
-						JSONObject item = itemArray.getJSONObject(i);
-						String imageURL = item.getString("picture");
-						String voiceURL = item.getString("voice");
-						JSONObject person = item.getJSONObject("author");
-						String portraitURL = person.getString("portrait");
-						String authorName = person.getString("name");
-						NewsFeedItem newsFeedItem = new NewsFeedItem(imageURL,
-								portraitURL, authorName, voiceURL);
-						list.add(newsFeedItem);
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-					Log.e("NewsFeedFragment", "Parse Json Error");
-				}
-			}
-			return list;
+			return getNewsFeedList(0);
 		}
 
 		@Override
 		protected void onPostExecute(List<NewsFeedItem> result) {
 			super.onPostExecute(result);
 			adapter.updateList(result);
+			adapter.resetPage();
 			lv.onRefreshComplete();
 		}
+	}
+	
+	private class MoreNewsFeedTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
+		private NewsFeedItemAdapter adapter;
+		private PullToRefreshListView lv;
+		
+		public MoreNewsFeedTask(NewsFeedItemAdapter adapter, PullToRefreshListView lv) {
+			this.adapter = adapter;
+			this.lv = lv;
+		}
+		@Override
+		protected List<NewsFeedItem> doInBackground(Void... params) {
+			int currentPage = adapter.getCurrentPage() + 1;
+			Log.e("NEWSFEED FRAG", "Load more:" + currentPage);
+			List<NewsFeedItem> fetchList = getNewsFeedList(currentPage);
+			if(fetchList.size() > 0) adapter.incrementCurrentPage();
+			return fetchList;
+		}
+
+		@Override
+		protected void onPostExecute(List<NewsFeedItem> result) {
+			super.onPostExecute(result);
+			List<NewsFeedItem> currentList = adapter.getItemList();
+			for(NewsFeedItem item: result){
+				currentList.add(item);
+			}
+			adapter.notifyDataSetChanged();
+			lv.onRefreshComplete();
+		}
+	}
+	
+	private List<NewsFeedItem> getNewsFeedList(int page){
+		List<NewsFeedItem> list = new ArrayList<NewsFeedItem>();
+		String getURL = Constants.GET_NEWSFEED_URL_PREFIX + page;
+		GetRequest getRequest = new GetRequest(getURL);
+		String jsonResult = getRequest.getContent();
+		Log.v("NewsFeedFragment", "Request URL: " + getURL);
+		Log.v("NewsFeedFragment", "Response: " + jsonResult);
+		if (jsonResult == null) {
+			Log.e("NewsFeedFragment", "Json Parse Error");
+		} else {
+			try {
+				JSONArray itemArray = new JSONArray(jsonResult);
+				for (int i = 0; i < itemArray.length(); i++) {
+					JSONObject item = itemArray.getJSONObject(i);
+					String imageURL = item.getString("picture");
+					String voiceURL = item.getString("voice");
+					JSONObject person = item.getJSONObject("author");
+					String portraitURL = person.getString("portrait");
+					String authorName = person.getString("name");
+					NewsFeedItem newsFeedItem = new NewsFeedItem(imageURL,
+							portraitURL, authorName, voiceURL);
+					list.add(newsFeedItem);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.e("NewsFeedFragment", "Parse Json Error");
+			}
+		}
+		return list;
 	}
 }
