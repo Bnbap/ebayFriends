@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import util.GetRequest;
-import activity.MainActivity;
 import activity.newsfeed.PullToRefreshListView.OnRefreshListener;
 import android.app.Fragment;
 import android.os.AsyncTask;
@@ -44,21 +43,19 @@ public class NewsFeedFragment extends Fragment {
 		lv.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				new GetDataTask(adapter).execute();
+				new GetDataTask().execute();
 			}
 		});
-		new GetDataTask(adapter).execute();
+		new GetDataTask().execute();
 		return view;
 	}
 
 	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
 
-		private NewsFeedItemAdapter adapter;
 		private List<NewsFeedItem> list;
 
-		public GetDataTask(NewsFeedItemAdapter adapter) {
-			this.adapter = adapter;
-			list = adapter.getItemList();
+		public GetDataTask() {
+			list = new ArrayList<NewsFeedItem>();
 		}
 
 		@Override
@@ -86,7 +83,6 @@ public class NewsFeedFragment extends Fragment {
 								portraitURL, authorName, voiceURL);
 						list.add(newsFeedItem);
 					}
-					adapter.updateList(list);
 				} catch (JSONException e) {
 					e.printStackTrace();
 					Log.e("NewsFeedFragment", "Parse Json Error");
@@ -98,7 +94,7 @@ public class NewsFeedFragment extends Fragment {
 		@Override
 		protected void onPostExecute(String[] result) {
 			super.onPostExecute(result);
-			adapter.updateList(list);
+			// adapter.updateList(list);
 		}
 	}
 }
