@@ -39,33 +39,32 @@ public class NewsFeedFragment extends Fragment {
 		lv = (PullToRefreshListView) view.findViewById(R.id.listview);
 		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader,
 				lv);
-		lv.setAdapter(adapter);
 		lv.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				new GetDataTask().execute();
+				new GetDataTask(adapter, lv).execute();
 			}
 		});
-		new GetDataTask().execute();
+		lv.setAdapter(adapter);
+		new GetDataTask(adapter, lv).execute();
 		return view;
 	}
 
-	private class GetDataTask extends AsyncTask<Void, Void, String[]> {
-
-		private List<NewsFeedItem> list;
-
-		public GetDataTask() {
-			list = new ArrayList<NewsFeedItem>();
+	private class GetDataTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
+		private NewsFeedItemAdapter adapter;
+		private PullToRefreshListView lv;
+		
+		public GetDataTask(NewsFeedItemAdapter adapter, PullToRefreshListView lv) {
+			this.adapter = adapter;
+			this.lv = lv;
 		}
-
 		@Override
-		protected String[] doInBackground(Void... params) {
+		protected List<NewsFeedItem> doInBackground(Void... params) {
 			// Simulates a background job.
+			List<NewsFeedItem> list = new ArrayList<NewsFeedItem>();
 			String getURL = Constants.GET_NEWSFEED_URL_PREFIX + 0;
 			GetRequest getRequest = new GetRequest(getURL);
 			String jsonResult = getRequest.getContent();
-			Log.e("JSON", "Request URL: " + getURL);
-			Log.e("JSON", "Result: " + jsonResult);
 			
 			if (jsonResult == null) {
 				Log.e("NewsFeedFragment", "Json Parse Error");
@@ -88,13 +87,14 @@ public class NewsFeedFragment extends Fragment {
 					Log.e("NewsFeedFragment", "Parse Json Error");
 				}
 			}
-			return null;
+			return list;
 		}
 
 		@Override
-		protected void onPostExecute(String[] result) {
+		protected void onPostExecute(List<NewsFeedItem> result) {
 			super.onPostExecute(result);
-			// adapter.updateList(list);
+			adapter.updateList(result);
+			lv.onRefreshComplete();
 		}
 	}
 }

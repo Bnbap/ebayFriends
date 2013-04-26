@@ -59,7 +59,7 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 						mediaPlayer.reset();
 						newsFeedList.get(preparePosition).setPlayState(NewsFeedItem.STOP);
 					}
-					mediaPlayer.setDataSource(AUDIO_PATH);
+					mediaPlayer.setDataSource(newsFeedList.get(currentPosition).getVoice());
 				    mediaPlayer.prepareAsync();
 				    currentItem.setPlayState(NewsFeedItem.PREPARE);
 				    preparePosition = currentPosition;
@@ -161,7 +161,6 @@ public class NewsFeedItemAdapter extends BaseAdapter {
 		else{
 			holder.playButton.setImageResource(R.drawable.playbutton);
 		}
-		holder.playButton.invalidate();
 
 		// set play config
 		holder.playButton.setOnClickListener(playListener);
