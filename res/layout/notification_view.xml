@@ -1,7 +1,22 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/notitication_view"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:scaleType="fitXY" >
+    android:orientation="vertical" >
 
-</ListView>
+    <ListView
+        android:id="@+id/notification_view"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:divider="#00000000"
+        android:dividerHeight="1dip"
+        android:drawSelectorOnTop="false"
+        android:fadingEdge="none"
+        android:listSelector="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:scrollbars="vertical" />
+
+</LinearLayout>
