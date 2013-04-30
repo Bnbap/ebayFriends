@@ -1,6 +1,7 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -11,11 +12,11 @@ import bean.PurchasedItem;
 
 public class PostNewUtil {
 
-	private static List<PurchasedItem> itemList = new ArrayList<PurchasedItem>();
+	private static ArrayList<HashMap<String,Object>> itemList = new ArrayList<HashMap<String,Object>>();
 
-	public List<PurchasedItem> getItemList() {
+	public static ArrayList<HashMap<String,Object>> getItemList() {
 
-		GetRequest gr = new GetRequest("URL");
+		GetRequest gr = new GetRequest("http://192.168.47.19:8080/users/getGoodsList");
 		JSONArray jsonArray = null;
 		try {
 			jsonArray = new JSONArray(gr.getContent());
@@ -27,10 +28,17 @@ public class PostNewUtil {
 				JSONObject jObject = (JSONObject) jsonArray.get(i);
 				String name = null;
 				String url = null;
+				String date =null;
 				name = jObject.getString("name");
 				url = jObject.getString("url");
-				PurchasedItem pi = new PurchasedItem(name,url);
-				itemList.add(pi);
+				date = jObject.getString("date");
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("name", name);
+				map.put("url", url);
+				map.put("date", date);
+				
+//				PurchasedItem pi = new PurchasedItem(name,url);
+				itemList.add(map);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
