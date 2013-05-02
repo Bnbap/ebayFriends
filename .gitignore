@@ -5,5 +5,3 @@ gen/*
 R.java
 *.dex
 *.ap*
-.project
-project.properties
