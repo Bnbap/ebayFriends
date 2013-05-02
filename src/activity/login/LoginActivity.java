@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -88,6 +89,7 @@ public class LoginActivity extends Activity {
 			Bundle b = new Bundle();
 			b.putBoolean("isSessionAvailable", isSessionAvailable);
 			msg.setData(b);
+			Log.e("Thread","sessionAvalable"+isSessionAvailable);
 			LoginActivity.this.myHandler.sendMessage(msg);
 		}
 	}

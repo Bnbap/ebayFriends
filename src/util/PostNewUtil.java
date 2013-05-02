@@ -27,14 +27,14 @@ public class PostNewUtil {
 			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject jObject = (JSONObject) jsonArray.get(i);
 				String name = null;
-				String url = null;
+				String id = null;
 				String date =null;
 				name = jObject.getString("name");
-				url = jObject.getString("url");
-				date = jObject.getString("date");
+				id = jObject.getString("id");
+				date = jObject.getString("time");
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("name", name);
-				map.put("url", url);
+				map.put("url", id);
 				map.put("date", date);
 				
 //				PurchasedItem pi = new PurchasedItem(name,url);

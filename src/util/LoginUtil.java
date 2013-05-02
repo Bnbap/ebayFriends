@@ -86,6 +86,9 @@ public class LoginUtil {
 
 		PostRequest postRequest = new PostRequest(HTTP_ADDRESS, param);
 		List<Cookie> cookies = postRequest.getCookieList();
+		if(cookies==null){
+			return false;
+		}
 		for (int i = 0; i < cookies.size(); i++) {
 			if ("sessionid".equals(cookies.get(i).getName())) {
 				session.put("s_sessionid", cookies.get(i).getValue());
