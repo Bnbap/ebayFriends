@@ -4,6 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import com.ebay.ebayfriend.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import bean.PurchasedItem;
 import util.PicUtil;
@@ -37,6 +41,8 @@ public class PicProcessFragment extends Fragment {
 	private ImageView imageView;
 	private Bitmap myBitmap;
 	private byte[] mContent;
+	private ImageLoadingListener animateFirstListener = new PicUtil.AnimateFirstDisplayListener();
+	private ImageLoader imageLoader;
 
 	public PicProcessFragment() {
 	}
@@ -47,6 +53,8 @@ public class PicProcessFragment extends Fragment {
 
 		Bundle b = getArguments();
 		pi = (PurchasedItem) b.getSerializable("purchasedItem");
+
+		imageLoader = ImageLoader.getInstance();
 
 		View view = inflater.inflate(R.layout.process_pic, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
@@ -127,7 +135,8 @@ public class PicProcessFragment extends Fragment {
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 				String picturePath = cursor.getString(columnIndex);
 				cursor.close();
-				imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+				// imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+				prepareImg(picturePath);
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -147,6 +156,17 @@ public class PicProcessFragment extends Fragment {
 			imageView.setImageBitmap(myBitmap);
 		}
 
+	}
+
+	private void prepareImg(String picUrl) {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showStubImage(R.drawable.ic_stub)
+				.showImageForEmptyUri(R.drawable.ic_empty)
+				.showImageOnFail(R.drawable.ic_error).cacheInMemory()
+				.cacheOnDisc().displayer(new RoundedBitmapDisplayer(20))
+				.build();
+		imageLoader.displayImage("file://" + picUrl, imageView, options,
+				animateFirstListener);
 	}
 
 	public static Bitmap getPicFromBytes(byte[] bytes,
