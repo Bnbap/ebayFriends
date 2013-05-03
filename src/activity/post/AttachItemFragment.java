@@ -35,8 +35,8 @@ public class AttachItemFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.attachitem, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
-				R.id.window_title);
-		windowTitleView.setText("Post");
+				R.id.post_title);
+		windowTitleView.setText("select item");
 
 		itemListHandler = new ItemListHandler();
 		Thread getItemListThread = new GetItemListThread();
@@ -54,7 +54,7 @@ public class AttachItemFragment extends Fragment {
 		fragment.setArguments(bundle);
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
-		transaction.replace(R.id.content, fragment);
+		transaction.replace(R.id.post_content, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
 		Log.e("AttachItemFragment","switch to picProcessFragment");

@@ -50,8 +50,8 @@ public class PicProcessFragment extends Fragment {
 
 		View view = inflater.inflate(R.layout.process_pic, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
-				R.id.window_title);
-		windowTitleView.setText("Post");
+				R.id.post_title);
+		windowTitleView.setText("select picture");
 		imageView = (ImageView) view.findViewById(R.id.post_pic);
 		imageView.setOnClickListener(new OnClickListener() {
 
