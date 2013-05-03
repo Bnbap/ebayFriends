@@ -47,7 +47,7 @@ public class PicProcessFragment extends Fragment {
 
 		Bundle b = getArguments();
 		pi = (PurchasedItem) b.getSerializable("purchasedItem");
-		
+
 		View view = inflater.inflate(R.layout.process_pic, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.window_title);
@@ -120,8 +120,8 @@ public class PicProcessFragment extends Fragment {
 				Uri selectedImage = data.getData();
 				String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-				Cursor cursor = getActivity().getContentResolver().query(selectedImage,
-						filePathColumn, null, null, null);
+				Cursor cursor = getActivity().getContentResolver().query(
+						selectedImage, filePathColumn, null, null, null);
 				cursor.moveToFirst();
 
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
