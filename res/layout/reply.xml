@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="5dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true" >
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/hello_world"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/image"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-25dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/hello_world"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/image"
+            android:layout_below="@+id/image"
+            android:layout_marginRight="70dp"
+            android:layout_marginTop="-30dp"
+            android:background="@null"
+            android:src="@drawable/playbutton" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/icon"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/hello_world"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/replyList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none" />
+
+</LinearLayout>
