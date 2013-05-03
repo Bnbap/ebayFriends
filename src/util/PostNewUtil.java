@@ -12,10 +12,9 @@ import bean.PurchasedItem;
 
 public class PostNewUtil {
 
-	private static ArrayList<HashMap<String,Object>> itemList = new ArrayList<HashMap<String,Object>>();
-
 	public static ArrayList<HashMap<String,Object>> getItemList() {
-
+		
+		ArrayList<HashMap<String,Object>> itemList = new ArrayList<HashMap<String,Object>>();
 		GetRequest gr = new GetRequest("http://192.168.47.19:8080/users/getGoodsList");
 		JSONArray jsonArray = null;
 		try {
