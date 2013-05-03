@@ -1,6 +1,12 @@
 package bean;
 
-public class PurchasedItem {
+import java.io.Serializable;
+
+public class PurchasedItem implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String name;
 	String url;
 	public PurchasedItem(String name,String url){

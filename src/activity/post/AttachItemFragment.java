@@ -2,16 +2,9 @@ package activity.post;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import util.PostNewUtil;
 
-import activity.about.AboutFragment;
-import activity.login.LoginActivity;
-import activity.newsfeed.NewsFeedFragment;
-import activity.notification.NotificationFragment;
-import activity.profile.ProfileFragment;
-import activity.setting.SettingFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -21,14 +14,11 @@ import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import bean.PurchasedItem;
 import android.widget.ListView;
 
@@ -59,7 +49,9 @@ public class AttachItemFragment extends Fragment {
 
 	private void switchToPicProcessFragment(PurchasedItem pi) {
 		PicProcessFragment fragment = new PicProcessFragment();
-		fragment.setPurchasedItem(pi);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("purchasedItem", pi);
+		fragment.setArguments(bundle);
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
 		transaction.replace(R.id.content, fragment);
@@ -92,26 +84,7 @@ public class AttachItemFragment extends Fragment {
 
 		});
 	}
-	/**
-	 * get the user's purchase records
-	 * 
-	 * @param UserId
-	 *            the user who concerns
-	 * @return PurchasedItems
-	 */
-	private PurchasedItem[] getBoughtRecords(long UserId) {
-		return null;
-	}
 
-	class SelectItem implements OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
 
 	class GetItemListThread extends Thread {
 		@Override
@@ -136,3 +109,6 @@ public class AttachItemFragment extends Fragment {
 		}
 	}
 }
+
+
+
