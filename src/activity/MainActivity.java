@@ -8,6 +8,7 @@ import activity.item.ItemDetailActivity;
 import activity.newsfeed.NewsFeedFragment;
 import activity.notification.NotificationFragment;
 import activity.post.AttachItemFragment;
+import activity.post.PostActivity;
 import activity.profile.ProfileFragment;
 import activity.setting.SettingFragment;
 import android.annotation.SuppressLint;
@@ -100,7 +101,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 			@Override
 			public void onClick(View view) {
 
-				changeFragment(5);
+				Intent intent = new Intent(view.getContext(),PostActivity.class);
+				view.getContext().startActivity(intent);
 				
 			}
 			
@@ -403,9 +405,6 @@ public class MainActivity extends Activity implements OnTouchListener,
 			break;
 		case 4:
 			fragment = new AboutFragment();
-			break;
-		case 5:
-			fragment = new AttachItemFragment();
 			break;
 		}
 		transaction.replace(R.id.content, fragment);
