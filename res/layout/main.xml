@@ -20,7 +20,7 @@
                 android:id="@+id/iv_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:clickable="true"
                 android:onClick="displayItemDetails"
@@ -33,6 +33,13 @@
                 android:layout_centerInParent="true"
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp" />
+            <Button 
+                android:id="@+id/mainview_post_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/mainview_post"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -81,18 +88,5 @@
         </layout.MenuLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right" >
-
-        <Button
-            android:id="@+id/buy"
-            android:layout_width="70dp"
-            android:layout_height="35dp"
-            android:background="#0f0"
-            android:text="@string/buy_it_now"
-            android:textSize="12sp" />
-    </LinearLayout>
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import activity.about.AboutFragment;
 import activity.item.ItemDetailActivity;
 import activity.newsfeed.NewsFeedFragment;
 import activity.notification.NotificationFragment;
+import activity.post.AttachItemFragment;
 import activity.profile.ProfileFragment;
 import activity.setting.SettingFragment;
 import android.annotation.SuppressLint;
@@ -31,6 +32,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -48,6 +50,7 @@ public class MainActivity extends Activity implements OnTouchListener,
 	protected LinearLayout menuLayout;
 	protected ImageView iv_set;
 	protected ListView lv_set;
+	protected Button postButton;
 
 	protected int MAX_WIDTH = 0;
 	protected final static int SPEED = 30;
@@ -90,6 +93,18 @@ public class MainActivity extends Activity implements OnTouchListener,
 		mylaout = (MenuLayout) findViewById(R.id.mylaout);
 		lv_set.setAdapter(new ArrayAdapter<String>(this, R.layout.item,
 				R.id.tv_item, windowsTitle));
+		
+		postButton =(Button)findViewById(R.id.mainview_post_bt);
+		postButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View view) {
+
+				changeFragment(5);
+				
+			}
+			
+		});
 
 		mylaout.setOnScrollListener(new OnScrollListener() {
 			@Override
@@ -388,6 +403,9 @@ public class MainActivity extends Activity implements OnTouchListener,
 			break;
 		case 4:
 			fragment = new AboutFragment();
+			break;
+		case 5:
+			fragment = new AttachItemFragment();
 			break;
 		}
 		transaction.replace(R.id.content, fragment);

@@ -15,5 +15,4 @@
     <string name="pull_to_refresh_refreshing_label">Loading&#8230;</string>
     <string name="pull_to_refresh_tap_label">Tap to refresh&#8230;</string>
     <string name="no_more_label">No more items to be loaded&#8230;</string>
-
 </resources>
