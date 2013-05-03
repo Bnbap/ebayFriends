@@ -4,14 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="0dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
     android:paddingTop="5dp"
     tools:context=".MainActivity" >
 
     <activity.newsfeed.PullAndLoadListView
         android:id="@+id/listview"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:scrollbars="none" />
 
 </LinearLayout>

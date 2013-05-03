@@ -1,8 +1,5 @@
 package activity.newsfeed;
 
-
-import com.ebay.ebayfriend.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -10,6 +7,9 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.ebay.ebayfriend.R;
 
 /*
  * Copyright (C) 2012 Fabian Leon Ortega <http://orleonsoft.blogspot.com/,
@@ -30,6 +30,8 @@ import android.widget.RelativeLayout;
 
 public class PullAndLoadListView extends PullToRefreshListView {
 
+	private boolean noMore = false;
+
 	public PullAndLoadListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initComponent(context);
@@ -44,9 +46,12 @@ public class PullAndLoadListView extends PullToRefreshListView {
 	private RelativeLayout mFooterView;
 	// private TextView mLabLoadMore;
 	private ProgressBar mProgressBarLoadMore;
+	private TextView noMoreToLoadBar;
 
-	public PullAndLoadListView(Context context) { super(context);
-	  initComponent(context); }
+	public PullAndLoadListView(Context context) {
+		super(context);
+		initComponent(context);
+	}
 
 	public PullAndLoadListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -58,12 +63,11 @@ public class PullAndLoadListView extends PullToRefreshListView {
 		// footer
 		mFooterView = (RelativeLayout) mInflater.inflate(
 				R.layout.load_more_footer, this, false);
-		/*
-		 * mLabLoadMore = (TextView) mFooterView
-		 * .findViewById(R.id.load_more_lab_view);
-		 */
+
 		mProgressBarLoadMore = (ProgressBar) mFooterView
 				.findViewById(R.id.load_more_progressBar);
+		noMoreToLoadBar = (TextView) mFooterView
+				.findViewById(R.id.no_more_text_bar);
 
 		addFooterView(mFooterView);
 	}
@@ -90,26 +94,23 @@ public class PullAndLoadListView extends PullToRefreshListView {
 
 			if (visibleItemCount == totalItemCount) {
 				mProgressBarLoadMore.setVisibility(View.GONE);
-				// mLabLoadMore.setVisibility(View.GONE);
 				return;
 			}
 
 			boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
 
 			if (!mIsLoadingMore && loadMore && mRefreshState != REFRESHING
-					&& mCurrentScrollState != SCROLL_STATE_IDLE) {
+					&& mCurrentScrollState != SCROLL_STATE_IDLE & !noMore) {
 				mProgressBarLoadMore.setVisibility(View.VISIBLE);
-				// mLabLoadMore.setVisibility(View.VISIBLE);
 				mIsLoadingMore = true;
 				onLoadMore();
 			}
-
 		}
 	}
 
 	public void onLoadMore() {
 		Log.d(TAG, "onLoadMore");
-		if (mOnLoadMoreListener != null) {
+		if (mOnLoadMoreListener != null && !noMore) {
 			mOnLoadMoreListener.onLoadMore();
 		}
 	}
@@ -119,6 +120,20 @@ public class PullAndLoadListView extends PullToRefreshListView {
 	 */
 	public void onLoadMoreComplete() {
 		mIsLoadingMore = false;
+	}
+
+	public void notifyNoMore() {
+		noMore = true;
+		noMoreToLoadBar.setVisibility(VISIBLE);
+		mProgressBarLoadMore.setVisibility(GONE);
+	}
+	
+	@Override
+	public void onRefresh(){
+		super.onRefresh();
+		noMoreToLoadBar.setVisibility(GONE);
+		mProgressBarLoadMore.setVisibility(GONE);
+		this.noMore = false;
 	}
 
 	/**
@@ -134,4 +149,5 @@ public class PullAndLoadListView extends PullToRefreshListView {
 		 */
 		public void onLoadMore();
 	}
+	
 }

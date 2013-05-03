@@ -60,9 +60,9 @@ public class NewsFeedFragment extends Fragment {
 
 	private class RefreshNewsFeedTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
 		private NewsFeedItemAdapter adapter;
-		private PullToRefreshListView lv;
+		private PullAndLoadListView lv;
 		
-		public RefreshNewsFeedTask(NewsFeedItemAdapter adapter, PullToRefreshListView lv) {
+		public RefreshNewsFeedTask(NewsFeedItemAdapter adapter, PullAndLoadListView lv) {
 			this.adapter = adapter;
 			this.lv = lv;
 		}
@@ -82,16 +82,15 @@ public class NewsFeedFragment extends Fragment {
 	
 	private class MoreNewsFeedTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
 		private NewsFeedItemAdapter adapter;
-		private PullToRefreshListView lv;
+		private PullAndLoadListView lv;
 		
-		public MoreNewsFeedTask(NewsFeedItemAdapter adapter, PullToRefreshListView lv) {
+		public MoreNewsFeedTask(NewsFeedItemAdapter adapter, PullAndLoadListView lv) {
 			this.adapter = adapter;
 			this.lv = lv;
 		}
 		@Override
 		protected List<NewsFeedItem> doInBackground(Void... params) {
 			int currentPage = adapter.getCurrentPage() + 1;
-			Log.e("NEWSFEED FRAG", "Load more:" + currentPage);
 			List<NewsFeedItem> fetchList = getNewsFeedList(currentPage);
 			if(fetchList.size() > 0) adapter.incrementCurrentPage();
 			return fetchList;
@@ -105,7 +104,15 @@ public class NewsFeedFragment extends Fragment {
 				currentList.add(item);
 			}
 			adapter.notifyDataSetChanged();
-			lv.onRefreshComplete();
+			int index = lv.getFirstVisiblePosition();
+			View v = lv.getChildAt(0);
+			int top = (v == null) ? 0 : v.getTop();
+
+			lv.setSelectionFromTop(index, top);
+			if (result.size() == 0){
+				lv.notifyNoMore();
+			}
+			lv.onLoadMoreComplete();
 		}
 	}
 	
