@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Account Settings" >
+        <Preference
+            android:key="logout"
+            android:title="Log Out" />
+        <Preference
+            android:key="cleanHistory"
+            android:title="Clean History" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Notification Settings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_NOTIFICATION_ENABLED"
+            android:summaryOff="Do not receive push messages"
+            android:summaryOn="Receive push messages"
+            android:title="Notifications Enabled" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_SOUND_ENABLED"
+            android:summary="Play a sound for notifications"
+            android:title="Sound" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SETTINGS_VIBRATE_ENABLED"
+            android:summary="Vibrate the phone for notifications"
+            android:title="Vibrate" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
