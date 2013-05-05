@@ -11,12 +11,15 @@ import util.GetRequest;
 import activity.newsfeed.PullAndLoadListView.OnLoadMoreListener;
 import activity.newsfeed.PullToRefreshListView.OnRefreshListener;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 import com.ebay.ebayfriend.R;
@@ -51,6 +54,15 @@ public class NewsFeedFragment extends Fragment {
 			@Override
 			public void onLoadMore() {
 				new MoreNewsFeedTask(adapter, lv).execute();
+			}
+		});
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				Intent intent = new Intent(getActivity(), ReplyActivity.class);
+				getActivity().startActivity(intent);
 			}
 		});
 		lv.setAdapter(adapter);

@@ -5,6 +5,7 @@ import java.util.List;
 import util.PicUtil;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -38,7 +39,120 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 	private ListView lv;
 	private OnClickListener playListener;
 	private int currentPage = 0;
+	private ReplyButtonListener replyListener;
 
+	
+	public NewsFeedItemAdapter(Activity activity,
+		 final List<NewsFeedItem> newsFeedList, ImageLoader imageLoader, final ListView lv) {
+		super(activity, R.layout.newsfeeditem, newsFeedList);
+		this.newsFeedList = newsFeedList;
+		this.activity = activity;
+		this.imageLoader = imageLoader;
+		this.lv = lv;
+
+		// init play config
+		mediaPlayer = new MediaPlayer();
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		mediaPlayer.setOnCompletionListener(new MediaPlayerCompleteListener(this));
+		mediaPlayer.setOnPreparedListener(new MediaPlayerPreparedListener(this));
+		playListener = new PlayButtonListener(this);
+		replyListener =  new ReplyButtonListener();
+	}
+
+	private class ViewHolder {
+		public TextView name;
+		public ImageView image;
+		public ImageView icon;
+		public ImageButton playButton;
+		public ImageView replyButton;
+	}
+
+	public List<NewsFeedItem> getItemList() {
+		return newsFeedList;
+	}
+
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		NewsFeedItem currentNewsFeed = newsFeedList.get(position);
+		View view = convertView;
+		final ViewHolder holder;
+		if (convertView == null) {
+			view = activity.getLayoutInflater().inflate(R.layout.newsfeeditem,
+					parent, false);
+			holder = new ViewHolder();
+			holder.name = (TextView) view.findViewById(R.id.name);
+			holder.image = (ImageView) view.findViewById(R.id.image);
+			holder.icon = (ImageView) view.findViewById(R.id.icon);
+			holder.playButton = (ImageButton) view.findViewById(R.id.play);
+			holder.replyButton = (ImageView)view.findViewById(R.id.reply);
+			view.setTag(holder);
+		} else {
+			holder = (ViewHolder) view.getTag();
+		}
+
+		holder.name.setText(currentNewsFeed.getName());
+		int playState = currentNewsFeed.getPlayState();
+		if(playState == NewsFeedItem.PLAYING){
+			holder.playButton.setImageResource(R.drawable.pausebutton);
+		}
+		else{
+			holder.playButton.setImageResource(R.drawable.playbutton);
+		}
+		
+		holder.replyButton.setOnClickListener(replyListener);
+		// set play config
+		holder.playButton.setOnClickListener(playListener);
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showStubImage(R.drawable.ic_stub)
+				.showImageForEmptyUri(R.drawable.ic_empty)
+				.showImageOnFail(R.drawable.ic_error).cacheInMemory()
+				.cacheOnDisc().displayer(new RoundedBitmapDisplayer(20))
+				.build();
+		imageLoader.displayImage(currentNewsFeed.getImage(), holder.image,
+				options, animateFirstListener);
+		options = new DisplayImageOptions.Builder()
+				.showStubImage(R.drawable.ic_stub)
+				.showImageForEmptyUri(R.drawable.ic_empty)
+				.showImageOnFail(R.drawable.ic_error).cacheInMemory()
+				.cacheOnDisc().displayer(new RoundedBitmapDisplayer(500))
+				.build();
+		imageLoader.displayImage(currentNewsFeed.getIcon(), holder.icon,
+				options, animateFirstListener);
+
+		return view;
+	}
+	
+	public void updateList(List<NewsFeedItem> newsFeedList){
+		this.newsFeedList = newsFeedList;
+		this.notifyDataSetChanged();
+	}
+
+	@Override
+	public int getCount() {
+		return newsFeedList.size();
+	}
+
+	@Override
+	public NewsFeedItem getItem(int position) {
+		return newsFeedList.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+	
+	public int getCurrentPage(){
+		return currentPage;
+	}
+	
+	public void incrementCurrentPage(){
+		currentPage++;
+	}
+	
+	public void resetPage(){
+		currentPage = 0;
+	}
+	
 	private class PlayButtonListener implements OnClickListener{
 		BaseAdapter adapter;
 		public PlayButtonListener(BaseAdapter adapter) {
@@ -106,112 +220,14 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 		}
 	}
 	
-	public NewsFeedItemAdapter(Activity activity,
-		 final List<NewsFeedItem> newsFeedList, ImageLoader imageLoader, final ListView lv) {
-		super(activity, R.layout.newsfeeditem, newsFeedList);
-		this.newsFeedList = newsFeedList;
-		this.activity = activity;
-		this.imageLoader = imageLoader;
-		this.lv = lv;
+	private class ReplyButtonListener implements OnClickListener{
 
-		// init play config
-		mediaPlayer = new MediaPlayer();
-		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		mediaPlayer.setOnCompletionListener(new MediaPlayerCompleteListener(this));
-		mediaPlayer.setOnPreparedListener(new MediaPlayerPreparedListener(this));
-		playListener = new PlayButtonListener(this);
-	}
-
-	private class ViewHolder {
-		public TextView name;
-		public ImageView image;
-		public ImageView icon;
-		public ImageButton playButton;
-	}
-
-	public List<NewsFeedItem> getItemList() {
-		return newsFeedList;
-	}
-
-	public View getView(final int position, View convertView, ViewGroup parent) {
-		NewsFeedItem currentNewsFeed = newsFeedList.get(position);
-		View view = convertView;
-		final ViewHolder holder;
-		if (convertView == null) {
-			view = activity.getLayoutInflater().inflate(R.layout.newsfeeditem,
-					parent, false);
-			holder = new ViewHolder();
-			holder.name = (TextView) view.findViewById(R.id.name);
-			holder.image = (ImageView) view.findViewById(R.id.image);
-			holder.icon = (ImageView) view.findViewById(R.id.icon);
-			holder.playButton = (ImageButton) view.findViewById(R.id.play);
-			view.setTag(holder);
-		} else {
-			holder = (ViewHolder) view.getTag();
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(activity, ReplyActivity.class);
+			activity.startActivity(intent);
 		}
-
-		holder.name.setText(currentNewsFeed.getName());
-		int playState = currentNewsFeed.getPlayState();
-		if(playState == NewsFeedItem.PLAYING){
-			holder.playButton.setImageResource(R.drawable.pausebutton);
-		}
-		else{
-			holder.playButton.setImageResource(R.drawable.playbutton);
-		}
-
-		// set play config
-		holder.playButton.setOnClickListener(playListener);
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.showStubImage(R.drawable.ic_stub)
-				.showImageForEmptyUri(R.drawable.ic_empty)
-				.showImageOnFail(R.drawable.ic_error).cacheInMemory()
-				.cacheOnDisc().displayer(new RoundedBitmapDisplayer(20))
-				.build();
-		imageLoader.displayImage(currentNewsFeed.getImage(), holder.image,
-				options, animateFirstListener);
-		options = new DisplayImageOptions.Builder()
-				.showStubImage(R.drawable.ic_stub)
-				.showImageForEmptyUri(R.drawable.ic_empty)
-				.showImageOnFail(R.drawable.ic_error).cacheInMemory()
-				.cacheOnDisc().displayer(new RoundedBitmapDisplayer(500))
-				.build();
-		imageLoader.displayImage(currentNewsFeed.getIcon(), holder.icon,
-				options, animateFirstListener);
-
-		return view;
+		
 	}
-	
-	public void updateList(List<NewsFeedItem> newsFeedList){
-		this.newsFeedList = newsFeedList;
-		this.notifyDataSetChanged();
-	}
-
-	@Override
-	public int getCount() {
-		return newsFeedList.size();
-	}
-
-	@Override
-	public NewsFeedItem getItem(int position) {
-		return newsFeedList.get(position);
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
-	
-	public int getCurrentPage(){
-		return currentPage;
-	}
-	
-	public void incrementCurrentPage(){
-		currentPage++;
-	}
-	
-	public void resetPage(){
-		currentPage = 0;
-	}
-	
 	
 }

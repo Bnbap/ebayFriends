@@ -39,6 +39,7 @@
                 android:value="activity.MainActivity" />
         </activity>
         <activity android:name="activity.post.PostActivity"/>
+        <activity android:name="activity.newsfeed.ReplyActivity"/>
 
         <service
             android:name="notification.client.NotificationService"
