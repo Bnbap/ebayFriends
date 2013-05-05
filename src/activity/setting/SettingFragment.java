@@ -13,6 +13,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ebay.ebayfriend.R;
@@ -96,6 +97,9 @@ public class SettingFragment extends PreferenceFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		TextView windowTitleView = (TextView) getActivity().findViewById(
+				R.id.window_title);
+		windowTitleView.setText("Setting");
 		addPreferencesFromResource(R.xml.settings);
 		notification = (CheckBoxPreference) findPreference(Constants.SETTINGS_NOTIFICATION_ENABLED);
 		sound = (CheckBoxPreference) findPreference(Constants.SETTINGS_SOUND_ENABLED);
