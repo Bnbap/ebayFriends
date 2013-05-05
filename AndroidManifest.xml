@@ -38,8 +38,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="activity.MainActivity" />
         </activity>
-        <activity android:name="activity.post.PostActivity"/>
-        <activity android:name="activity.newsfeed.ReplyActivity"/>
+        <activity android:name="activity.post.PostActivity" />
+        <activity android:name="activity.newsfeed.ReplyActivity" />
 
         <service
             android:name="notification.client.NotificationService"
@@ -53,6 +53,15 @@
         <meta-data
             android:name="NOTIFICATION_API_KEY"
             android:value="1234567890" />
+
+        <activity
+            android:name="activity.chat.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:parentActivityName="activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

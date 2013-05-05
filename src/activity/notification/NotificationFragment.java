@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import activity.chat.ChatActivity;
 import activity.newsfeed.PullAndLoadListView;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +54,8 @@ public class NotificationFragment extends ListFragment {
 				"You have selected "
 						+ (String) mData.get(position).get("title"),
 				Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(getActivity(), ChatActivity.class);
+		startActivity(intent);
 	}
 
 	private List<Map<String, Object>> getData() {
