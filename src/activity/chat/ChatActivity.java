@@ -1,15 +1,28 @@
 package activity.chat;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +44,16 @@ import com.ebay.ebayfriend.R;
 
 public class ChatActivity extends Activity implements OnClickListener {
 	/** Called when the activity is first created. */
+	private String ipstring = null, nameString = null;
+	Thread thread = null;
+	Socket s = null;
+	private InetSocketAddress isa = null;
+	DataInputStream dis = null;
+	DataOutputStream dos = null;
+	private String reMsg = null;
+	private String chatKey = "chatKey";
+	private String toName = "zhanghang", fromName = "tangyu", ip = "10.0.2.2";
+	private boolean isConnect = false;
 
 	private Button mBtnSend;
 	private TextView mBtnRcd;
@@ -63,6 +86,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		initView();
+		connect();
 
 		initData();
 	}
@@ -164,6 +188,31 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private void send() {
 		String contString = mEditTextContent.getText().toString();
 		if (contString.length() > 0) {
+
+			System.out.println(s);
+			try {
+				dos.writeUTF(chatKey + "name:" + toName + "end;" + contString);
+
+			} catch (SocketTimeoutException e) {
+				System.out.println("連接超時，服務器未開啟或IP錯誤");
+				// Toast.makeText(SocketmsgActivity.this, "連接超時，服務器未開啟或IP錯誤",
+				// Toast.LENGTH_SHORT).show();
+				// Intent intent = new
+				// Intent(SocketmsgActivity.this,IniActivity.class);
+				// startActivity(intent);
+				// SocketmsgActivity.this.finish();
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("連接超時，服務器未開啟或IP錯誤");
+				// Toast.makeText(SocketmsgActivity.this, "連接超時，服務器未開啟或IP錯誤",
+				// Toast.LENGTH_SHORT).show();
+				// Intent intent = new
+				// Intent(SocketmsgActivity.this,IniActivity.class);
+				// startActivity(intent);
+				// SocketmsgActivity.this.finish();
+				e.printStackTrace();
+			}
 			ChatMsgEntity entity = new ChatMsgEntity();
 			entity.setDate(getDate());
 			entity.setName("高富帅");
@@ -389,5 +438,153 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	public void head_xiaohei(View v) { // 标题栏 返回按钮
 
+	}
+
+	private Runnable doThread = new Runnable() {
+		public void run() {
+			System.out.println("running!");
+			ReceiveMsg();
+		}
+	};
+
+	public void connect() {
+		thread = new Thread(null, connThread, "connect");
+		thread.start();
+	}
+
+	private Runnable connThread = new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				s = new Socket();
+				isa = new InetSocketAddress(ip, 1235);
+				s.connect(isa, 5000);
+
+				if (s.isConnected()) {
+					dos = new DataOutputStream(s.getOutputStream());
+					dis = new DataInputStream(s.getInputStream());
+					dos.writeUTF(chatKey + "online:" + fromName);
+					/**
+					 * 这里是关键，我在此耗时8h+ 原因是 子线程不能直接更新UI 为此，我们需要通过Handler物件，通知主线程Ui
+					 * Thread来更新界面。
+					 * 
+					 */
+					thread = new Thread(null, doThread, "Message");
+					thread.start();
+					System.out.println("connect");
+					isConnect = true;
+				}
+			} catch (UnknownHostException e) {
+				System.out.println("連接失敗");
+				// Toast.makeText(SocketmsgActivity.this, "連接失敗",
+				// Toast.LENGTH_SHORT).show();
+				// Intent intent = new
+				// Intent(SocketmsgActivity.this,IniActivity.class);
+				// startActivity(intent);
+				// SocketmsgActivity.this.finish();
+				finish();
+				e.printStackTrace();
+			} catch (SocketTimeoutException e) {
+				System.out.println("連接超時，服務器未開啟或IP錯誤");
+				// Toast.makeText(SocketmsgActivity.this, "連接超時，服務器未開啟或IP錯誤",
+				// Toast.LENGTH_SHORT).show();
+				// Intent intent = new
+				// Intent(SocketmsgActivity.this,IniActivity.class);
+				// startActivity(intent);
+				// SocketmsgActivity.this.finish();
+				finish();
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("連接失敗");
+				e.printStackTrace();
+			}
+		}
+	};
+
+	public void disConnect() {
+		if (dos != null) {
+			try {
+
+				dos.writeUTF(chatKey + "offline:" + fromName);
+
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				s.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 线程监视Server信息
+	 */
+	private void ReceiveMsg() {
+		if (isConnect) {
+			try {
+				while ((reMsg = dis.readUTF()) != null) {
+					System.out.println(reMsg);
+					if (reMsg != null) {
+
+						try {
+							android.os.Message msgMessage = new android.os.Message();
+							msgMessage.what = 0x1981;
+							handler.sendMessage(msgMessage);
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				}
+			} catch (SocketException e) {
+				// TODO: handle exception
+				System.out.println("exit!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	/**
+	 * 通过handler更新UI
+	 */
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 0x1981:
+
+				ChatMsgEntity entity = new ChatMsgEntity();
+				entity.setDate(getDate());
+				entity.setName("白富美");
+				entity.setMsgType(true);
+				entity.setText(reMsg);
+
+				mDataArrays.add(entity);
+				mAdapter.notifyDataSetChanged();
+
+				mEditTextContent.setText("");
+
+				mListView.setSelection(mListView.getCount() - 1);
+
+				break;
+			}
+		}
+	};
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		disConnect();
+		// System.exit(0);
 	}
 }

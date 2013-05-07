@@ -20,6 +20,8 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Registration;
 import org.jivesoftware.smack.provider.ProviderManager;
 
+import util.XMPPConnUtil;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -260,15 +262,16 @@ public class XmppManager {
 
 			if (!xmppManager.isConnected()) {
 				// Create the configuration for this new connection
-				ConnectionConfiguration connConfig = new ConnectionConfiguration(
-						xmppHost, xmppPort);
-				// connConfig.setSecurityMode(SecurityMode.disabled);
-				connConfig.setSecurityMode(SecurityMode.required);
-				connConfig.setSASLAuthenticationEnabled(false);
-				connConfig.setCompressionEnabled(false);
-
-				XMPPConnection connection = new XMPPConnection(connConfig);
-				xmppManager.setConnection(connection);
+				// ConnectionConfiguration connConfig = new
+				// ConnectionConfiguration(
+				// xmppHost, xmppPort);
+				// // connConfig.setSecurityMode(SecurityMode.disabled);
+				// connConfig.setSecurityMode(SecurityMode.required);
+				// connConfig.setSASLAuthenticationEnabled(false);
+				// connConfig.setCompressionEnabled(false);
+				//
+				// XMPPConnection connection = new XMPPConnection(connConfig);
+				xmppManager.setConnection(XMPPConnUtil.getConnection());
 
 				try {
 					// Connect to the server
