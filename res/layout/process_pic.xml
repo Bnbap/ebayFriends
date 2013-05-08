@@ -7,12 +7,58 @@
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingTop="5dp"
+    android:background="#5B5B5B"
     tools:context=".MainActivity" >
 
     <ImageView
         android:id="@+id/post_pic"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_weight="0.16" 
+        android:src="@drawable/load_image">
+    </ImageView>
+
+    <LinearLayout
+        android:id="@+id/style_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical" >
+
+        <Button
+            android:id="@+id/button_style1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="style1" />
+
+        <Button
+            android:id="@+id/button_style2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="style2" />
+
+        <Button
+            android:id="@+id/button_style3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="style3" />
+
+        <Button
+            android:id="@+id/button_style4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="style4" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/post_pic_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Next" />
+    </LinearLayout>
 
 </LinearLayout>

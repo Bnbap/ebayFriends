@@ -89,7 +89,20 @@ public class AttachItemFragment extends Fragment {
 	class GetItemListThread extends Thread {
 		@Override
 		public void run() {
-			itemList = PostNewUtil.getItemList();
+//			itemList = PostNewUtil.getItemList();
+			/**
+			 * test codes start
+			 */
+			itemList = new ArrayList<HashMap<String,Object>>();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("name", "name");
+			map.put("url", "id");
+			map.put("date"," date");
+			itemList.add(map);
+			/**
+			 * test codes end
+			 */
+			
 			itemListHandler.sendMessage(new Message());
 			
 		}
@@ -105,7 +118,6 @@ public class AttachItemFragment extends Fragment {
 		@Override
 		public void handleMessage(Message msg) {
 			showItemList();
-			Log.e("AttachItemFragment","invalidate the listview");
 		}
 	}
 }

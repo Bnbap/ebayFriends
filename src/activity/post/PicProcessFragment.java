@@ -1,22 +1,32 @@
 package activity.post;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import com.ebay.ebayfriend.R;
+import com.jhlabs.image.ChromeFilter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import bean.PurchasedItem;
+import util.ImageTools;
 import util.PicUtil;
 import activity.MainActivity;
 import activity.post.AttachItemFragment.GetItemListThread;
 import activity.post.AttachItemFragment.ItemListHandler;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,12 +34,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,10 +53,12 @@ public class PicProcessFragment extends Fragment {
 	private PicUtil picUtil;
 	private PurchasedItem pi;
 	private ImageView imageView;
-	private Bitmap myBitmap;
-	private byte[] mContent;
+	private Bitmap myBitmap = null;
 	private ImageLoadingListener animateFirstListener = new PicUtil.AnimateFirstDisplayListener();
 	private ImageLoader imageLoader;
+	private Button btStyle1, btStyle2, btStyle3, btStyle4,postPicNext;
+	private String originalPic, styledPic;
+	private LinearLayout ll;
 
 	public PicProcessFragment() {
 	}
@@ -60,6 +76,78 @@ public class PicProcessFragment extends Fragment {
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.post_title);
 		windowTitleView.setText("select picture");
+
+		ll = (LinearLayout)view.findViewById(R.id.style_linearlayout);
+		ll.setVisibility(View.INVISIBLE);
+		
+		postPicNext = (Button)view.findViewById(R.id.post_pic_next);
+		postPicNext.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				switchToVoiceProcessFragment(pi);
+				
+			}
+			
+		});
+		postPicNext.setVisibility(View.INVISIBLE);
+		btStyle1 = (Button) view.findViewById(R.id.button_style1);
+		btStyle1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				Date d = new Date();
+				Bitmap bitmap = ImageTools.toFuDiao(myBitmap);
+				long l = (new Date()).getTime() - d.getTime();
+				Log.v("process pic time", "" + l);
+				styledPic = savePic(bitmap);
+				prepareImg(styledPic);
+			}
+
+		});
+		btStyle2 = (Button) view.findViewById(R.id.button_style2);
+		btStyle2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Date d = new Date();
+				Bitmap bitmap = ImageTools.toYouHua(myBitmap);
+				long l = (new Date()).getTime() - d.getTime();
+				Log.v("process pic time", "" + l);
+				styledPic = savePic(bitmap);
+				prepareImg(styledPic);
+			}
+
+		});
+		btStyle3 = (Button) view.findViewById(R.id.button_style3);
+		btStyle3.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Date d = new Date();
+				Bitmap bitmap = ImageTools.toJiMu(myBitmap);
+				long l = (new Date()).getTime() - d.getTime();
+				Log.v("process pic time", "" + l);
+				styledPic = savePic(bitmap);
+				prepareImg(styledPic);
+			}
+
+		});
+		btStyle4 = (Button) view.findViewById(R.id.button_style4);
+		btStyle4.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				Date d = new Date();
+				Bitmap bitmap = myBitmap;
+				long l = (new Date()).getTime() - d.getTime();
+				Log.v("process pic time", "" + l);
+				styledPic = savePic(bitmap);
+				prepareImg(styledPic);
+			}
+
+		});
 		imageView = (ImageView) view.findViewById(R.id.post_pic);
 		imageView.setOnClickListener(new OnClickListener() {
 
@@ -67,6 +155,9 @@ public class PicProcessFragment extends Fragment {
 			public void onClick(View v) {
 				final CharSequence[] items = { "from gallery", "from camera" };
 
+				ll.setVisibility(View.VISIBLE);
+				postPicNext.setVisibility(View.VISIBLE);
+				
 				AlertDialog dlg = new AlertDialog.Builder(
 						PicProcessFragment.this.getActivity())
 						.setTitle("Choose Picture")
@@ -81,6 +172,13 @@ public class PicProcessFragment extends Fragment {
 								if (which == 1) {
 									Intent getImageByCamera = new Intent(
 											"android.media.action.IMAGE_CAPTURE");
+									File f = new File(Environment
+											.getExternalStorageDirectory()
+											+ File.separator + "temp");
+									Uri imageUri = Uri.fromFile(f);
+									getImageByCamera.putExtra(
+											MediaStore.EXTRA_OUTPUT, imageUri);
+									f.deleteOnExit();
 									startActivityForResult(getImageByCamera, 1);
 								} else {
 									Intent getImage = new Intent(
@@ -111,19 +209,6 @@ public class PicProcessFragment extends Fragment {
 		 */
 
 		if (requestCode == 0) {
-
-			// 方式一
-			/*
-			 * try { //获得图片的uri Uri orginalUri = data.getData(); //将图片内容解析成字节数组
-			 * mContent =
-			 * readStream(contentResolver.openInputStream(Uri.parse(orginalUri
-			 * .toString()))); //将字节数组转换为ImageView可调用的Bitmap对象 myBitmap
-			 * =getPicFromBytes(mContent,null); ////把得到的图片绑定在控件上显示
-			 * imageView.setImageBitmap(myBitmap); } catch (Exception e) {
-			 * e.printStackTrace(); // TODO: handle exception }
-			 */
-
-			// 方式二
 			try {
 				Uri selectedImage = data.getData();
 				String[] filePathColumn = { MediaStore.Images.Media.DATA };
@@ -133,10 +218,16 @@ public class PicProcessFragment extends Fragment {
 				cursor.moveToFirst();
 
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-				String picturePath = cursor.getString(columnIndex);
+				originalPic = cursor.getString(columnIndex);
 				cursor.close();
+
+				if (myBitmap != null && !myBitmap.isRecycled()) {
+					myBitmap.recycle();
+				}
+				myBitmap = BitmapFactory.decodeFile(originalPic);
+
 				// imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-				prepareImg(picturePath);
+				prepareImg(originalPic);
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -144,18 +235,52 @@ public class PicProcessFragment extends Fragment {
 
 		} else if (requestCode == 1) {
 			try {
-				Bundle extras = data.getExtras();
-				myBitmap = (Bitmap) extras.get("data");
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-				mContent = baos.toByteArray();
+				// Bundle extras = data.getExtras();
+				// myBitmap = (Bitmap) extras.get("data");
+				// ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				// myBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+
+				myBitmap = BitmapFactory.decodeFile(Environment
+						.getExternalStorageDirectory()
+						+ File.separator
+						+ "temp");
+				originalPic = savePic(myBitmap);
+				if (myBitmap != null && !myBitmap.isRecycled()) {
+					myBitmap.recycle();
+				}
+				myBitmap = BitmapFactory.decodeFile(originalPic);
+
+				prepareImg(originalPic);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle exception
 			}
-			imageView.setImageBitmap(myBitmap);
 		}
 
+	}
+
+	private String savePic(Bitmap bitmap) {
+		// String fileName = Environment.getExternalStorageDirectory().getPath()
+		// + File.separator + (new Date()).toString();
+		String fileName = (new Date()).toString();
+		fileName = fileName.replace(' ', '_').replace(':', '_')
+				.replace('+', '_');
+		FileOutputStream b = null;
+		try {
+			b = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				b.flush();
+				b.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return getActivity().getFilesDir().toString() + File.separator
+				+ fileName;
 	}
 
 	private void prepareImg(String picUrl) {
@@ -216,5 +341,18 @@ public class PicProcessFragment extends Fragment {
 
 	public Bitmap getBitmapStyle3() {
 		return null;
+	}
+	
+	private void switchToVoiceProcessFragment(PurchasedItem pi) {
+		VoiceProcessFragment fragment = new VoiceProcessFragment();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("purchasedItem", pi);
+		fragment.setArguments(bundle);
+		FragmentTransaction transaction = getFragmentManager()
+				.beginTransaction();
+		transaction.replace(R.id.post_content, fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+		Log.e("postPicProcessFragment","switch to voiceProcessFragment");
 	}
 }
