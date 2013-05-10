@@ -20,5 +20,6 @@
     <string name="title_activity_chat">ChatActivity</string>
     <string name="record">Record</string>
     <string name="play">Play</string>
+    <string name="post">Post</string>
 
 </resources>

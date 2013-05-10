@@ -3,6 +3,7 @@ encoding//src/activity/chat/ChatActivity.java=UTF-8
 encoding//src/activity/chat/ClientConServer.java=UTF-8
 encoding//src/activity/chat/config.java=UTF-8
 encoding//src/activity/post/PicProcessFragment.java=UTF-8
+encoding//src/activity/post/VoiceProcessFragment.java=UTF-8
 encoding//src/notification/client/NotificationAccess.java=UTF-8
 encoding//src/notification/client/XmppManager.java=UTF-8
 encoding//src/util/AudioUtil.java=UTF-8
