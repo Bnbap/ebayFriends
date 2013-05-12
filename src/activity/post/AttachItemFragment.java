@@ -7,6 +7,7 @@ import util.PostNewUtil;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -67,6 +68,7 @@ public class AttachItemFragment extends Fragment {
 				new String[] { "date", "name" }, new int[] {
 						R.id.purchasedItem_date, R.id.purchasedItem_name });
 		lv.setAdapter(listItemAdapter);
+		lv.setBackgroundColor(Color.GRAY);
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

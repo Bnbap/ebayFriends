@@ -21,5 +21,9 @@
     <string name="record">Record</string>
     <string name="play">Play</string>
     <string name="post">Post</string>
+    <string name="style1">Emboss</string>
+    <string name="style2">Paint</string>
+    <string name="style3">Black</string>
+    <string name="style4">Original</string>
 
 </resources>

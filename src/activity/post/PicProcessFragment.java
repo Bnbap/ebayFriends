@@ -20,6 +20,7 @@ import bean.PurchasedItem;
 import util.ImageTools;
 import util.PicUtil;
 import activity.MainActivity;
+import activity.login.LoginActivity;
 import activity.post.AttachItemFragment.GetItemListThread;
 import activity.post.AttachItemFragment.ItemListHandler;
 import android.app.AlertDialog;
@@ -35,6 +36,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,19 +50,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PicProcessFragment extends Fragment {
 
 	protected Bitmap originBitmap, thumbPic;
-	private PicUtil picUtil;
 	private PurchasedItem pi;
 	private ImageView imageView;
 	private Bitmap myBitmap = null;
 	private ImageLoadingListener animateFirstListener = new PicUtil.AnimateFirstDisplayListener();
 	private ImageLoader imageLoader;
-	private Button btStyle1, btStyle2, btStyle3, btStyle4,postPicNext;
+	private Button btStyle1, btStyle2, btStyle3, btStyle4, postPicNext;
 	private String originalPic, styledPic;
 	private LinearLayout ll;
+	private CustomToast ct;
+	private ImageHandler ih;
 
 	public PicProcessFragment() {
 	}
@@ -67,87 +73,35 @@ public class PicProcessFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		Bundle b = getArguments();
-		pi = (PurchasedItem) b.getSerializable("purchasedItem");
-
-		imageLoader = ImageLoader.getInstance();
+		initial();
 
 		View view = inflater.inflate(R.layout.process_pic, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.post_title);
 		windowTitleView.setText("select picture");
 
-		ll = (LinearLayout)view.findViewById(R.id.style_linearlayout);
+		ll = (LinearLayout) view.findViewById(R.id.style_linearlayout);
 		ll.setVisibility(View.INVISIBLE);
-		
-		postPicNext = (Button)view.findViewById(R.id.post_pic_next);
-		postPicNext.setOnClickListener(new OnClickListener(){
+
+		postPicNext = (Button) view.findViewById(R.id.post_pic_next);
+		postPicNext.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				switchToVoiceProcessFragment(pi);
-				
+
 			}
-			
+
 		});
 		postPicNext.setVisibility(View.INVISIBLE);
 		btStyle1 = (Button) view.findViewById(R.id.button_style1);
-		btStyle1.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				Date d = new Date();
-				Bitmap bitmap = ImageTools.toFuDiao(myBitmap);
-				long l = (new Date()).getTime() - d.getTime();
-				Log.v("process pic time", "" + l);
-				styledPic = savePic(bitmap);
-				prepareImg(styledPic);
-			}
-
-		});
+		btStyle1.setOnClickListener(new ClickListener(1));
 		btStyle2 = (Button) view.findViewById(R.id.button_style2);
-		btStyle2.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Date d = new Date();
-				Bitmap bitmap = ImageTools.toYouHua(myBitmap);
-				long l = (new Date()).getTime() - d.getTime();
-				Log.v("process pic time", "" + l);
-				styledPic = savePic(bitmap);
-				prepareImg(styledPic);
-			}
-
-		});
+		btStyle2.setOnClickListener(new ClickListener(2) );
 		btStyle3 = (Button) view.findViewById(R.id.button_style3);
-		btStyle3.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Date d = new Date();
-				Bitmap bitmap = ImageTools.toJiMu(myBitmap);
-				long l = (new Date()).getTime() - d.getTime();
-				Log.v("process pic time", "" + l);
-				styledPic = savePic(bitmap);
-				prepareImg(styledPic);
-			}
-
-		});
+		btStyle3.setOnClickListener(new ClickListener(3));
 		btStyle4 = (Button) view.findViewById(R.id.button_style4);
-		btStyle4.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				Date d = new Date();
-				Bitmap bitmap = myBitmap;
-				long l = (new Date()).getTime() - d.getTime();
-				Log.v("process pic time", "" + l);
-				styledPic = savePic(bitmap);
-				prepareImg(styledPic);
-			}
-
-		});
+		btStyle4.setOnClickListener(new ClickListener(4));
 		imageView = (ImageView) view.findViewById(R.id.post_pic);
 		imageView.setOnClickListener(new OnClickListener() {
 
@@ -157,7 +111,7 @@ public class PicProcessFragment extends Fragment {
 
 				ll.setVisibility(View.VISIBLE);
 				postPicNext.setVisibility(View.VISIBLE);
-				
+
 				AlertDialog dlg = new AlertDialog.Builder(
 						PicProcessFragment.this.getActivity())
 						.setTitle("Choose Picture")
@@ -197,11 +151,20 @@ public class PicProcessFragment extends Fragment {
 		return view;
 	}
 
+	private void initial() {
+		Bundle b = getArguments();
+		pi = (PurchasedItem) b.getSerializable("purchasedItem");
+		ct = new CustomToast(getActivity(), "Processing");
+
+		imageLoader = ImageLoader.getInstance();
+		ih = new ImageHandler();
+	}
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		ContentResolver contentResolver = getActivity().getContentResolver();
+		// ContentResolver contentResolver = getActivity().getContentResolver();
 		/**
 		 * 因为两种方式都用到了startActivityForResult方法，这个方法执行完后都会执行onActivityResult方法，
 		 * 所以为了区别到底选择了那个方式获取图片要进行判断
@@ -342,7 +305,7 @@ public class PicProcessFragment extends Fragment {
 	public Bitmap getBitmapStyle3() {
 		return null;
 	}
-	
+
 	private void switchToVoiceProcessFragment(PurchasedItem pi) {
 		VoiceProcessFragment fragment = new VoiceProcessFragment();
 		Bundle bundle = new Bundle();
@@ -353,6 +316,68 @@ public class PicProcessFragment extends Fragment {
 		transaction.replace(R.id.post_content, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();
-		Log.e("postPicProcessFragment","switch to voiceProcessFragment");
+		Log.e("postPicProcessFragment", "switch to voiceProcessFragment");
+	}
+
+	class ImageHandler extends Handler {
+		public ImageHandler() {
+
+		}
+
+		public ImageHandler(Looper l) {
+
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			Bundle b= msg.getData();
+			String styledPic = b.getString("bitmap");
+			prepareImg(styledPic);
+			ct.stopToast();
+		}
+	}
+
+	class ClickListener implements OnClickListener {
+
+		private int style;
+
+		public ClickListener(int i) {
+			style = i;
+		}
+
+		@Override
+		public void onClick(View v) {
+
+			ct.showToast(999999);
+			Thread t = new Thread() {
+				@Override
+				public void run() {
+					Bitmap bitmap;
+					switch (style) {
+					case 1:
+						bitmap = ImageTools.toFuDiao(myBitmap);
+						break;
+					case 2:
+						bitmap = ImageTools.toYouHua(myBitmap);
+						break;
+					case 3:
+						bitmap = ImageTools.toGrayscale(myBitmap);
+						break;
+					default:
+						bitmap = myBitmap;
+
+					}
+					styledPic = savePic(bitmap);
+					
+					Message msg = new Message();
+					Bundle b = new Bundle();
+					b.putString("bitmap", styledPic);
+					msg.setData(b);
+					ih.sendMessage(msg);
+				}
+			};
+			t.start();
+		}
+
 	}
 }

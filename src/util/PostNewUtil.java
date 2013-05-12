@@ -30,7 +30,7 @@ public class PostNewUtil {
 				String date =null;
 				name = jObject.getString("name");
 				id = jObject.getString("id");
-				date = jObject.getString("time");
+				date = jObject.getString("time").split(" ")[0];
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("name", name);
 				map.put("url", id);

@@ -38,7 +38,6 @@ public class VoiceProcessFragment extends Fragment {
 	PurchasedItem pi;
 	Button recordButton, playButton;
 	private String recordName = null;
-	private Toast toast;
 	private CustomToast ct;
 
 
@@ -55,7 +54,7 @@ public class VoiceProcessFragment extends Fragment {
 				+ "MyRecord";
 		
 
-		ct = new CustomToast(getActivity());
+		ct = new CustomToast(getActivity(),"Recording");
 		au = new AudioUtil();
 		View view = inflater.inflate(R.layout.process_voice, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
@@ -106,59 +105,6 @@ public class VoiceProcessFragment extends Fragment {
 
 	public String getRecordStyle3() {
 		return null;
-	}
-
-	@SuppressLint("ShowToast")
-	public class CustomToast {
-		private Context context;
-		private Handler handler = null;
-		private Runnable toastThread = new Runnable() {
-			public void run() {
-				toast.setText("Recording");
-				toast.show();
-				handler.postDelayed(toastThread, 3300);
-			}
-		};
-		public CustomToast(Context context) {
-			this.context = context;
-			handler = new Handler(this.context.getMainLooper());
-			ProgressBar pb = new ProgressBar(getActivity(), null,
-					android.R.attr.progressBarStyleInverse);
-			pb.setMax(100);
-			pb.setProgress(1);
-			pb.setLayoutParams(new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.WRAP_CONTENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT));
-
-			toast = Toast.makeText(getActivity(), "Recording", Toast.LENGTH_LONG);
-			toast.setGravity(Gravity.CENTER, 0, 0);
-			LinearLayout toastView = (LinearLayout) toast.getView();
-			toastView.setGravity(Gravity.CENTER);
-			toastView.addView(pb,1);
-		}
-		public void setText(String text) {
-			toast.setText(text);
-		}
-		public void showToast(final long length) {
-			handler.post(toastThread);
-			Thread timeThread = new Thread() {
-				public void run() {
-					try {
-						Thread.sleep(length);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					CustomToast.this.stopToast();
-				}
-			};
-			timeThread.start();
-		}
-		public void stopToast() {
-			// 删除Handler队列中的仍处理等待的消息元素删除
-			handler.removeCallbacks(toastThread);
-			// 撤掉仍在显示的Toast
-			toast.cancel();
-		}
 	}
 	
 	
