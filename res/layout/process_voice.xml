@@ -12,13 +12,18 @@
     tools:context=".MainActivity" >
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="254dp"
-        android:layout_height="312dp" />
+        android:id="@+id/play_record"
+        android:layout_width="278dp"
+        android:layout_height="222dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="50dp"
+        android:background="@anim/record" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:gravity="center_horizontal" >
 
         <Button
@@ -31,13 +36,13 @@
             android:id="@+id/process_play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:text="@string/play" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/post_final_button"
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/post" />

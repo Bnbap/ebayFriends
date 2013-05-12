@@ -2,31 +2,17 @@ package activity.post;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import com.ebay.ebayfriend.R;
-import com.jhlabs.image.ChromeFilter;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-
-import bean.PurchasedItem;
 import util.ImageTools;
 import util.PicUtil;
-import activity.MainActivity;
-import activity.login.LoginActivity;
-import activity.post.AttachItemFragment.GetItemListThread;
-import activity.post.AttachItemFragment.ItemListHandler;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,9 +34,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+import bean.PurchasedItem;
+
+import com.ebay.ebayfriend.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class PicProcessFragment extends Fragment {
 
@@ -97,7 +88,7 @@ public class PicProcessFragment extends Fragment {
 		btStyle1 = (Button) view.findViewById(R.id.button_style1);
 		btStyle1.setOnClickListener(new ClickListener(1));
 		btStyle2 = (Button) view.findViewById(R.id.button_style2);
-		btStyle2.setOnClickListener(new ClickListener(2) );
+		btStyle2.setOnClickListener(new ClickListener(2));
 		btStyle3 = (Button) view.findViewById(R.id.button_style3);
 		btStyle3.setOnClickListener(new ClickListener(3));
 		btStyle4 = (Button) view.findViewById(R.id.button_style4);
@@ -120,9 +111,6 @@ public class PicProcessFragment extends Fragment {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								// TODO Auto-generated method stub
-								// 这里item是根据选择的方式，
-								// 在items数组里面定义了两种方式，拍照的下标为1所以就调用拍照方法
 								if (which == 1) {
 									Intent getImageByCamera = new Intent(
 											"android.media.action.IMAGE_CAPTURE");
@@ -192,7 +180,6 @@ public class PicProcessFragment extends Fragment {
 				// imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 				prepareImg(originalPic);
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 
@@ -216,7 +203,6 @@ public class PicProcessFragment extends Fragment {
 				prepareImg(originalPic);
 			} catch (Exception e) {
 				e.printStackTrace();
-				// TODO: handle exception
 			}
 		}
 
@@ -319,18 +305,19 @@ public class PicProcessFragment extends Fragment {
 		Log.e("postPicProcessFragment", "switch to voiceProcessFragment");
 	}
 
+	@SuppressLint("HandlerLeak")
 	class ImageHandler extends Handler {
 		public ImageHandler() {
 
 		}
-
+		
 		public ImageHandler(Looper l) {
 
 		}
 
 		@Override
 		public void handleMessage(Message msg) {
-			Bundle b= msg.getData();
+			Bundle b = msg.getData();
 			String styledPic = b.getString("bitmap");
 			prepareImg(styledPic);
 			ct.stopToast();
@@ -368,7 +355,7 @@ public class PicProcessFragment extends Fragment {
 
 					}
 					styledPic = savePic(bitmap);
-					
+
 					Message msg = new Message();
 					Bundle b = new Bundle();
 					b.putString("bitmap", styledPic);

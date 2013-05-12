@@ -12,11 +12,12 @@
 
     <ImageView
         android:id="@+id/post_pic"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_gravity="center"
-        android:layout_weight="0.16" 
-        android:src="@drawable/load_image">
+        android:layout_weight="0.15"
+        android:src="@drawable/load_image" >
+
     </ImageView>
 
     <LinearLayout
@@ -58,7 +59,7 @@
             android:id="@+id/post_pic_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Next" />
+            android:text="@string/next" />
     </LinearLayout>
 
 </LinearLayout>

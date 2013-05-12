@@ -11,9 +11,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Movie;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("HandlerLeak")
 public class VoiceProcessFragment extends Fragment {
 	/**
 	 * step 4 final 1.audio or 2. text
@@ -39,6 +43,8 @@ public class VoiceProcessFragment extends Fragment {
 	Button recordButton, playButton;
 	private String recordName = null;
 	private CustomToast ct;
+	private ImageView iv;
+	public VoiceHandler vh;
 
 
 	public VoiceProcessFragment() {
@@ -53,9 +59,11 @@ public class VoiceProcessFragment extends Fragment {
 		recordName = getActivity().getFilesDir().toString() + File.separator
 				+ "MyRecord";
 		
+		vh = new VoiceHandler();
+		
 
-		ct = new CustomToast(getActivity(),"Recording");
-		au = new AudioUtil();
+//		ct = new CustomToast(getActivity(),"Recording");
+		au = new AudioUtil(vh);
 		View view = inflater.inflate(R.layout.process_voice, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.post_title);
@@ -67,11 +75,22 @@ public class VoiceProcessFragment extends Fragment {
 			public boolean onTouch(View v, MotionEvent event) {
 
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					Message msg = new Message();
+					Bundle b = new Bundle();
+					b.putString("status", "start");
+					msg.setData(b);
+					vh.sendMessage(msg);
+					
 					au.recordVoice(recordName);
-					ct.showToast(99999999);
+//					ct.showToast(99999999);
 				} else if (event.getAction() == MotionEvent.ACTION_UP) {
 					au.storeVoice();
-					ct.stopToast();
+					
+					Message msg = new Message();
+					Bundle b = new Bundle();
+					b.putString("status", "finish");
+					msg.setData(b);
+					vh.sendMessage(msg);
 				}
 				return false;
 			}
@@ -87,6 +106,10 @@ public class VoiceProcessFragment extends Fragment {
 			}
 
 		});
+		
+		
+		iv = (ImageView) view.findViewById(R.id.play_record);
+		
 		return view;
 
 	}
@@ -107,5 +130,33 @@ public class VoiceProcessFragment extends Fragment {
 		return null;
 	}
 	
+	class VoiceHandler extends Handler{
+		public VoiceHandler(){
+			
+		}
+		public VoiceHandler(Looper l){
+			super(l);
+		}
+		
+		@Override
+		public void handleMessage(Message msg){
+			Bundle b = msg.getData();
+			String status = b.getString("status");
+			if(status.equals("finish")){
+
+				AnimationDrawable anim = null;
+				Object ob = iv.getBackground();
+				anim = (AnimationDrawable) ob;
+				anim.stop();
+			}else{
+
+				AnimationDrawable anim = null;
+				Object ob = iv.getBackground();
+				anim = (AnimationDrawable) ob;
+				anim.stop();
+				anim.start();
+			}
+		}
+	}
 	
 }
