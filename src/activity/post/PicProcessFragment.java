@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import util.ImageTools;
 import util.PicUtil;
@@ -26,12 +28,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,11 +56,15 @@ public class PicProcessFragment extends Fragment {
 	private Bitmap myBitmap = null;
 	private ImageLoadingListener animateFirstListener = new PicUtil.AnimateFirstDisplayListener();
 	private ImageLoader imageLoader;
-	private Button btStyle1, btStyle2, btStyle3, btStyle4, postPicNext;
+	private Button postPicNext;
 	private String originalPic, styledPic;
 	private LinearLayout ll;
 	private CustomToast ct;
 	private ImageHandler ih;
+	private GridView gv;
+	private LayoutInflater inflater;
+
+	private List<String> dataList = new ArrayList<String>();
 
 	public PicProcessFragment() {
 	}
@@ -64,8 +73,11 @@ public class PicProcessFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		super.onCreateView(inflater, container, savedInstanceState);
+
 		initial();
 
+		this.inflater = inflater;
 		View view = inflater.inflate(R.layout.process_pic, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.post_title);
@@ -73,6 +85,25 @@ public class PicProcessFragment extends Fragment {
 
 		ll = (LinearLayout) view.findViewById(R.id.style_linearlayout);
 		ll.setVisibility(View.INVISIBLE);
+
+		gv = (GridView) view.findViewById(R.id.picture_grid_view);
+
+		GridViewAdapter adapter = new GridViewAdapter();
+
+		gv.setAdapter(adapter);
+		int size = dataList.size();
+		DisplayMetrics dm = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+		float density = dm.density;
+		int allWidth = (int) (110 * size * density);
+		int itemWidth = (int) (100 * density);
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+				allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+		gv.setLayoutParams(layoutParams);
+		gv.setColumnWidth(itemWidth);
+		gv.setHorizontalSpacing(10);
+		gv.setStretchMode(GridView.NO_STRETCH);
+		gv.setNumColumns(size);
 
 		postPicNext = (Button) view.findViewById(R.id.post_pic_next);
 		postPicNext.setOnClickListener(new OnClickListener() {
@@ -85,14 +116,14 @@ public class PicProcessFragment extends Fragment {
 
 		});
 		postPicNext.setVisibility(View.INVISIBLE);
-		btStyle1 = (Button) view.findViewById(R.id.button_style1);
-		btStyle1.setOnClickListener(new ClickListener(1));
-		btStyle2 = (Button) view.findViewById(R.id.button_style2);
-		btStyle2.setOnClickListener(new ClickListener(2));
-		btStyle3 = (Button) view.findViewById(R.id.button_style3);
-		btStyle3.setOnClickListener(new ClickListener(3));
-		btStyle4 = (Button) view.findViewById(R.id.button_style4);
-		btStyle4.setOnClickListener(new ClickListener(4));
+		// btStyle1 = (Button) view.findViewById(R.id.button_style1);
+		// btStyle1.setOnClickListener(new ClickListener(1));
+		// btStyle2 = (Button) view.findViewById(R.id.button_style2);
+		// btStyle2.setOnClickListener(new ClickListener(2));
+		// btStyle3 = (Button) view.findViewById(R.id.button_style3);
+		// btStyle3.setOnClickListener(new ClickListener(3));
+		// btStyle4 = (Button) view.findViewById(R.id.button_style4);
+		// btStyle4.setOnClickListener(new ClickListener(4));
 		imageView = (ImageView) view.findViewById(R.id.post_pic);
 		imageView.setOnClickListener(new OnClickListener() {
 
@@ -143,6 +174,12 @@ public class PicProcessFragment extends Fragment {
 		Bundle b = getArguments();
 		pi = (PurchasedItem) b.getSerializable("purchasedItem");
 		ct = new CustomToast(getActivity(), "Processing");
+
+		dataList.add("Emboss");
+		dataList.add("Painting");
+		dataList.add("Gray");
+		dataList.add("Blur");
+		dataList.add("Original");
 
 		imageLoader = ImageLoader.getInstance();
 		ih = new ImageHandler();
@@ -206,6 +243,12 @@ public class PicProcessFragment extends Fragment {
 			}
 		}
 
+	}
+	private void recycleBitmap(Bitmap bitmap){
+		if(bitmap!=null&&!bitmap.isRecycled()){
+			bitmap.recycle();
+			bitmap = null;
+		}
 	}
 
 	private String savePic(Bitmap bitmap) {
@@ -310,7 +353,7 @@ public class PicProcessFragment extends Fragment {
 		public ImageHandler() {
 
 		}
-		
+
 		public ImageHandler(Looper l) {
 
 		}
@@ -341,20 +384,33 @@ public class PicProcessFragment extends Fragment {
 				public void run() {
 					Bitmap bitmap;
 					switch (style) {
-					case 1:
+					case 0:
 						bitmap = ImageTools.toFuDiao(myBitmap);
 						break;
-					case 2:
+					case 1:
 						bitmap = ImageTools.toYouHua(myBitmap);
 						break;
-					case 3:
+					case 2:
 						bitmap = ImageTools.toGrayscale(myBitmap);
+						break;
+					case 3:
+						bitmap = ImageTools.toJiMu(myBitmap);
 						break;
 					default:
 						bitmap = myBitmap;
 
 					}
 					styledPic = savePic(bitmap);
+					switch (style) {
+					case 0:
+					case 1:
+					case 2:
+					case 3:
+						recycleBitmap(bitmap);
+						break;
+					default:
+
+					}
 
 					Message msg = new Message();
 					Bundle b = new Bundle();
@@ -364,6 +420,35 @@ public class PicProcessFragment extends Fragment {
 				}
 			};
 			t.start();
+		}
+
+	}
+
+	class GridViewAdapter extends BaseAdapter {
+
+		@Override
+		public int getCount() {
+			return dataList.size();
+		}
+
+		@Override
+		public String getItem(int position) {
+			return dataList.get(position - 1);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			convertView = inflater.inflate(R.layout.grid_view_item, null);
+			Button button = (Button) convertView
+					.findViewById(R.id.button_style);
+			button.setText(dataList.get(position));
+			button.setOnClickListener(new ClickListener(position));
+			return convertView;
 		}
 
 	}
