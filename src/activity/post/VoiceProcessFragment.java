@@ -1,11 +1,30 @@
 package activity.post;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.ebay.ebayfriend.R;
 
 import bean.PurchasedItem;
 import util.AudioUtil;
+import util.HttpMultipartRequest;
+import util.MultipartEntityUtil;
+import util.NamedFile;
+import util.NamedString;
+import util.PostNewUtil;
+import util.PostRequest;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
@@ -17,6 +36,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,11 +60,14 @@ public class VoiceProcessFragment extends Fragment {
 	private String recordFileName;
 	private AudioUtil au;
 	PurchasedItem pi;
-	Button recordButton, playButton;
+	Button recordButton, playButton,submitButton;
 	private String recordName = null;
 	private CustomToast ct;
 	private ImageView iv;
 	public VoiceHandler vh;
+	private String url;
+	private String picturePath;
+	private PostHandler ph;
 
 
 	public VoiceProcessFragment() {
@@ -56,11 +79,13 @@ public class VoiceProcessFragment extends Fragment {
 			Bundle savedInstanceState) {
 		Bundle b = getArguments();
 		pi = (PurchasedItem) b.getSerializable("purchasedItem");
+		url = pi.getUrl();
+		picturePath = b.getString("picture");
 		recordName = getActivity().getFilesDir().toString() + File.separator
 				+ "MyRecord";
 		
 		vh = new VoiceHandler();
-		
+		ph = new PostHandler();
 
 //		ct = new CustomToast(getActivity(),"Recording");
 		au = new AudioUtil(vh);
@@ -68,6 +93,19 @@ public class VoiceProcessFragment extends Fragment {
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.post_title);
 		windowTitleView.setText("Record Voice");
+		
+		submitButton = (Button)view.findViewById(R.id.post_final_button);
+		submitButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+
+				PostThread pt = new PostThread();
+				pt.start();
+				
+			}
+			
+		});
 		recordButton = (Button) view.findViewById(R.id.process_record_button);
 		recordButton.setOnTouchListener(new OnTouchListener() {
 
@@ -157,6 +195,121 @@ public class VoiceProcessFragment extends Fragment {
 				anim.start();
 			}
 		}
+	}
+	
+	class PostThread extends Thread{
+		@Override
+		public void run(){
+//			JSONObject jo = new JSONObject();
+//			byte[] voiceByte = null;
+//			byte[] pictureByte = null;
+//			
+//			File voice,picture;
+//			try {
+//				voice = new File(recordName);
+//				voiceByte = read(voice);
+//				picture = new File(picturePath);
+//				pictureByte = read(picture);
+//			} catch (FileNotFoundException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//			try {
+//				jo.put("voice", voiceByte);
+//				jo.put("picture", pictureByte);
+//				jo.put("url", url);
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			Log.e("Json",jo.toString());
+			
+//			boolean isSuccess  = PostNewUtil.post(jo);
+//			List<String[]> strParams;
+//			String[] urlList = {"url",url};
+//			strParams = new ArrayList<String[]>();
+//			strParams.add(urlList);
+//			
+//			List<String[]> fileParams = new ArrayList<String[]>();
+//			String[] voiceFile = {"voice","voice","audio/wav",recordName};s
+//			String[] pictureFile = {"picture","picture","image/jpeg",picturePath};
+//			fileParams.add(voiceFile);
+//			fileParams.add(pictureFile);
+//			
+//			HttpMultipartRequest hmr = new HttpMultipartRequest("http://192.168.47.19:8080/news/addNews",strParams,fileParams);
+//			try {
+//				hmr.sendPost();
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			boolean isSuccess = false;
+			
+			HashMap<String,File>fileMap = new HashMap<String,File>();
+			fileMap.put("picture", new File(picturePath));
+			fileMap.put("voice", new File(recordName));
+			
+			HashMap<String,String> stringMap = new HashMap<String,String>();
+			stringMap.put("url", url);
+			try {
+				isSuccess = MultipartEntityUtil.post("http://192.168.47.19:8080/news/addNews", fileMap, stringMap);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Bundle b = new Bundle();
+			b.putBoolean("isSuccess", isSuccess);
+			Message msg = new Message();
+			msg.setData(b);
+			ph.sendMessage(msg);
+			
+		}
+	}
+	class PostHandler extends Handler{
+		public PostHandler(){
+			
+		}
+		public PostHandler(Looper l){
+			
+		}
+		
+		@Override
+		public void handleMessage(Message msg){
+			Bundle b = msg.getData();
+			boolean isSuccess = b.getBoolean("isSuccess");
+			if(isSuccess){
+				Toast.makeText(getActivity(), "Post Success", Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(getActivity(), "Post Failed", Toast.LENGTH_LONG).show();
+			}
+		}
+	}
+	public byte[] read(File file) throws IOException {
+
+
+	    byte []buffer = new byte[(int) file.length()];
+	    InputStream ios = null;
+	    try {
+	        ios = new FileInputStream(file);
+	        if ( ios.read(buffer) == -1 ) {
+	            throw new IOException("EOF reached while trying to read the whole file");
+	        }        
+	    } finally { 
+	        try {
+	             if ( ios != null ) 
+	                  ios.close();
+	        } catch ( IOException e) {
+	        }
+	    }
+
+	    return buffer;
 	}
 	
 }

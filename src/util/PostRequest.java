@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import android.content.Entity;
 import android.util.Log;
 
-public class PostRequest extends Request{
+public class PostRequest extends Request {
 
 	protected JSONObject param;
 
@@ -31,11 +31,31 @@ public class PostRequest extends Request{
 		StringEntity entity;
 		try {
 			entity = new StringEntity(param.toString());
+			sessionid = LoginUtil.getSession().get("s_sessionid");
 			requestBase = new HttpPost(HTTP_URL);
-			((HttpPost)requestBase).setEntity(entity);
+			((HttpPost) requestBase).setEntity(entity);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public boolean post() {
+		try {
+			DefaultHttpClient mHttpClient = new DefaultHttpClient();
+			requestBase.setHeader("Cookie","sessionid="+sessionid);
+			HttpResponse response = mHttpClient.execute(requestBase);
+			int res = response.getStatusLine().getStatusCode();
+			if (res == 200) {
+				
+				return true;
+
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public List<Cookie> getCookieList() {

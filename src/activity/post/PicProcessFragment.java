@@ -59,6 +59,7 @@ public class PicProcessFragment extends Fragment {
 	private Button postPicNext;
 	private String originalPic, styledPic;
 	private LinearLayout ll;
+	private LinearLayout control;
 	private CustomToast ct;
 	private ImageHandler ih;
 	private GridView gv;
@@ -84,7 +85,7 @@ public class PicProcessFragment extends Fragment {
 		windowTitleView.setText("select picture");
 
 		ll = (LinearLayout) view.findViewById(R.id.style_linearlayout);
-		ll.setVisibility(View.INVISIBLE);
+		// ll.setVisibility(View.INVISIBLE);
 
 		gv = (GridView) view.findViewById(R.id.picture_grid_view);
 
@@ -115,7 +116,9 @@ public class PicProcessFragment extends Fragment {
 			}
 
 		});
-		postPicNext.setVisibility(View.INVISIBLE);
+		control = (LinearLayout) view.findViewById(R.id.pic_control);
+		control.setVisibility(View.INVISIBLE);
+		// postPicNext.setVisibility(View.INVISIBLE);
 		// btStyle1 = (Button) view.findViewById(R.id.button_style1);
 		// btStyle1.setOnClickListener(new ClickListener(1));
 		// btStyle2 = (Button) view.findViewById(R.id.button_style2);
@@ -131,8 +134,9 @@ public class PicProcessFragment extends Fragment {
 			public void onClick(View v) {
 				final CharSequence[] items = { "from gallery", "from camera" };
 
-				ll.setVisibility(View.VISIBLE);
-				postPicNext.setVisibility(View.VISIBLE);
+				// ll.setVisibility(View.VISIBLE);
+				// postPicNext.setVisibility(View.VISIBLE);
+				control.setVisibility(View.VISIBLE);
 
 				AlertDialog dlg = new AlertDialog.Builder(
 						PicProcessFragment.this.getActivity())
@@ -207,6 +211,7 @@ public class PicProcessFragment extends Fragment {
 
 				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 				originalPic = cursor.getString(columnIndex);
+				styledPic = originalPic;
 				cursor.close();
 
 				if (myBitmap != null && !myBitmap.isRecycled()) {
@@ -232,6 +237,7 @@ public class PicProcessFragment extends Fragment {
 						+ File.separator
 						+ "temp");
 				originalPic = savePic(myBitmap);
+				styledPic = originalPic;
 				if (myBitmap != null && !myBitmap.isRecycled()) {
 					myBitmap.recycle();
 				}
@@ -244,8 +250,9 @@ public class PicProcessFragment extends Fragment {
 		}
 
 	}
-	private void recycleBitmap(Bitmap bitmap){
-		if(bitmap!=null&&!bitmap.isRecycled()){
+
+	private void recycleBitmap(Bitmap bitmap) {
+		if (bitmap != null && !bitmap.isRecycled()) {
 			bitmap.recycle();
 			bitmap = null;
 		}
@@ -339,6 +346,9 @@ public class PicProcessFragment extends Fragment {
 		VoiceProcessFragment fragment = new VoiceProcessFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("purchasedItem", pi);
+		bundle.putString("picture", styledPic);
+		if (myBitmap != null && !myBitmap.isRecycled())
+			myBitmap.recycle();
 		fragment.setArguments(bundle);
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
@@ -448,6 +458,7 @@ public class PicProcessFragment extends Fragment {
 					.findViewById(R.id.button_style);
 			button.setText(dataList.get(position));
 			button.setOnClickListener(new ClickListener(position));
+			button.setWidth(200);
 			return convertView;
 		}
 

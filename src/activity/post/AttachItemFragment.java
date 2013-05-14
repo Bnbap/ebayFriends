@@ -74,13 +74,17 @@ public class AttachItemFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String name = ((TextView) view
-						.findViewById(R.id.purchasedItem_name)).getText()
-						.toString();
-				String date = ((TextView) view
-						.findViewById(R.id.purchasedItem_date)).getText()
-						.toString();
-				switchToPicProcessFragment(new PurchasedItem(name, date));
+//				String name = ((TextView) view
+//						.findViewById(R.id.purchasedItem_name)).getText()
+//						.toString();
+//				String date = ((TextView) view
+//						.findViewById(R.id.purchasedItem_date)).getText()
+//						.toString();
+
+				HashMap<String, Object> hashMap= itemList.get(position);
+				String name = (String)hashMap.get("name");
+				String url = (String)hashMap.get("url");
+				switchToPicProcessFragment(new PurchasedItem(name, url));
 
 			}
 

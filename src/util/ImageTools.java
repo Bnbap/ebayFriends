@@ -166,34 +166,16 @@ public class ImageTools {
 
 	/* 设置图片积木效果 */
 	public static Bitmap toJiMu(Bitmap mBitmap) {
-		Paint mPaint;
 
 		int mBitmapWidth = 0;
 		int mBitmapHeight = 0;
 
-		int mArrayColor[] = null;
-		int mArrayColorLengh = 0;
-		long startTime = 0;
-		int mBackVolume = 0;
 
 		mBitmapWidth = mBitmap.getWidth();
 		mBitmapHeight = mBitmap.getHeight();
-		// Log.d("zlc", "2");
 		Bitmap bmpReturn = Bitmap.createBitmap(mBitmapWidth, mBitmapHeight,
 				Bitmap.Config.ARGB_8888);
-		// Log.d("zlc", "3");
-		mArrayColorLengh = mBitmapWidth * mBitmapHeight;
-		// Log.d("zlc", "4");
-		// mArrayColor = new int[mArrayColorLengh];
-		// int[] mArrayColor2 = new int[mArrayColorLengh];
-		// mBitmap.getPixels(mArrayColor2, 0, mBitmapWidth, 0, 0, mBitmapWidth,
-		// mBitmapHeight);
-		// Log.d("zlc", "5");
-		int count = 0;
-		int preColor = 0;
-		int color = 0;
 
-		// Log.d("zlc", "4");
 		int iPixel = 0;
 		for (int i = 0; i < mBitmapWidth; i++) {
 			for (int j = 0; j < mBitmapHeight; j++) {
@@ -212,10 +194,6 @@ public class ImageTools {
 			}
 		}
 
-		// Log.d("zlc", "6");
-		// bmpReturn.setPixels(mArrayColor, 0, mBitmapWidth, 0, 0, mBitmapWidth,
-		// mBitmapHeight);
-		// Log.d("zlc", "7");
 		return bmpReturn;
 	}
 
