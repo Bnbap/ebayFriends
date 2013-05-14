@@ -67,7 +67,7 @@ public class VoiceProcessFragment extends Fragment {
 		ph = new PostHandler();
 
 //		ct = new CustomToast(getActivity(),"Recording");
-		au = new AudioUtil(vh);
+		au = new AudioUtil();
 		View view = inflater.inflate(R.layout.process_voice, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.post_title);
@@ -118,7 +118,7 @@ public class VoiceProcessFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				au.playVoice();
+				au.playVoice(vh);
 
 			}
 
@@ -153,6 +153,8 @@ public class VoiceProcessFragment extends Fragment {
 		}
 		public VoiceHandler(Looper l){
 			super(l);
+			
+			
 		}
 		
 		@Override

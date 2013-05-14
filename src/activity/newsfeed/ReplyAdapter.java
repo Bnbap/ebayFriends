@@ -40,7 +40,7 @@ public class ReplyAdapter extends BaseAdapter {
 		this.newsFeedItem = newsFeedItem;
 		replyList = new ArrayList<ReplyItem>();
 		// Need to refresh list in separate thread
-		new UpdateReplyListTask(this, newsFeedItem.getComments()).execute();
+		updateReplyList();
 	}
 	
 	@Override
@@ -174,6 +174,10 @@ public class ReplyAdapter extends BaseAdapter {
 			super.onPostExecute(result);
 			adapter.setReplyList(result);
 		}
+	}
+	
+	public void updateReplyList(){
+		new UpdateReplyListTask(this, newsFeedItem.getComments()).execute();
 	}
 
 	@Override

@@ -10,5 +10,8 @@ public class NamedFile {
 	public NamedFile(String name, File file){
 		this.file=file;
 		this.name=name;
+		
+	
+		
 	}
 }

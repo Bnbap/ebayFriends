@@ -16,10 +16,9 @@ import android.util.Log;
 public class AudioUtil {
 	private String mFileName;
 	private String LOG_TAG = "AudioUtil";
-	private Handler h;
+	private Handler handler;
 
-	public AudioUtil(Handler vh) {
-		h = vh;
+	public AudioUtil() {
 
 	}
 
@@ -55,7 +54,8 @@ public class AudioUtil {
 		Log.e(LOG_TAG, "store success");
 	}
 
-	public void playVoice() {
+	public void playVoice( Handler h) {
+		handler = h;
 		mPlayer = new MediaPlayer();
 		mPlayer.setOnCompletionListener(new OnCompletionListener() {
 
@@ -65,7 +65,7 @@ public class AudioUtil {
 				Bundle b = new Bundle();
 				b.putString("status", "finish");
 				msg.setData(b);
-				h.sendMessage(msg);
+				handler.sendMessage(msg);
 			}
 
 		});
@@ -88,7 +88,7 @@ public class AudioUtil {
 			Bundle b = new Bundle();
 			b.putString("status", "start");
 			msg.setData(b);
-			h.sendMessage(msg);
+			handler.sendMessage(msg);
 
 			Log.e(LOG_TAG, "play success");
 		} catch (IOException e) {
