@@ -28,7 +28,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class NewsFeedFragment extends Fragment {
 
 	private PullAndLoadListView lv;
-	private List<NewsFeedItem> itemList;
 	private NewsFeedItemAdapter adapter;
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -39,7 +38,7 @@ public class NewsFeedFragment extends Fragment {
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.window_title);
 		windowTitleView.setText("News Feeding");
-		itemList = new ArrayList<NewsFeedItem>();
+		List<NewsFeedItem> itemList = new ArrayList<NewsFeedItem>();
 		lv = (PullAndLoadListView) view.findViewById(R.id.listview);
 		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader,
 				lv);
@@ -62,6 +61,7 @@ public class NewsFeedFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				Intent intent = new Intent(getActivity(), ReplyActivity.class);
+				intent.putExtra("currentNewsFeed", adapter.getItemList().get(position - 1));
 				getActivity().startActivity(intent);
 			}
 		});
@@ -147,8 +147,9 @@ public class NewsFeedFragment extends Fragment {
 					JSONObject person = item.getJSONObject("author");
 					String portraitURL = person.getString("portrait");
 					String authorName = person.getString("name");
+					String commentsURL = item.getString("comments");
 					NewsFeedItem newsFeedItem = new NewsFeedItem(imageURL,
-							portraitURL, authorName, voiceURL);
+							portraitURL, authorName, voiceURL, commentsURL);
 					list.add(newsFeedItem);
 				}
 			} catch (JSONException e) {

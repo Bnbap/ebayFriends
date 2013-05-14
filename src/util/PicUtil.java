@@ -64,9 +64,9 @@ public class PicUtil {
 		}
 		return iconOption;
 	}
-	
-	public static AnimateFirstDisplayListener getAnimateListener(){
-		if (animateListener == null){
+
+	public static AnimateFirstDisplayListener getAnimateListener() {
+		if (animateListener == null) {
 			animateListener = new AnimateFirstDisplayListener();
 		}
 		return animateListener;

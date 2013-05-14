@@ -48,7 +48,8 @@
         android:layout_marginLeft="10dp"
         android:text="@string/hello_world"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/nameColor" />
     
     <ImageView
         android:id="@+id/reply"
