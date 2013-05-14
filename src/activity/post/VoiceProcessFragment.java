@@ -147,7 +147,7 @@ public class VoiceProcessFragment extends Fragment {
 		return null;
 	}
 	
-	class VoiceHandler extends Handler{
+	public class VoiceHandler extends Handler{
 		public VoiceHandler(){
 			
 		}

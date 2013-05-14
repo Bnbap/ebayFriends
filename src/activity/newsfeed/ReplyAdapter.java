@@ -91,10 +91,12 @@ public class ReplyAdapter extends BaseAdapter {
 			String audioUrl = replyList.get(index).getAudioReplyURL();
 			if (replyText.length() != 0){
 				holder.replyText.setVisibility(View.VISIBLE);
+				holder.replyPlayButton.setVisibility(View.GONE);
 				holder.replyText.setText(replyText);
 			}
 			if (audioUrl.length() != 0){
 				holder.replyPlayButton.setVisibility(View.VISIBLE);
+				holder.replyText.setVisibility(View.GONE);
 				/**
 				 * @TODO SET PLAYBUTTON DATASOURCE.
 				 */

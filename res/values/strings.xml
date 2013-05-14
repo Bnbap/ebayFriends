@@ -26,5 +26,6 @@
     <string name="style3">Black</string>
     <string name="style4">Original</string>
     <string name="next">Next  →</string>
+    <string name="comment">Enter comments</string>
 
 </resources>
