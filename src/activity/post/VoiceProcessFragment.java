@@ -2,43 +2,23 @@ package activity.post;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.ebay.ebayfriend.R;
-
-import bean.PurchasedItem;
 import util.AudioUtil;
-import util.HttpMultipartRequest;
 import util.MultipartEntityUtil;
-import util.NamedFile;
-import util.NamedString;
-import util.PostNewUtil;
-import util.PostRequest;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Movie;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.LayoutInflater;   
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,10 +26,11 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import bean.PurchasedItem;
+
+import com.ebay.ebayfriend.R;
 
 @SuppressLint("HandlerLeak")
 public class VoiceProcessFragment extends Fragment {
@@ -57,12 +38,10 @@ public class VoiceProcessFragment extends Fragment {
 	 * step 4 final 1.audio or 2. text
 	 */
 	protected MediaRecorder mr;
-	private String recordFileName;
 	private AudioUtil au;
 	PurchasedItem pi;
 	Button recordButton, playButton,submitButton;
 	private String recordName = null;
-	private CustomToast ct;
 	private ImageView iv;
 	public VoiceHandler vh;
 	private String url;
@@ -200,53 +179,6 @@ public class VoiceProcessFragment extends Fragment {
 	class PostThread extends Thread{
 		@Override
 		public void run(){
-//			JSONObject jo = new JSONObject();
-//			byte[] voiceByte = null;
-//			byte[] pictureByte = null;
-//			
-//			File voice,picture;
-//			try {
-//				voice = new File(recordName);
-//				voiceByte = read(voice);
-//				picture = new File(picturePath);
-//				pictureByte = read(picture);
-//			} catch (FileNotFoundException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//			try {
-//				jo.put("voice", voiceByte);
-//				jo.put("picture", pictureByte);
-//				jo.put("url", url);
-//			} catch (JSONException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			Log.e("Json",jo.toString());
-			
-//			boolean isSuccess  = PostNewUtil.post(jo);
-//			List<String[]> strParams;
-//			String[] urlList = {"url",url};
-//			strParams = new ArrayList<String[]>();
-//			strParams.add(urlList);
-//			
-//			List<String[]> fileParams = new ArrayList<String[]>();
-//			String[] voiceFile = {"voice","voice","audio/wav",recordName};s
-//			String[] pictureFile = {"picture","picture","image/jpeg",picturePath};
-//			fileParams.add(voiceFile);
-//			fileParams.add(pictureFile);
-//			
-//			HttpMultipartRequest hmr = new HttpMultipartRequest("http://192.168.47.19:8080/news/addNews",strParams,fileParams);
-//			try {
-//				hmr.sendPost();
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 			boolean isSuccess = false;
 			
 			HashMap<String,File>fileMap = new HashMap<String,File>();
@@ -258,10 +190,8 @@ public class VoiceProcessFragment extends Fragment {
 			try {
 				isSuccess = MultipartEntityUtil.post("http://192.168.47.19:8080/news/addNews", fileMap, stringMap);
 			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Bundle b = new Bundle();
