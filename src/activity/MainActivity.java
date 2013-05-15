@@ -234,12 +234,14 @@ public class MainActivity extends Activity implements OnTouchListener,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-					.getLayoutParams();
-			if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
-				new AsynMove().execute(-SPEED);
-				return false;
-			}
+//			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
+//					.getLayoutParams();
+//			if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
+//				new AsynMove().execute(-SPEED);
+//				return false;
+//			}
+			new AsynMove().execute(-SPEED);
+			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -413,4 +415,6 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		new AsynMove().execute(SPEED);
 	}
+	
+
 }
