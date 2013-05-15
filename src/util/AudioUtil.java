@@ -2,9 +2,11 @@ package util;
 
 import java.io.IOException;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
+import android.media.SoundPool;
 import android.media.audiofx.AudioEffect;
 import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
@@ -16,14 +18,16 @@ import android.util.Log;
 public class AudioUtil {
 	private String mFileName;
 	private String LOG_TAG = "AudioUtil";
-	private Handler handler;
+
+	private float frequency = 1.0f;
+	MediaRecorder mRecorder;
+	MediaPlayer mPlayer = new MediaPlayer();
+	SoundPool sp = new SoundPool(3	, AudioManager.STREAM_MUSIC, 0);
+
 
 	public AudioUtil() {
 
 	}
-
-	MediaRecorder mRecorder;
-	MediaPlayer mPlayer = new MediaPlayer();
 
 	public void recordVoice(String fileName) {
 		mFileName = fileName;
@@ -54,22 +58,8 @@ public class AudioUtil {
 		Log.e(LOG_TAG, "store success");
 	}
 
-	public void playVoice( Handler h) {
-		handler = h;
-		mPlayer = new MediaPlayer();
-		mPlayer.setOnCompletionListener(new OnCompletionListener() {
-
-			@Override
-			public void onCompletion(MediaPlayer mp) {
-				Message msg = new Message();
-				Bundle b = new Bundle();
-				b.putString("status", "finish");
-				msg.setData(b);
-				handler.sendMessage(msg);
-			}
-
-		});
-		try {
+	public void playVoice() {
+//		try {
 //			int sessionId = mPlayer.getAudioSessionId();
 //			Equalizer ae = new Equalizer(0,sessionId);
 //			ae.setEnabled(true);
@@ -80,19 +70,21 @@ public class AudioUtil {
 //				ae.setBandLevel(i, (short)i>=bands/2?range[0]:range[1]);
 //			}
 //			mPlayer.attachAuxEffect(ae.getId());
-			mPlayer.setDataSource(mFileName);
-			mPlayer.prepare();
-			mPlayer.start();
-
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putString("status", "start");
-			msg.setData(b);
-			handler.sendMessage(msg);
-
+			
+			
+//			mPlayer.setDataSource(mFileName);
+//			mPlayer.prepare();
+//			mPlayer.start();
+//			
+			int soundId = sp.load(mFileName, 1);
+			sp.play(soundId, 1, 1, 1, 0,  frequency);
 			Log.e(LOG_TAG, "play success");
-		} catch (IOException e) {
-			Log.e(LOG_TAG, "prepare() failed");
-		}
+//		} catch (IOException e) {
+//			Log.e(LOG_TAG, "prepare() failed");
+//		}
+	}
+	public void changeFrequencyAndPlay(float frequency,Handler h){
+		this.frequency=frequency;
+		playVoice();
 	}
 }
