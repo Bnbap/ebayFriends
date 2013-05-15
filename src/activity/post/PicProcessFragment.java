@@ -50,7 +50,6 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 public class PicProcessFragment extends Fragment {
 
-	protected Bitmap originBitmap, thumbPic;
 	private PurchasedItem pi;
 	private ImageView imageView;
 	private Bitmap myBitmap = null;
@@ -214,9 +213,7 @@ public class PicProcessFragment extends Fragment {
 				styledPic = originalPic;
 				cursor.close();
 
-				if (myBitmap != null && !myBitmap.isRecycled()) {
-					myBitmap.recycle();
-				}
+				recycleBitmap(myBitmap);
 				myBitmap = BitmapFactory.decodeFile(originalPic);
 
 				// imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
@@ -232,15 +229,14 @@ public class PicProcessFragment extends Fragment {
 				// ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				// myBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 
+				recycleBitmap(myBitmap);
 				myBitmap = BitmapFactory.decodeFile(Environment
 						.getExternalStorageDirectory()
 						+ File.separator
 						+ "temp");
 				originalPic = savePic(myBitmap);
 				styledPic = originalPic;
-				if (myBitmap != null && !myBitmap.isRecycled()) {
-					myBitmap.recycle();
-				}
+				recycleBitmap(myBitmap);
 				myBitmap = BitmapFactory.decodeFile(originalPic);
 
 				prepareImg(originalPic);
@@ -318,17 +314,7 @@ public class PicProcessFragment extends Fragment {
 		return data;
 	}
 
-	public void setBitmap(Bitmap bitmap) {
-		this.originBitmap = bitmap;
-	}
 
-	public Bitmap getThumbPic() {
-		return this.thumbPic;
-	}
-
-	public Bitmap getOriginBitmap() {
-		return this.originBitmap;
-	}
 
 	public Bitmap getBitmapStyle1() {
 		return null;
@@ -347,8 +333,7 @@ public class PicProcessFragment extends Fragment {
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("purchasedItem", pi);
 		bundle.putString("picture", styledPic);
-		if (myBitmap != null && !myBitmap.isRecycled())
-			myBitmap.recycle();
+		recycleBitmap(myBitmap);
 		fragment.setArguments(bundle);
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
@@ -393,18 +378,24 @@ public class PicProcessFragment extends Fragment {
 				@Override
 				public void run() {
 					Bitmap bitmap;
+					recycleBitmap(myBitmap);
+					myBitmap = BitmapFactory.decodeFile(originalPic);
 					switch (style) {
 					case 0:
 						bitmap = ImageTools.toFuDiao(myBitmap);
+						recycleBitmap(myBitmap);
 						break;
 					case 1:
 						bitmap = ImageTools.toYouHua(myBitmap);
+						recycleBitmap(myBitmap);
 						break;
 					case 2:
 						bitmap = ImageTools.toGrayscale(myBitmap);
+						recycleBitmap(myBitmap);
 						break;
 					case 3:
 						bitmap = ImageTools.toJiMu(myBitmap);
+						recycleBitmap(myBitmap);
 						break;
 					default:
 						bitmap = myBitmap;

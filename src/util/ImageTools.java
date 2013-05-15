@@ -31,6 +31,7 @@ public class ImageTools {
 		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
 		paint.setColorFilter(f);
 		c.drawBitmap(bmpOriginal, 0, 0, paint);
+		recycleBitmap(bmpOriginal);
 		return bmpGrayscale;
 	}
 
@@ -109,6 +110,7 @@ public class ImageTools {
 		paint.setColorFilter(f);
 		c.drawBitmap(bmpReturn, 0, 0, paint);
 		Log.d("zlc", "7");
+		recycleBitmap(mBitmap);
 		return bmpReturn;
 	}
 
@@ -161,6 +163,7 @@ public class ImageTools {
 
 		bmpReturn.setPixels(pixels, 0, bmpSource.getWidth(), 0, 0,
 				bmpSource.getWidth(), bmpSource.getHeight()); // 必须新建位图然后填充，不能直接填充源图像，否则内存报错
+		recycleBitmap(bmpSource);
 		return bmpReturn;
 	}
 
@@ -193,15 +196,16 @@ public class ImageTools {
 				bmpReturn.setPixel(i, j, modif_color);
 			}
 		}
-
+		
+		recycleBitmap(mBitmap);
 		return bmpReturn;
 	}
 
 	/* 设置油画 */
 	public static Bitmap toYouHua(Bitmap bmpSource) // 源位图
 	{
-		Bitmap bmpReturn = Bitmap.createBitmap(bmpSource.getWidth(),
-				bmpSource.getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap bmpReturn = Bitmap.createBitmap(bmpSource.getWidth()/2,
+				bmpSource.getHeight()/2, Bitmap.Config.ARGB_8888);
 		int color = 0;
 		int Radio = 0;
 		int width = bmpSource.getWidth();
@@ -216,11 +220,19 @@ public class ImageTools {
 				int iPos = rnd.nextInt(100000) % iModel;
 				// 将半径之内取任一点
 				color = bmpSource.getPixel(i + iPos, j + iPos);
-				bmpReturn.setPixel(i, j, color);
+				bmpReturn.setPixel(i/2, j/2, color);
 				j = j - 1;
 			}
 			i = i - 1;
 		}
+		recycleBitmap(bmpSource);
 		return bmpReturn;
+	}
+	
+	private static void recycleBitmap(Bitmap bitmap) {
+		if (bitmap != null && !bitmap.isRecycled()) {
+			bitmap.recycle();
+			bitmap = null;
+		}
 	}
 }
