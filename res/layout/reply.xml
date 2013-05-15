@@ -13,15 +13,17 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/commentbar"
-        android:scrollbars="none" />
+        android:layout_alignParentTop="true"
+        android:scrollbars="none"
+        android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
         android:id="@+id/commentbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
         android:background="@color/dark_slate_gray"
-        android:layout_alignParentBottom="true" >
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/swapInputForm"
@@ -31,24 +33,25 @@
 
         <EditText
             android:id="@+id/textInput"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="@string/comment"
             android:inputType="text" />
-        <Button 
+
+        <Button
             android:id="@+id/audioInput"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Type to Record"
-            android:visibility="gone"/>
-        
-        <Button 
+            android:visibility="gone" />
+
+        <Button
             android:id="@+id/sendReplyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SEND"/>
+            android:text="SEND" />
     </LinearLayout>
 
 </RelativeLayout>

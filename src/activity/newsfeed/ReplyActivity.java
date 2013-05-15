@@ -10,12 +10,15 @@ import org.apache.http.client.ClientProtocolException;
 import util.AudioUtil;
 import util.MultipartEntityUtil;
 import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,38 +30,41 @@ public class ReplyActivity extends Activity {
 	private static final int TEXT_INPUT = 0;
 	private static final int AUDIO_INPUT = 1;
 	private int barStatus = TEXT_INPUT;
-	private String recordName = this.getFilesDir().toString() + File.separator
-			+ "MyRecord";
+	private String recordName;
 	private AudioUtil audioUtility;
 	private ReplyAdapter replyAdapter;
 	private ListView replyList;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reply);
+		recordName = this.getFilesDir().toString() + File.separator
+				+ "MyRecord";
 		audioUtility = new AudioUtil();
-		this.newsFeedItem = (NewsFeedItem) getIntent().getSerializableExtra("currentNewsFeed");
+		this.newsFeedItem = (NewsFeedItem) getIntent().getSerializableExtra(
+				"currentNewsFeed");
 		replyList = (ListView) findViewById(R.id.replyList);
-		replyAdapter = new ReplyAdapter(this, newsFeedItem);
+		replyAdapter = new ReplyAdapter(this, newsFeedItem, replyList);
 		replyList.setAdapter(replyAdapter);
-		
+
 		// Set input bar listener
 		Button swapButton = (Button) findViewById(R.id.swapInputForm);
 		Button sendButton = (Button) findViewById(R.id.sendReplyButton);
 		final EditText textInput = (EditText) findViewById(R.id.textInput);
 		final Button audioInput = (Button) findViewById(R.id.audioInput);
-		
+
 		swapButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View view) {
-				if (barStatus == ReplyActivity.TEXT_INPUT){
+				if (barStatus == ReplyActivity.TEXT_INPUT) {
 					textInput.setVisibility(View.GONE);
 					audioInput.setVisibility(View.VISIBLE);
 					barStatus = AUDIO_INPUT;
-				}
-				else if (barStatus == ReplyActivity.AUDIO_INPUT){
+					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(textInput.getWindowToken(), 0);
+				} else if (barStatus == ReplyActivity.AUDIO_INPUT) {
 					textInput.setVisibility(View.VISIBLE);
 					audioInput.setVisibility(View.GONE);
 					barStatus = TEXT_INPUT;
@@ -66,7 +72,7 @@ public class ReplyActivity extends Activity {
 			}
 		});
 		audioInput.setOnTouchListener(new OnTouchListener() {
-			
+
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -78,39 +84,59 @@ public class ReplyActivity extends Activity {
 			}
 		});
 		sendButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// Collect data
 				File audioFile = null;
 				String textComment = "";
-				if (barStatus == ReplyActivity.AUDIO_INPUT){
+				if (barStatus == ReplyActivity.AUDIO_INPUT) {
 					audioFile = new File(recordName);
-				}
-				else{
+				} else {
 					textComment = textInput.getText().toString();
 				}
-				String sendCommentURL = Constants.SEND_COMMENT_URL;
-				Map<String, String> stringMap = new HashMap<String, String>();
+				final String sendCommentURL = Constants.SEND_COMMENT_URL;
+				final Map<String, String> stringMap = new HashMap<String, String>();
 				stringMap.put("comment_url", newsFeedItem.getComments());
 				stringMap.put("content", textComment);
-				Map<String, File> fileMap = new HashMap<String, File>();
+				final Map<String, File> fileMap = new HashMap<String, File>();
 				fileMap.put("voice", audioFile);
-				try {
-					MultipartEntityUtil.post(sendCommentURL, fileMap, stringMap);
-				} catch (ClientProtocolException e) {
-					Log.e("ReplyActivity", "ClientProtocolException");
-				} catch (IOException e) {
-					Log.e("ReplyActivity", "I/O Error");
+				// Send data
+				if (!(barStatus == ReplyActivity.TEXT_INPUT && textComment.length() == 0)){
+					new AsyncTask<Void, Void, Void>() {
+
+						@Override
+						protected Void doInBackground(Void... params) {
+							try {
+								MultipartEntityUtil.post(sendCommentURL, fileMap,
+										stringMap);
+							} catch (ClientProtocolException e) {
+								Log.e("ReplyActivity", "ClientProtocolException");
+							} catch (IOException e) {
+								Log.e("ReplyActivity", "I/O Error");
+							}
+							Log.e("reply", "ready to return");
+							return null;
+						}
+
+						@Override
+						protected void onPostExecute(Void result) {
+							super.onPostExecute(result);
+							Log.e("replya", "post");
+							// Clear text
+							if (barStatus == ReplyActivity.TEXT_INPUT) {
+								textInput.setText("");
+							}
+							// Update replyList
+							replyAdapter.updateReplyList();
+							// Scroll to the end of list
+							replyList.setSelection(replyAdapter.getCount() - 1);
+							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(textInput.getWindowToken(), 0);
+						}
+
+					}.execute();
 				}
-				// Clear text
-				if (barStatus == ReplyActivity.TEXT_INPUT){
-					textInput.setText("");
-				}
-				// Update replyList
-				replyAdapter.updateReplyList();
-				// Scroll to the end of list
-				replyList.setSelection(replyAdapter.getCount() - 1);
 			}
 		});
 	}

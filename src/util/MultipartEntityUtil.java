@@ -34,7 +34,9 @@ public class MultipartEntityUtil {
 			
 			for(String key:keySet){
 				File file = fileList.get(key);
-				reqEntity.addPart(key,new FileBody(file));
+				if (file != null){
+					reqEntity.addPart(key,new FileBody(file));
+				}
 			}
 		}
 		if(stringList!=null){

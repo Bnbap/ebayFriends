@@ -1,7 +1,10 @@
 package activity.newsfeed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,35 +13,46 @@ import org.json.JSONObject;
 import util.GetRequest;
 import util.PicUtil;
 import util.PicUtil.AnimateFirstDisplayListener;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ebay.ebayfriend.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+@SuppressLint("UseSparseArrays")
 public class ReplyAdapter extends BaseAdapter {
     private Context context;
     private List<ReplyItem> replyList;
     private NewsFeedItem newsFeedItem;
+    private SafeMediaPlayer mediaPlayer;
+    private Map<Integer, PlayState> playStateMap;
+    private ListView listview;
     private static int REPLY_ITEM = 0;
     private static int REPLY_HEADER = 1;
     private static int VIEW_COUNT = 2;
     
 	public ReplyAdapter(Context context,
-			 NewsFeedItem newsFeedItem) {
+			 NewsFeedItem newsFeedItem, ListView listview) {
 		this.context = context;
 		this.newsFeedItem = newsFeedItem;
+		this.listview = listview;
+		playStateMap = new HashMap<Integer, PlayState>();
+		playStateMap.put(0, new PlayState(newsFeedItem.getVoice()));
 		replyList = new ArrayList<ReplyItem>();
+		mediaPlayer = new SafeMediaPlayer(playStateMap, this);
 		// Need to refresh list in separate thread
 		updateReplyList();
 	}
@@ -55,6 +69,7 @@ public class ReplyAdapter extends BaseAdapter {
 				holder.mainImage = (ImageView) rowView.findViewById(R.id.image);
 				holder.authorIcon = (ImageView) rowView.findViewById(R.id.icon);
 				holder.authorName = (TextView) rowView.findViewById(R.id.name);
+				holder.newsPlayButton = (ImageButton)rowView.findViewById(R.id.play);
 			}
 			else if (type == REPLY_ITEM){
 				rowView = inflater.inflate(R.layout.replyitem, parent, false);
@@ -80,6 +95,13 @@ public class ReplyAdapter extends BaseAdapter {
 			imageLoader.displayImage(newsFeedItem.getIcon(), holder.authorIcon, iconOption, animateListener);
 			// Display Name
 			holder.authorName.setText(newsFeedItem.getName());
+			holder.newsPlayButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mediaPlayer.togglePlay(0);
+				}
+			});
 		}
 		else{// set content in reply item
 			int index = position - 1;
@@ -97,9 +119,24 @@ public class ReplyAdapter extends BaseAdapter {
 			if (audioUrl.length() != 0){
 				holder.replyPlayButton.setVisibility(View.VISIBLE);
 				holder.replyText.setVisibility(View.GONE);
-				/**
-				 * @TODO SET PLAYBUTTON DATASOURCE.
-				 */
+				// Set datasource tag to button
+				Set<Integer> positionSet = playStateMap.keySet();
+				if (!positionSet.contains(position)){
+					playStateMap.put(position, new PlayState(audioUrl));
+				}
+				if (playStateMap.get(position).getState() == PlayState.PLAYING){
+					holder.replyPlayButton.setImageResource(R.drawable.pausebutton);
+				}
+				else {
+					holder.replyPlayButton.setImageResource(R.drawable.playbutton);
+				}
+				holder.replyPlayButton.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						mediaPlayer.togglePlay(listview.getPositionForView(v));
+					}
+				});
 			}
 		}
 		Log.e("ReplyAdapter", "Display position" + position);
@@ -115,6 +152,7 @@ public class ReplyAdapter extends BaseAdapter {
 		public ImageView mainImage;
 		public ImageView authorIcon;
 		public TextView authorName;
+		public ImageButton newsPlayButton;
 		public TextView replyName;
 		public ImageView replyIcon;
 		public TextView replyText;

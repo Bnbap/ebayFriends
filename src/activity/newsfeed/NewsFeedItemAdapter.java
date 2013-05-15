@@ -200,8 +200,10 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			this.adapter = adapter;
 		}
 		@Override
-		public void onCompletion(MediaPlayer arg0) {
+		public void onCompletion(MediaPlayer mediaPlayer) {
 			newsFeedList.get(preparePosition).setPlayState(NewsFeedItem.STOP);
+			mediaPlayer.stop();
+			mediaPlayer.reset();
 			preparePosition = -1;
 			adapter.notifyDataSetChanged();
 		}	
