@@ -68,7 +68,6 @@ public class AttachItemFragment extends Fragment {
 				new String[] { "date", "name" }, new int[] {
 						R.id.purchasedItem_date, R.id.purchasedItem_name });
 		lv.setAdapter(listItemAdapter);
-		lv.setBackgroundColor(Color.GRAY);
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

@@ -42,31 +42,38 @@
         -->
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/voice_horizontalScrollView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none" >
+        android:background="#A3A3A3"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/voice_linearlayout"
+        <HorizontalScrollView
+            android:id="@+id/voice_horizontalScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#7F7F7F"
-            android:orientation="horizontal" >
+            android:scrollbars="none" >
 
-            <GridView
-                android:id="@+id/voice_grid_view"
+            <LinearLayout
+                android:id="@+id/voice_linearlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center" />
-        </LinearLayout>
-    </HorizontalScrollView>
+                android:background="#7F7F7F"
+                android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/post_final_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/post" />
+                <GridView
+                    android:id="@+id/voice_grid_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/post_final_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/post" />
+    </LinearLayout>
 
 </LinearLayout>
