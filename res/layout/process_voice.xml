@@ -16,7 +16,7 @@
         android:layout_width="278dp"
         android:layout_height="222dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="50dp"
         android:background="@anim/record" />
 
@@ -32,19 +32,48 @@
             android:layout_height="wrap_content"
             android:text="@string/record" />
 
-        <Button
+        <!--
+            <Button
             android:id="@+id/process_play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="@string/play" />
-
+        -->
     </LinearLayout>
 
-    <Button
-        android:id="@+id/post_final_button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/post" />
+        android:background="#A3A3A3"
+        android:orientation="vertical" >
+
+        <HorizontalScrollView
+            android:id="@+id/voice_horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:id="@+id/voice_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#7F7F7F"
+                android:orientation="horizontal" >
+
+                <GridView
+                    android:id="@+id/voice_grid_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/post_final_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/post" />
+    </LinearLayout>
 
 </LinearLayout>
