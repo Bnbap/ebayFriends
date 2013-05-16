@@ -1,13 +1,12 @@
 package activity;
 
-import notification.client.NotificationAccess;
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
+import notification.client.NotificationAccess;
 import activity.about.AboutFragment;
 import activity.item.ItemDetailActivity;
 import activity.newsfeed.NewsFeedFragment;
 import activity.notification.NotificationFragment;
-import activity.post.AttachItemFragment;
 import activity.post.PostActivity;
 import activity.profile.ProfileFragment;
 import activity.setting.SettingFragment;
@@ -415,6 +414,4 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		new AsynMove().execute(SPEED);
 	}
-	
-
 }
