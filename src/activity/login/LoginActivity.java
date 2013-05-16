@@ -30,7 +30,11 @@ public class LoginActivity extends Activity {
 		myHandler = new MyHandler();
 		
 		if (loginUtil.isSessionExist()) {
-			startMainActivity();
+			String password = loginUtil.getPassword();
+			String username = loginUtil.getUsername();
+			Thread checkThread = new CheckSessionThread(password, username);
+			checkThread.start();
+//			startMainActivity();
 		} else {
 			setContentView(R.layout.login);
 			initView();
