@@ -3,13 +3,16 @@ package activity.newsfeed;
 import java.util.List;
 
 import util.PicUtil;
+import activity.profile.ProfileFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -117,7 +120,7 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 				.build();
 		imageLoader.displayImage(currentNewsFeed.getIcon(), holder.icon,
 				options, animateFirstListener);
-
+		holder.icon.setOnClickListener(new ProfileIconListener(currentNewsFeed.getName(), currentNewsFeed.getIcon()));
 		return view;
 	}
 	
@@ -153,6 +156,28 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 		currentPage = 0;
 	}
 	
+	private class ProfileIconListener implements OnClickListener{
+		private String username;
+		private String portrait;
+		
+		public ProfileIconListener(String username, String portrait) {
+			this.username = username;
+			this.portrait = portrait;
+		}
+		@Override
+		public void onClick(View v) {
+			ProfileFragment fragment = new ProfileFragment();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("username", username);
+			bundle.putString("portrait", portrait);
+			fragment.setArguments(bundle);
+			FragmentTransaction transaction = activity.getFragmentManager()
+					.beginTransaction();
+			transaction.replace(R.id.content, fragment);
+			transaction.addToBackStack(null);
+			transaction.commit();
+		}
+	}
 	private class PlayButtonListener implements OnClickListener{
 		BaseAdapter adapter;
 		public PlayButtonListener(BaseAdapter adapter) {

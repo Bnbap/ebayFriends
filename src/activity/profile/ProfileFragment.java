@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import util.GetRequest;
+import util.LoginUtil;
 import util.PicUtil;
 import util.PicUtil.AnimateFirstDisplayListener;
 import activity.newsfeed.Constants;
@@ -50,6 +51,10 @@ public class ProfileFragment extends Fragment {
 		if (bundle != null){
 			name = bundle.getString("username");
 			portrait = bundle.getString("portrait");
+		}
+		else{
+			name = LoginUtil.USERNAME;
+			portrait = LoginUtil.PORTRAIT;
 		}
 		View view = inflater.inflate(R.layout.profile,container,false);
 		TextView windowTitleView = (TextView)getActivity().findViewById(R.id.window_title);
