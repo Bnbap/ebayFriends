@@ -55,6 +55,7 @@ public class LoginActivity extends Activity {
 			}
 
 		});
+		sbButton.setVisibility(View.GONE);
 	}
 
 	OnClickListener loginClick = new OnClickListener() {
