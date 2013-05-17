@@ -3,6 +3,7 @@ package activity.login;
 import util.LoginUtil;
 import com.ebay.ebayfriend.R;
 import activity.MainActivity;
+import activity.buy.BuyActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,7 +76,8 @@ public class LoginActivity extends Activity {
 	private void startMainActivity() {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("NOTIFICATION", false);
-		startActivity(intent);
+//		Intent intent = new Intent(this, BuyActivity.class);
+//		startActivity(intent);
 		finish();
 	}
 

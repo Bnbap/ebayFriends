@@ -32,6 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="activity.buy.BuyActivity">
+        </activity>
         <activity
             android:name="activity.item.ItemDetailActivity"
             android:parentActivityName="activity.MainActivity" >
@@ -41,7 +43,6 @@
         </activity>
         <activity android:name="activity.post.PostActivity"/>
         <activity android:name="activity.newsfeed.ReplyActivity"/>
-        <activity android:name="activity.buy.BuyActivity"/>
         <service
             android:name="notification.client.NotificationService"
             android:enabled="true"
