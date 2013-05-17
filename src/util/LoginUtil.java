@@ -23,7 +23,7 @@ public class LoginUtil {
 	private static String FILE_NAME = "session";
 	private String HTTP_ADDRESS = "http://192.168.47.19:8080/users/login";
 	private static String filePath;
-	public static String USERNAME,PORTRAIT;
+	public static String USERNAME, PORTRAIT;
 
 	public static HashMap<String, String> getSession() {
 		return session;
@@ -111,20 +111,20 @@ public class LoginUtil {
 			e.printStackTrace();
 		}
 	}
-	private void storeUsernameAndPassword(String username,String password){
-		try{
+
+	private void storeUsernameAndPassword(String username, String password) {
+		try {
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 					new FileOutputStream(filePath + File.separator + "name"));
 			objectOutputStream.writeObject(username);
 			objectOutputStream.close();
 
-			
 			ObjectOutputStream objectOutputStream2 = new ObjectOutputStream(
 					new FileOutputStream(filePath + File.separator + "password"));
 			objectOutputStream2.writeObject(password);
 			objectOutputStream2.close();
 
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -144,7 +144,7 @@ public class LoginUtil {
 		}
 
 		PostRequest postRequest = new PostRequest(HTTP_ADDRESS, param);
-		JSONObject jo=null;
+		JSONObject jo = null;
 		try {
 			jo = new JSONObject(postRequest.getContent());
 			USERNAME = (String) jo.get("username");
@@ -157,7 +157,7 @@ public class LoginUtil {
 		if (cookies == null) {
 			return false;
 		}
-		storeUsernameAndPassword(username,password);
+		storeUsernameAndPassword(username, password);
 		for (int i = 0; i < cookies.size(); i++) {
 			if ("sessionid".equals(cookies.get(i).getName())) {
 				session.put("s_sessionid", cookies.get(i).getValue());
