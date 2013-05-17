@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="menu_items">
+        <item>News Feed</item>
+        <item>Notifications</item>
+        <item>My Profiles</item>
+        <item>Setting</item>
+        <item>About</item>
+    </string-array>
+    
+    <string-array name="color_names">
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>White</item>
+        <item>Black</item>
+    </string-array>
+
+
+
+</resources>

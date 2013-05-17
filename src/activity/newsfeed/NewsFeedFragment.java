@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.ebay.ebayfriend.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class NewsFeedFragment extends Fragment {
 
@@ -46,6 +47,7 @@ public class NewsFeedFragment extends Fragment {
 		this.activity = getActivity();
 		List<NewsFeedItem> itemList = new ArrayList<NewsFeedItem>();
 		lv = (PullAndLoadListView) view.findViewById(R.id.listview);
+		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
 		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader,
 				lv);
 		lv.setOnRefreshListener(new OnRefreshListener() {
