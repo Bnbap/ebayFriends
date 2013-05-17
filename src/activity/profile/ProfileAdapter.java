@@ -93,7 +93,6 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 		} else {
 			holder = (ViewHolder) view.getTag();
 		}
-
 		holder.name.setText(currentNewsFeed.getName());
 		int playState = currentNewsFeed.getPlayState();
 		if(playState == NewsFeedItem.PLAYING){
@@ -103,7 +102,7 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 			holder.playButton.setImageResource(R.drawable.playbutton);
 		}
 		
-		holder.replyButton.setOnClickListener(replyListener);
+		
 		// set play config
 		holder.playButton.setOnClickListener(playListener);
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -122,7 +121,7 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 				.build();
 		imageLoader.displayImage(currentNewsFeed.getIcon(), holder.icon,
 				options, animateFirstListener);
-
+		
 		return view;
 	}
 	

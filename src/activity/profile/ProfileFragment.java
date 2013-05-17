@@ -103,10 +103,12 @@ public class ProfileFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				Log.e("Profile", "position: " + position);
-				Intent intent = new Intent(getActivity(), ReplyActivity.class);
-				intent.putExtra("currentNewsFeed", adapter.getItemList().get(position - 2));
-				getActivity().startActivity(intent);
+				if(position > 1){
+					Log.e("Profile", "position: " + position);
+					Intent intent = new Intent(getActivity(), ReplyActivity.class);
+					intent.putExtra("currentNewsFeed", adapter.getItemList().get(position - 2));
+					getActivity().startActivity(intent);
+				}
 			}
 		});
 		new RefreshNewsFeedTask(adapter, lv).execute();
@@ -192,8 +194,9 @@ public class ProfileFragment extends Fragment {
 					String portraitURL = person.getString("portrait");
 					String authorName = person.getString("name");
 					String commentsURL = item.getString("comments");
+					String goodURL = item.getString("good");
 					NewsFeedItem newsFeedItem = new NewsFeedItem(imageURL,
-							portraitURL, authorName, voiceURL, commentsURL);
+							portraitURL, authorName, voiceURL, commentsURL, goodURL);
 					list.add(newsFeedItem);
 				}
 			} catch (JSONException e) {

@@ -13,16 +13,22 @@ public class NewsFeedItem implements Serializable{
 	private String name;
 	private String voice;
 	private String comments;
+	private String goodURL;
 	private int playState = STOP;
 	
-	public NewsFeedItem(String image, String icon, String name, String voice, String comments) {
+	public NewsFeedItem(String image, String icon, String name, String voice, String comments, String goodURL) {
 		this.image = image;
 		this.icon = icon;
 		this.name = name;
 		this.voice = voice;
 		this.comments = comments;
+		this.goodURL = goodURL;
 	}
 
+	public String getGoodURL(){
+		return goodURL;
+	}
+	
 	public String getImage() {
 		return image;
 	}

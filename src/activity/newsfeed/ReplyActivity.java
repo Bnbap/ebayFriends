@@ -9,8 +9,10 @@ import org.apache.http.client.ClientProtocolException;
 
 import util.AudioUtil;
 import util.MultipartEntityUtil;
+import activity.buy.BuyActivity;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,9 +20,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.ebay.ebayfriend.R;
@@ -34,10 +38,14 @@ public class ReplyActivity extends Activity {
 	private AudioUtil audioUtility;
 	private ReplyAdapter replyAdapter;
 	private ListView replyList;
+	private ImageButton buyButton;
+	private Activity activity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		activity = this;
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.reply);
 		recordName = this.getFilesDir().toString() + File.separator
 				+ "MyRecord";
@@ -47,10 +55,11 @@ public class ReplyActivity extends Activity {
 		replyList = (ListView) findViewById(R.id.replyList);
 		replyAdapter = new ReplyAdapter(this, newsFeedItem, replyList);
 		replyList.setAdapter(replyAdapter);
+		buyButton = (ImageButton) findViewById(R.id.buy);
 
 		// Set input bar listener
-		Button swapButton = (Button) findViewById(R.id.swapInputForm);
-		Button sendButton = (Button) findViewById(R.id.sendReplyButton);
+		ImageButton swapButton = (ImageButton) findViewById(R.id.swapInputForm);
+		ImageButton sendButton = (ImageButton) findViewById(R.id.sendReplyButton);
 		final EditText textInput = (EditText) findViewById(R.id.textInput);
 		final Button audioInput = (Button) findViewById(R.id.audioInput);
 
@@ -81,6 +90,15 @@ public class ReplyActivity extends Activity {
 					audioUtility.storeVoice();
 				}
 				return false;
+			}
+		});
+		buyButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(activity, BuyActivity.class);
+				intent.putExtra("goodsId", newsFeedItem.getGoodURL().split("=")[1]);
+				startActivity(intent);
 			}
 		});
 		sendButton.setOnClickListener(new OnClickListener() {

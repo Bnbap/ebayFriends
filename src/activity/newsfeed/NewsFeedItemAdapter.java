@@ -7,7 +7,6 @@ import activity.profile.ProfileFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -42,7 +41,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 	private ListView lv;
 	private OnClickListener playListener;
 	private int currentPage = 0;
-	private ReplyButtonListener replyListener;
 
 	
 	public NewsFeedItemAdapter(Activity activity,
@@ -59,7 +57,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 		mediaPlayer.setOnCompletionListener(new MediaPlayerCompleteListener(this));
 		mediaPlayer.setOnPreparedListener(new MediaPlayerPreparedListener(this));
 		playListener = new PlayButtonListener(this);
-		replyListener =  new ReplyButtonListener();
 	}
 
 	private class ViewHolder {
@@ -67,7 +64,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 		public ImageView image;
 		public ImageView icon;
 		public ImageButton playButton;
-		public ImageView replyButton;
 	}
 
 	public List<NewsFeedItem> getItemList() {
@@ -86,7 +82,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			holder.image = (ImageView) view.findViewById(R.id.image);
 			holder.icon = (ImageView) view.findViewById(R.id.icon);
 			holder.playButton = (ImageButton) view.findViewById(R.id.play);
-			holder.replyButton = (ImageView)view.findViewById(R.id.reply);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
@@ -101,7 +96,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			holder.playButton.setImageResource(R.drawable.playbutton);
 		}
 		
-		holder.replyButton.setOnClickListener(replyListener);
 		// set play config
 		holder.playButton.setOnClickListener(playListener);
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -246,15 +240,4 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			adapter.notifyDataSetChanged();
 		}
 	}
-	
-	private class ReplyButtonListener implements OnClickListener{
-
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(activity, ReplyActivity.class);
-			activity.startActivity(intent);
-		}
-		
-	}
-	
 }

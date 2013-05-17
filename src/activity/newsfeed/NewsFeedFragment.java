@@ -10,17 +10,21 @@ import org.json.JSONObject;
 import util.GetRequest;
 import activity.newsfeed.PullAndLoadListView.OnLoadMoreListener;
 import activity.newsfeed.PullToRefreshListView.OnRefreshListener;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ebay.ebayfriend.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -30,6 +34,7 @@ public class NewsFeedFragment extends Fragment {
 	private PullAndLoadListView lv;
 	private NewsFeedItemAdapter adapter;
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
+	Activity activity;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +43,7 @@ public class NewsFeedFragment extends Fragment {
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.window_title);
 		windowTitleView.setText("News Feeding");
+		this.activity = getActivity();
 		List<NewsFeedItem> itemList = new ArrayList<NewsFeedItem>();
 		lv = (PullAndLoadListView) view.findViewById(R.id.listview);
 		adapter = new NewsFeedItemAdapter(getActivity(), itemList, imageLoader,
@@ -63,6 +69,24 @@ public class NewsFeedFragment extends Fragment {
 				Intent intent = new Intent(getActivity(), ReplyActivity.class);
 				intent.putExtra("currentNewsFeed", adapter.getItemList().get(position - 1));
 				getActivity().startActivity(intent);
+			}
+		});
+		lv.setLongClickable(true);
+		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				LayoutInflater inflater = activity.getLayoutInflater();
+				View layout = inflater.inflate(R.layout.like_toast, null);
+				Toast toast = new Toast(activity);
+				int[] location = new int[2];
+				view.getLocationOnScreen(location);
+		        toast.setGravity(Gravity.CENTER, location[0], location[1] - 200);
+		        toast.setDuration(Toast.LENGTH_SHORT);
+		        toast.setView(layout);
+		        toast.show();
+				return true;
 			}
 		});
 		lv.setAdapter(adapter);
@@ -148,8 +172,9 @@ public class NewsFeedFragment extends Fragment {
 					String portraitURL = person.getString("portrait");
 					String authorName = person.getString("name");
 					String commentsURL = item.getString("comments");
+					String goodURL = item.getString("good");
 					NewsFeedItem newsFeedItem = new NewsFeedItem(imageURL,
-							portraitURL, authorName, voiceURL, commentsURL);
+							portraitURL, authorName, voiceURL, commentsURL, goodURL);
 					list.add(newsFeedItem);
 				}
 			} catch (JSONException e) {
