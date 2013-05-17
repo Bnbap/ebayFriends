@@ -6,6 +6,7 @@ import java.util.HashMap;
 import util.BuyUtil;
 import util.PicUtil;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,18 +40,17 @@ public class BuyActivity extends Activity {
 	private BuyHandler buyHandler;
 	private String goodsId;
 	private GridViewAdapter adapter;
+	private TextView title;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-//		
+		
 //		Intent intent = getIntent();
 //		Bundle b = intent.getExtras();
 //		goodsId = b.getString("goodsId");
-		
-		goodsId = "5194e0a57985f72200acda41";
+//		
+		goodsId = "5195ab587985f706f8f8abc9";
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_buy);
-		description = (TextView) this.findViewById(R.id.description);
-		description.setText("   " + description.getText());
 
 		adapter = new GridViewAdapter();
 		buyHandler = new BuyHandler();
@@ -60,26 +61,14 @@ public class BuyActivity extends Activity {
 		
 		Thread thread = new LoadDataThread();
 		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			thread.join();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
-		int size = urlList.size();
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		float density = dm.density;
-		int allWidth = (int) (110 * size * density);
-		int itemWidth = (int) (100 * density);
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-				allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-		gv.setLayoutParams(layoutParams);
-		gv.setColumnWidth(itemWidth);
-		gv.setHorizontalSpacing(10);
-		gv.setStretchMode(GridView.NO_STRETCH);
-		gv.setNumColumns(size);
+		
 
 		// ll.setBackgroundColor(Color.BLACK);
 	}
@@ -103,8 +92,31 @@ public class BuyActivity extends Activity {
 		}
 		@Override
 		public void handleMessage(Message msg){
+			int size = urlList.size();
+			DisplayMetrics dm = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dm);
+			float density = dm.density;
+			int allWidth = (int) (310 * size * density);
+			int itemWidth = (int) (300 * density);
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+					allWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
+			gv.setLayoutParams(layoutParams);
+			gv.setColumnWidth(itemWidth);
+			gv.setHorizontalSpacing(10);
+			gv.setStretchMode(GridView.NO_STRETCH);
+			gv.setNumColumns(size);
+			
+			title = (TextView)BuyActivity.this.findViewById(R.id.buy_title);
+			title.setText((String)dataList.get("name"));
+			
+			description = (TextView)BuyActivity.this.findViewById(R.id.description);
+			description.setText((String)dataList.get("description"));
+			
 			gv.invalidate();
+			title.invalidate();
+			description.invalidate();
 			adapter.notifyDataSetChanged();
+			
 			
 		}
 	}
@@ -119,7 +131,7 @@ public class BuyActivity extends Activity {
 
 		@Override
 		public int getCount() {
-			return dataList.size();
+			return urlList.size();
 		}
 
 		@Override
@@ -136,12 +148,13 @@ public class BuyActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			convertView = getLayoutInflater().inflate(R.layout.buy_grid_view,
 					null);
-			ImageView iv = (ImageView) findViewById(R.id.buy_imageView);
+			ImageView iv = (ImageView) convertView.findViewById(R.id.buy_imageView);
+			iv.setScaleType(ScaleType.CENTER_CROP);
 			DisplayImageOptions options = new DisplayImageOptions.Builder()
 					.showStubImage(R.drawable.ic_stub)
 					.showImageForEmptyUri(R.drawable.ic_empty)
 					.showImageOnFail(R.drawable.ic_error).cacheInMemory()
-					.cacheOnDisc().displayer(new RoundedBitmapDisplayer(20))
+					.cacheOnDisc().displayer(new RoundedBitmapDisplayer(0))
 					.build();
 			String picUrl = urlList.get(position);
 			ImageLoader.getInstance().displayImage(picUrl, iv, options,

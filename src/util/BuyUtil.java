@@ -12,8 +12,7 @@ public class BuyUtil {
 	private static String HTTP_ADDRESS  ="http://192.168.47.19:8080/goods/getGoods?id=";
 	
 	public static HashMap<String,Object> getGoodsInfo(String goodsId){
-		HTTP_ADDRESS+=goodsId;
-		GetRequest getRequest = new GetRequest(HTTP_ADDRESS);
+		GetRequest getRequest = new GetRequest(HTTP_ADDRESS+goodsId);
 		JSONObject jo = null;
 		HashMap<String,Object> res = new HashMap<String,Object>();
 		try {
