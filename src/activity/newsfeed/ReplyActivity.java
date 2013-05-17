@@ -67,15 +67,18 @@ public class ReplyActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
+				ImageButton imageButton = (ImageButton) view;
 				if (barStatus == ReplyActivity.TEXT_INPUT) {
 					textInput.setVisibility(View.GONE);
 					audioInput.setVisibility(View.VISIBLE);
 					barStatus = AUDIO_INPUT;
+					imageButton.setImageResource(R.drawable.text);
 					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(textInput.getWindowToken(), 0);
 				} else if (barStatus == ReplyActivity.AUDIO_INPUT) {
 					textInput.setVisibility(View.VISIBLE);
 					audioInput.setVisibility(View.GONE);
+					imageButton.setImageResource(R.drawable.speaker);
 					barStatus = TEXT_INPUT;
 				}
 			}
