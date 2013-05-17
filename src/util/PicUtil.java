@@ -64,6 +64,18 @@ public class PicUtil {
 		}
 		return iconOption;
 	}
+	
+	public static DisplayImageOptions getProfileIconOption() {
+		if (iconOption == null) {
+			iconOption = new DisplayImageOptions.Builder()
+					.showStubImage(R.drawable.ic_stub)
+					.showImageForEmptyUri(R.drawable.ic_empty)
+					.showImageOnFail(R.drawable.ic_error).cacheInMemory()
+					.cacheOnDisc().displayer(new RoundedBitmapDisplayer(30))
+					.build();
+		}
+		return iconOption;
+	}
 
 	public static AnimateFirstDisplayListener getAnimateListener() {
 		if (animateListener == null) {

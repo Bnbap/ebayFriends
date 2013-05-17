@@ -77,7 +77,7 @@ public class LoginActivity extends Activity {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("NOTIFICATION", false);
 //		Intent intent = new Intent(this, BuyActivity.class);
-//		startActivity(intent);
+		startActivity(intent);
 		finish();
 	}
 

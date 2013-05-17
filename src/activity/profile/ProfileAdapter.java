@@ -43,7 +43,6 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 	private ListView lv;
 	private OnClickListener playListener;
 	private int currentPage = 0;
-	private ReplyButtonListener replyListener;
 
 	
 	public ProfileAdapter(Activity activity,
@@ -60,7 +59,6 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 		mediaPlayer.setOnCompletionListener(new MediaPlayerCompleteListener(this));
 		mediaPlayer.setOnPreparedListener(new MediaPlayerPreparedListener(this));
 		playListener = new PlayButtonListener(this);
-		replyListener =  new ReplyButtonListener();
 	}
 
 	private class ViewHolder {
@@ -68,7 +66,6 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 		public ImageView image;
 		public ImageView icon;
 		public ImageButton playButton;
-		public ImageView replyButton;
 	}
 
 	public List<NewsFeedItem> getItemList() {
@@ -88,7 +85,6 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 			holder.image = (ImageView) view.findViewById(R.id.image);
 			holder.icon = (ImageView) view.findViewById(R.id.icon);
 			holder.playButton = (ImageButton) view.findViewById(R.id.play);
-			holder.replyButton = (ImageView)view.findViewById(R.id.reply);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
