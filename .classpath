@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="libs/httpclient-cache-4.2.5.jar"/>
 	<classpathentry kind="lib" path="libs/httpcore-4.2.4.jar"/>
 	<classpathentry kind="lib" path="libs/httpmime-4.2.5.jar"/>
+	<classpathentry kind="lib" path="libs/universal-image-loader-1.8.2-with-sources.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

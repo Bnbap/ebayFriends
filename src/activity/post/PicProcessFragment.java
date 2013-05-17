@@ -283,7 +283,7 @@ public class PicProcessFragment extends Fragment {
 				.showStubImage(R.drawable.ic_stub)
 				.showImageForEmptyUri(R.drawable.ic_empty)
 				.showImageOnFail(R.drawable.ic_error).cacheInMemory()
-				.cacheOnDisc().displayer(new RoundedBitmapDisplayer(20))
+				.cacheOnDisc().displayer(new RoundedBitmapDisplayer(0))
 				.build();
 		imageLoader.displayImage("file://" + picUrl, imageView, options,
 				animateFirstListener);
