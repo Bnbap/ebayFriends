@@ -43,7 +43,6 @@
         </activity>
         <activity android:name="activity.post.PostActivity"/>
         <activity android:name="activity.newsfeed.ReplyActivity"/>
-        <activity android:name="activity.buy.BuyActivity"/>
         <service
             android:name="notification.client.NotificationService"
             android:enabled="true"

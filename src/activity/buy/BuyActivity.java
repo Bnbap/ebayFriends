@@ -60,6 +60,12 @@ public class BuyActivity extends Activity {
 		
 		Thread thread = new LoadDataThread();
 		thread.start();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		int size = urlList.size();
 		DisplayMetrics dm = new DisplayMetrics();
@@ -82,7 +88,7 @@ public class BuyActivity extends Activity {
 		public void run(){
 			dataList = BuyUtil.getGoodsInfo(goodsId);
 
-			urlList = (ArrayList<String>) dataList.get("urlList");
+			urlList = (ArrayList<String>) dataList.get("pictures");
 			
 			buyHandler.sendMessage(new Message());
 			
