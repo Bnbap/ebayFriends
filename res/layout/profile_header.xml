@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/profileIcon"
         android:layout_below="@+id/profileIcon"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="50dp"
         android:text="Descript:"
         android:textStyle="bold"
         android:textSize="15sp"
@@ -81,5 +81,16 @@
         android:layout_alignTop="@+id/webSiteTitle"
         android:text="www.rainite.com"
         android:textColor="@color/gray" />
+
+    <Button
+        android:id="@+id/followButton"
+        android:layout_width="20dp"
+        android:layout_height="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_above="@+id/introContent"
+        android:layout_alignLeft="@+id/profileIcon"
+        android:layout_alignRight="@+id/webSiteTitle"
+        android:layout_below="@+id/profileIcon"
+        android:background="@drawable/follow" />
 
 </RelativeLayout>
