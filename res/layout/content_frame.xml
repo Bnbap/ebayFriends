@@ -16,15 +16,18 @@
             android:layout_height="wrap_content"
             android:background="@drawable/nav_bg" >
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/iv_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
                 android:clickable="true"
                 android:onClick="displayItemDetails"
-                android:src="@drawable/nav_setting" />
+                android:background="@null"
+                android:src="@android:drawable/ic_menu_back" />
 
             <TextView
                 android:id="@+id/window_title"
@@ -34,13 +37,16 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/mainview_post_bt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:text="@string/mainview_post" />
+                android:background="@null"
+                android:src="@android:drawable/ic_menu_edit" />
         </RelativeLayout>
 
         <LinearLayout

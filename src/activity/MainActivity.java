@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Interpolator;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.ebay.ebayfriend.R;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -45,7 +45,7 @@ public class MainActivity extends SlidingActivity {
 				.replace(R.id.menu_frame, new MenuFragment()).commit();
 
 		// set post listener
-		Button postButton = (Button) findViewById(R.id.mainview_post_bt);
+		ImageButton postButton = (ImageButton) findViewById(R.id.mainview_post_bt);
 		postButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -55,7 +55,7 @@ public class MainActivity extends SlidingActivity {
 			}
 		});
 		// customize the SlidingMenu
-		SlidingMenu sm = getSlidingMenu();
+		final SlidingMenu sm = getSlidingMenu();
 		sm.setShadowWidthRes(R.dimen.shadow_width);
 		sm.setShadowDrawable(R.drawable.shadow);
 		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
@@ -75,6 +75,15 @@ public class MainActivity extends SlidingActivity {
 				canvas.translate(0, canvas.getHeight()*(1-interp.getInterpolation(percentOpen)));
 			}
 			});
+		// back button listener
+		ImageButton backButton = (ImageButton) findViewById(R.id.iv_set);
+		backButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				sm.showMenu();
+			}
+		});
 	}
 
 	@Override
