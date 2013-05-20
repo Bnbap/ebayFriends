@@ -101,7 +101,7 @@ public class PicProcessFragment extends Fragment {
 				allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
 		gv.setLayoutParams(layoutParams);
 		gv.setColumnWidth(itemWidth);
-		gv.setHorizontalSpacing(10);
+		gv.setHorizontalSpacing(0);
 		gv.setStretchMode(GridView.NO_STRETCH);
 		gv.setNumColumns(size);
 

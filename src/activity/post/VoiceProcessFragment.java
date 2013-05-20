@@ -124,6 +124,7 @@ public class VoiceProcessFragment extends Fragment {
 		gv.setHorizontalSpacing(10);
 		gv.setStretchMode(GridView.NO_STRETCH);
 		gv.setNumColumns(size);
+		gv.setVisibility(View.INVISIBLE);
 		
 		
 		
@@ -141,6 +142,7 @@ public class VoiceProcessFragment extends Fragment {
 			}
 			
 		});
+		submitButton.setVisibility(View.INVISIBLE);
 		recordButton = (Button) view.findViewById(R.id.process_record_button);
 		recordButton.setOnTouchListener(new OnTouchListener() {
 
@@ -164,6 +166,8 @@ public class VoiceProcessFragment extends Fragment {
 					b.putString("status", "finish");
 					msg.setData(b);
 					vh.sendMessage(msg);
+					gv.setVisibility(View.VISIBLE);
+					submitButton.setVisibility(View.VISIBLE);
 				}
 				return false;
 			}
