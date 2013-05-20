@@ -66,7 +66,7 @@ public class ProfileFragment extends Fragment {
 		ImageView portraitview = (ImageView)profileHeader.findViewById(R.id.profileIcon);
 		
 		imageLoader = PicUtil.imageLoader;
-		DisplayImageOptions iconOption = PicUtil.getIconOption();
+		DisplayImageOptions iconOption = PicUtil.getProfileIconOption();
 		AnimateFirstDisplayListener animateListener = PicUtil.getAnimateListener();
 		if (name.length() != 0){
 			nameview.setText(name);

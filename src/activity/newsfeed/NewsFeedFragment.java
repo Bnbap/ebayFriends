@@ -43,7 +43,7 @@ public class NewsFeedFragment extends Fragment {
 		View view = inflater.inflate(R.layout.newsfeed, container, false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.window_title);
-		windowTitleView.setText("News Feeding");
+		windowTitleView.setText("News Feed");
 		this.activity = getActivity();
 		List<NewsFeedItem> itemList = new ArrayList<NewsFeedItem>();
 		lv = (PullAndLoadListView) view.findViewById(R.id.listview);

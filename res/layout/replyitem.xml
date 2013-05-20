@@ -32,12 +32,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="textStart"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="20dp"
         android:layout_alignTop="@+id/replyIcon"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/replyName"
         android:text="@string/hello_world"
+        android:textSize="15sp"
         android:visibility="gone" />
     
     <ImageButton
