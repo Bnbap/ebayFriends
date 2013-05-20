@@ -57,7 +57,6 @@ public class PicProcessFragment extends Fragment {
 	private ImageLoader imageLoader;
 	private Button postPicNext;
 	private String originalPic, styledPic;
-	private LinearLayout ll;
 	private LinearLayout control;
 	private CustomToast ct;
 	private ImageHandler ih;
@@ -83,9 +82,6 @@ public class PicProcessFragment extends Fragment {
 				R.id.post_title);
 		windowTitleView.setText("select picture");
 
-		ll = (LinearLayout) view.findViewById(R.id.style_linearlayout);
-		// ll.setVisibility(View.INVISIBLE);
-
 		gv = (GridView) view.findViewById(R.id.picture_grid_view);
 
 		GridViewAdapter adapter = new GridViewAdapter();
@@ -101,7 +97,7 @@ public class PicProcessFragment extends Fragment {
 				allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
 		gv.setLayoutParams(layoutParams);
 		gv.setColumnWidth(itemWidth);
-		gv.setHorizontalSpacing(0);
+		gv.setHorizontalSpacing(10);
 		gv.setStretchMode(GridView.NO_STRETCH);
 		gv.setNumColumns(size);
 

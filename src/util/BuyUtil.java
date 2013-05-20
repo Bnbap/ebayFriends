@@ -21,7 +21,7 @@ public class BuyUtil {
 			ArrayList<String> goodsPics = new ArrayList<String>();
 			
 			goodsName = (String)jo.get("name");
-			goodsPrice = ""+((Double)jo.get("price"));
+//			goodsPrice = ""+((Double)jo.get("price"));
 			
 			goodsDescription = (String)jo.getString("description");
 			String picture1 = (String)jo.getString("picture1");
@@ -32,12 +32,18 @@ public class BuyUtil {
 			goodsPics.add(picture3);
 			
 			res.put("name", goodsName);
-			res.put("price", goodsPrice);
+//			res.put("price", goodsPrice);
 			res.put("description", goodsDescription);
 			res.put("pictures", goodsPics);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return res;
+	}
+	
+	public static boolean buy(String goodsId){
+		GetRequest gr = new GetRequest("http://192.168.47.19:8080/users/buy?id="+goodsId);
+		gr.getContent();
+		return true;
 	}
 }

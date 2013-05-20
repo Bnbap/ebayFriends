@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import util.BuyUtil;
 import util.PicUtil;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,13 +16,16 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ebay.ebayfriend.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -41,22 +45,38 @@ public class BuyActivity extends Activity {
 	private String goodsId;
 	private GridViewAdapter adapter;
 	private TextView title;
+	private Button buyBt;
+	private PurchaseHandler purchaseHandler;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-//		Intent intent = getIntent();
-//		Bundle b = intent.getExtras();
-//		goodsId = b.getString("goodsId");
+		Intent intent = getIntent();
+		Bundle b = intent.getExtras();
+		goodsId = b.getString("goodsId");
 //		
-		goodsId = "5195ab587985f706f8f8abc9";
+//		goodsId = "5195ab587985f706f8f8abc9";
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_buy);
 
 		adapter = new GridViewAdapter();
 		buyHandler = new BuyHandler();
+		purchaseHandler = new PurchaseHandler();
 
 		gv = (GridView) findViewById(R.id.buy_grid_view);
 		gv.setAdapter(adapter);
+		
+		buyBt = (Button) findViewById(R.id.buy_buy);
+		buyBt.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Thread buyThread = new BuyThread(goodsId);
+				buyThread.start();
+				
+			}
+			
+		});
 
 		
 		Thread thread = new LoadDataThread();
@@ -120,6 +140,20 @@ public class BuyActivity extends Activity {
 			
 		}
 	}
+	
+	@SuppressLint("HandlerLeak")
+	class PurchaseHandler extends Handler{
+		public PurchaseHandler (){
+			
+		}
+		public PurchaseHandler(Looper l){
+			
+		}
+		@Override
+		public void handleMessage(Message msg){
+			Toast.makeText(getApplicationContext(), "Purchase Success", Toast.LENGTH_LONG).show();
+		}
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,6 +197,20 @@ public class BuyActivity extends Activity {
 			return convertView;
 		}
 
+	}
+	class BuyThread extends Thread{
+		private String goodsId;
+		public BuyThread(String id){
+			this.goodsId=id;
+		}
+		
+		@Override
+		public void run(){
+			BuyUtil.buy(goodsId);
+			Message msg = new Message();
+			purchaseHandler.sendMessage(msg);
+			
+		}
 	}
 
 }
