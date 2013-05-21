@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 import activity.MainActivity;
+import activity.chat.ChatActivity;
 
 /**
  * This class is to notify the user of messages with NotificationManager.
@@ -125,6 +126,43 @@ public class Notifier {
 
 		} else {
 		}
+	}
+
+	public void notifyChat(String msg) {
+		if (isNotificationEnabled()) {
+
+			// Notification
+			Notification notification = new Notification();
+			notification.icon = getNotificationIcon();
+			notification.defaults = Notification.DEFAULT_LIGHTS;
+			if (isNotificationSoundEnabled()) {
+				notification.defaults |= Notification.DEFAULT_SOUND;
+			}
+			if (isNotificationVibrateEnabled()) {
+				notification.defaults |= Notification.DEFAULT_VIBRATE;
+			}
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
+			notification.when = System.currentTimeMillis();
+			notification.tickerText = "chat message from " + msg.split(" ")[0];
+
+			Intent intent = new Intent(context, ChatActivity.class);
+			intent.putExtra("reMsg", msg);
+			intent.putExtra(Constants.NOTIFICATION_FLAG, true);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+			intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+			PendingIntent contentIntent = PendingIntent
+					.getActivity(context, random.nextInt(), intent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
+
+			notification.setLatestEventInfo(context, msg.split(" ")[0],
+					msg.split(" ")[1], contentIntent);
+			notificationManager.notify(random.nextInt(), notification);
+		}
+
 	}
 
 	private int getNotificationIcon() {

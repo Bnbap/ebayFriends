@@ -21,6 +21,7 @@ public class NotificationAccess {
 	private NotifyManyUsersThread nmut = null;
 	private String username;
 	private String password;
+
 	public String getUsername() {
 		return username;
 	}

@@ -1,5 +1,6 @@
 package notification.client;
 
+import activity.chat.ChatService;
 import activity.notification.*;
 import android.app.Activity;
 import android.content.Context;
@@ -89,6 +90,8 @@ public final class ServiceManager {
 			public void run() {
 				Intent intent = NotificationService.getIntent();
 				context.startService(intent);
+				Intent intent2 = ChatService.getIntent();
+				context.startService(intent2);
 			}
 		});
 		serviceThread.start();
@@ -97,6 +100,8 @@ public final class ServiceManager {
 	public void stopService() {
 		Intent intent = NotificationService.getIntent();
 		context.stopService(intent);
+		Intent intent2 = ChatService.getIntent();
+		context.stopService(intent2);
 	}
 
 	private String getMetaDataValue(String name) {
@@ -126,10 +131,10 @@ public final class ServiceManager {
 		editor.commit();
 	}
 
-//	public static void viewNotificationSettings(Context context) {
-//		Intent intent = new Intent().setClass(context,
-//				NotificationSettingsActivity.class);
-//		context.startActivity(intent);
-//	}
+	// public static void viewNotificationSettings(Context context) {
+	// Intent intent = new Intent().setClass(context,
+	// NotificationSettingsActivity.class);
+	// context.startActivity(intent);
+	// }
 
 }

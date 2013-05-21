@@ -1,5 +1,14 @@
 package activity.chat;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.Collection;
 
 import org.jivesoftware.smack.Chat;
@@ -23,6 +32,16 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class ClientConServer {
+	private String ipstring = null, nameString = null;
+	Thread thread = null;
+	Socket s = null;
+	private InetSocketAddress isa = null;
+	DataInputStream dis = null;
+	DataOutputStream dos = null;
+	private String reMsg = null;
+	private String chatKey = "chatKey";
+	private String myName = "zhanghang", ip = "10.0.2.2";
+	private boolean isConnect = false;
 	private static int PORT = 5222;
 	private Context context;
 
@@ -31,22 +50,153 @@ public class ClientConServer {
 
 	}
 
-	// 这里收到消息后，通过广播将消息发送到需要的地方.哈哈，既然收到了服务器发送来的信息，如何处理自己决定。
-	private Handler handler = new Handler() {
-		public void handleMessage(android.os.Message m) {
-			Message msg = new Message();
-			msg = (Message) m.obj;
-			// 把从服务器获得的消息通过广播发送
-			Intent intent = new Intent("org.yhn.mes");
-			String[] message = new String[] { msg.getFrom(), msg.getBody() };
-			System.out.println("==========收到服务器消息  From==========="
-					+ message[0].toString());
-			System.out.println("==========收到服务器消息  Body==========="
-					+ message[1].toString());
-			intent.putExtra("message", message);
-			context.sendBroadcast(intent);
-		};
+	private Runnable doThread = new Runnable() {
+		public void run() {
+			System.out.println("running!");
+			ReceiveMsg();
+		}
 	};
+
+	public void connect() {
+		thread = new Thread(null, connThread, "connect");
+		thread.start();
+	}
+
+	private Runnable connThread = new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				s = new Socket();
+				isa = new InetSocketAddress(ip, 1235);
+				s.connect(isa, 5000);
+
+				if (s.isConnected()) {
+					dos = new DataOutputStream(s.getOutputStream());
+					dis = new DataInputStream(s.getInputStream());
+					dos.writeUTF(chatKey + "online:" + myName);
+					/**
+					 * 这里是关键，我在此耗时8h+ 原因是 子线程不能直接更新UI 为此，我们需要通过Handler物件，通知主线程Ui
+					 * Thread来更新界面。
+					 * 
+					 */
+					thread = new Thread(null, doThread, "Message");
+					thread.start();
+					System.out.println("connect");
+					isConnect = true;
+				}
+			} catch (UnknownHostException e) {
+				System.out.println("連接失敗");
+				// Toast.makeText(SocketmsgActivity.this, "連接失敗",
+				// Toast.LENGTH_SHORT).show();
+				// Intent intent = new
+				// Intent(SocketmsgActivity.this,IniActivity.class);
+				// startActivity(intent);
+				// SocketmsgActivity.this.finish();
+				e.printStackTrace();
+			} catch (SocketTimeoutException e) {
+				System.out.println("連接超時，服務器未開啟或IP錯誤");
+				// Toast.makeText(SocketmsgActivity.this, "連接超時，服務器未開啟或IP錯誤",
+				// Toast.LENGTH_SHORT).show();
+				// Intent intent = new
+				// Intent(SocketmsgActivity.this,IniActivity.class);
+				// startActivity(intent);
+				// SocketmsgActivity.this.finish();
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("連接失敗");
+				e.printStackTrace();
+			}
+		}
+	};
+
+	public void disConnect() {
+		if (dos != null) {
+			try {
+				dos.writeUTF(chatKey + "offline:" + myName);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				s.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 线程监视Server信息
+	 */
+	private void ReceiveMsg() {
+		if (isConnect) {
+			try {
+				while ((reMsg = dis.readUTF()) != null) {
+					System.out.println(reMsg);
+					if (reMsg != null) {
+
+						try {
+							android.os.Message msgMessage = new android.os.Message();
+							msgMessage.what = 0x1981;
+							handler.sendMessage(msgMessage);
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				}
+			} catch (SocketException e) {
+				// TODO: handle exception
+				System.out.println("exit!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	/**
+	 * 通过handler更新UI
+	 */
+	Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 0x1981:
+
+				// ChatMsgEntity entity = new ChatMsgEntity();
+				// entity.setDate(getDate());
+				// entity.setName(toName);
+				// entity.setMsgType(true);
+				// entity.setText(reMsg);
+				Intent intent = new Intent("chat.message");
+				intent.putExtra("reMsg", reMsg);
+				context.sendBroadcast(intent);
+				break;
+			}
+		}
+	};
+
+	// 这里收到消息后，通过广播将消息发送到需要的地方.哈哈，既然收到了服务器发送来的信息，如何处理自己决定。
+	// private Handler handler = new Handler() {
+	// public void handleMessage(android.os.Message m) {
+	// Message msg = new Message();
+	// msg = (Message) m.obj;
+	// // 把从服务器获得的消息通过广播发送
+	// Intent intent = new Intent("chat.message");
+	// String[] message = new String[] { msg.getFrom(), msg.getBody() };
+	// System.out.println("==========收到服务器消息  From==========="
+	// + message[0].toString());
+	// System.out.println("==========收到服务器消息  Body==========="
+	// + message[1].toString());
+	// intent.putExtra("message", message);
+	// context.sendBroadcast(intent);
+	// };
+	// };
 
 	// public boolean login(String a, String p) {
 	// // ConnectionConfiguration config = new
@@ -101,19 +251,19 @@ public class ClientConServer {
 	// return false;
 	// }
 
-	/** message listener */
-	class MyChatManagerListener implements ChatManagerListener {
-
-		public void chatCreated(Chat chat, boolean arg1) {
-			chat.addMessageListener(new MessageListener() {
-				public void processMessage(Chat arg0, Message msg) {
-					/** 通过handler转发消息 */
-					android.os.Message m = handler.obtainMessage();
-					m.obj = msg;
-					m.sendToTarget();
-
-				}
-			});
-		}
-	}
+	// /** message listener */
+	// class MyChatManagerListener implements ChatManagerListener {
+	//
+	// public void chatCreated(Chat chat, boolean arg1) {
+	// chat.addMessageListener(new MessageListener() {
+	// public void processMessage(Chat arg0, Message msg) {
+	// /** 通过handler转发消息 */
+	// android.os.Message m = handler.obtainMessage();
+	// m.obj = msg;
+	// m.sendToTarget();
+	//
+	// }
+	// });
+	// }
+	// }
 }

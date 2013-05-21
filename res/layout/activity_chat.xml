@@ -25,10 +25,10 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/otherName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="白富美"
             android:textColor="#ffffff"
             android:textSize="20sp" />
 

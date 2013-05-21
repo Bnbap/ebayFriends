@@ -4,6 +4,7 @@ import notification.client.NotificationAccess;
 import layout.MenuLayout;
 import layout.MenuLayout.OnScrollListener;
 import activity.about.AboutFragment;
+import activity.chat.ChatActivity;
 import activity.item.ItemDetailActivity;
 import activity.newsfeed.NewsFeedFragment;
 import activity.notification.NotificationFragment;
@@ -70,8 +71,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 	/**
 	 * show on the window of different fragments
 	 */
-	protected String windowsTitle[] = { "News Feed", "Notifications", "My Profiles",
-			"Setting", "About" };
+	protected String windowsTitle[] = { "News Feed", "Notifications",
+			"My Profiles", "Setting", "About" };
 
 	protected MenuLayout mylaout;
 
@@ -94,18 +95,19 @@ public class MainActivity extends Activity implements OnTouchListener,
 		mylaout = (MenuLayout) findViewById(R.id.mylaout);
 		lv_set.setAdapter(new ArrayAdapter<String>(this, R.layout.item,
 				R.id.tv_item, windowsTitle));
-		
-		postButton =(Button)findViewById(R.id.mainview_post_bt);
-		postButton.setOnClickListener(new OnClickListener(){
+
+		postButton = (Button) findViewById(R.id.mainview_post_bt);
+		postButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
 
-				Intent intent = new Intent(view.getContext(),PostActivity.class);
+				Intent intent = new Intent(view.getContext(),
+						PostActivity.class);
 				view.getContext().startActivity(intent);
-				
+
 			}
-			
+
 		});
 
 		mylaout.setOnScrollListener(new OnScrollListener() {
@@ -147,8 +149,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 
 		boolean isNotification = getIntent().getBooleanExtra("NOTIFICATION",
 				false);
-		
-		//if is switch from notification, show the notification fragment;
+
+		// if is switch from notification, show the notification fragment;
 		// else show the news feed fragment
 		if (isNotification) {
 			changeFragment(1);
@@ -395,7 +397,10 @@ public class MainActivity extends Activity implements OnTouchListener,
 			fragment = new NewsFeedFragment();
 			break;
 		case 1:
-			fragment = new NotificationFragment();
+			// fragment = new NotificationFragment();
+			new AsynMove().execute(SPEED);
+			Intent intent = new Intent(this, ChatActivity.class);
+			startActivity(intent);
 			break;
 		case 2:
 			fragment = new ProfileFragment();
@@ -407,10 +412,10 @@ public class MainActivity extends Activity implements OnTouchListener,
 			fragment = new AboutFragment();
 			break;
 		}
-		transaction.replace(R.id.content, fragment);
-		transaction.addToBackStack(null);
-		transaction.commit();
-
-		new AsynMove().execute(SPEED);
+//		transaction.replace(R.id.content, fragment);
+//		transaction.addToBackStack(null);
+//		transaction.commit();
+//
+//		new AsynMove().execute(SPEED);
 	}
 }

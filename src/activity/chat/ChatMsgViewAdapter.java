@@ -2,6 +2,8 @@ package activity.chat;
 
 import java.util.List;
 
+import util.PicUtil;
+import util.PicUtil.AnimateFirstDisplayListener;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -10,9 +12,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ebay.ebayfriend.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ChatMsgViewAdapter extends BaseAdapter {
 
@@ -78,6 +83,13 @@ public class ChatMsgViewAdapter extends BaseAdapter {
 			} else {
 				convertView = mInflater.inflate(
 						R.layout.chatting_item_msg_text_right, null);
+				// ImageView iv = (ImageView) convertView
+				// .findViewById(R.id.iv_userhead);
+				// AnimateFirstDisplayListener animateListener =
+				// PicUtil.getAnimateListener();
+				// ImageLoader imageLoader = PicUtil.imageLoader;
+				// DisplayImageOptions option = PicUtil.getIconOption();
+				// imageLoader.displayImage("", iv, option, animateListener);
 			}
 
 			viewHolder = new ViewHolder();
