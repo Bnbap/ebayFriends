@@ -6,6 +6,7 @@ import activity.about.AboutFragment;
 import activity.newsfeed.NewsFeedFragment;
 import activity.notification.NotificationFragment;
 import activity.profile.ProfileFragment;
+import activity.search.SearchFragment;
 import activity.setting.SettingFragment;
 import android.app.Fragment;
 import android.app.ListFragment;
@@ -49,6 +50,9 @@ public class MenuFragment extends ListFragment {
 			newContent = new SettingFragment();
 			break;
 		case 4:
+			newContent = new SearchFragment();
+			break;
+		case 5:
 			newContent = new AboutFragment();
 			break;
 		}

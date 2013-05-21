@@ -11,13 +11,9 @@ import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 
 import util.AudioUtil;
-import util.ImageTools;
 import util.MultipartEntityUtil;
-import activity.post.PicProcessFragment.ClickListener;
-import activity.post.PicProcessFragment.GridViewAdapter;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -25,7 +21,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;   
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,7 +55,6 @@ public class VoiceProcessFragment extends Fragment {
 	private PostHandler ph;
 	private LayoutInflater inflater;
 	
-	private LinearLayout ll;
 	private GridView gv;
 	private List<String> dataList = new ArrayList<String>();
 
@@ -92,7 +87,6 @@ public class VoiceProcessFragment extends Fragment {
 
 		
 		
-//		ct = new CustomToast(getActivity(),"Recording");
 		au = new AudioUtil();
 		this.inflater = inflater;
 		View view = inflater.inflate(R.layout.process_voice, container, false);
@@ -103,8 +97,6 @@ public class VoiceProcessFragment extends Fragment {
 		
 		
 		
-		ll = (LinearLayout) view.findViewById(R.id.voice_linearlayout);
-		// ll.setVisibility(View.INVISIBLE);
 
 		gv = (GridView) view.findViewById(R.id.voice_grid_view);
 
@@ -124,6 +116,7 @@ public class VoiceProcessFragment extends Fragment {
 		gv.setHorizontalSpacing(10);
 		gv.setStretchMode(GridView.NO_STRETCH);
 		gv.setNumColumns(size);
+		gv.setVisibility(View.INVISIBLE);
 		
 		
 		
@@ -141,6 +134,7 @@ public class VoiceProcessFragment extends Fragment {
 			}
 			
 		});
+		submitButton.setVisibility(View.INVISIBLE);
 		recordButton = (Button) view.findViewById(R.id.process_record_button);
 		recordButton.setOnTouchListener(new OnTouchListener() {
 
@@ -164,6 +158,8 @@ public class VoiceProcessFragment extends Fragment {
 					b.putString("status", "finish");
 					msg.setData(b);
 					vh.sendMessage(msg);
+					gv.setVisibility(View.VISIBLE);
+					submitButton.setVisibility(View.VISIBLE);
 				}
 				return false;
 			}

@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import util.PostNewUtil;
-
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,10 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import bean.PurchasedItem;
-import android.widget.ListView;
 
 import com.ebay.ebayfriend.R;
 
@@ -112,6 +111,7 @@ public class AttachItemFragment extends Fragment {
 			
 		}
 	}
+	@SuppressLint("HandlerLeak")
 	class ItemListHandler extends Handler{
 		
 		public ItemListHandler(){

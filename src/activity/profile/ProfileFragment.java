@@ -24,10 +24,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ebay.ebayfriend.R;
@@ -36,10 +39,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ProfileFragment extends Fragment {
 
-	private PullAndLoadListView lv;
+	private ListView lv;
 	private ProfileAdapter adapter;
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
 	private String name;
+	private static final int FOLLOW = 0;
+	private static final int NOT_FOLLOW = 1;
+	private int followState = NOT_FOLLOW;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -60,10 +66,35 @@ public class ProfileFragment extends Fragment {
 		TextView windowTitleView = (TextView)getActivity().findViewById(R.id.window_title);
 		windowTitleView.setText("Profile");
 		
-		lv = (PullAndLoadListView)view.findViewById(R.id.profileList);
+		lv = (ListView)view.findViewById(R.id.profileList);
 		View profileHeader = inflater.inflate(R.layout.profile_header, null);
 		TextView nameview = (TextView) profileHeader.findViewById(R.id.profileName);
 		ImageView portraitview = (ImageView)profileHeader.findViewById(R.id.profileIcon);
+		Button followButton = (Button) profileHeader.findViewById(R.id.followButton);
+		followButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// @TODO SEND REQUEST TO FOLLOW THIS PERSON
+				Button button = (Button)v;
+				if(followState == FOLLOW){
+					button.setBackgroundResource(R.drawable.follow);
+					followState = NOT_FOLLOW;
+				}
+				else{
+					button.setBackgroundResource(R.drawable.unfollow);
+					followState = FOLLOW;
+				}
+				new AsyncTask<Void, Void, Void>(){
+					@Override
+					protected Void doInBackground(Void... params) {
+					    GetRequest request = new GetRequest(Constants.CHANGE_FOLLOW_PREFIX + name);
+					    request.getContent();
+						return null;
+					}
+				}.execute();
+			}
+		});
 		
 		imageLoader = PicUtil.imageLoader;
 		DisplayImageOptions iconOption = PicUtil.getProfileIconOption();
@@ -85,93 +116,33 @@ public class ProfileFragment extends Fragment {
 		// header view set complete
 		//================================
 		adapter = new ProfileAdapter(getActivity(), imageLoader,lv);
-		lv.setOnRefreshListener(new OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				new RefreshNewsFeedTask(adapter, lv).execute();
-			}
-		});
-		lv.setOnLoadMoreListener(new OnLoadMoreListener() {
-
-			@Override
-			public void onLoadMore() {
-				new MoreNewsFeedTask(adapter, lv).execute();
-			}
-		});
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				if(position > 1){
+				if(position > 0){
 					Log.e("Profile", "position: " + position);
 					Intent intent = new Intent(getActivity(), ReplyActivity.class);
-					intent.putExtra("currentNewsFeed", adapter.getItemList().get(position - 2));
+					intent.putExtra("currentNewsFeed", adapter.getItemList().get(position - 1));
 					getActivity().startActivity(intent);
 				}
 			}
 		});
-		new RefreshNewsFeedTask(adapter, lv).execute();
 		lv.setAdapter(adapter);
+		new AsyncTask<Void, Void, List<NewsFeedItem>>(){
+			@Override
+			protected List<NewsFeedItem> doInBackground(Void... params) {
+				return getNewsFeedList(0);
+			}
+			
+			@Override
+			protected void onPostExecute(List<NewsFeedItem> result) {
+				super.onPostExecute(result);
+				adapter.setList(result);
+			}
+		}.execute();
 		return view;
-	}
-	
-	private class RefreshNewsFeedTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
-		private ProfileAdapter adapter;
-		private PullAndLoadListView lv;
-		
-		public RefreshNewsFeedTask(ProfileAdapter adapter, PullAndLoadListView lv) {
-			this.adapter = adapter;
-			this.lv = lv;
-		}
-		@Override
-		protected List<NewsFeedItem> doInBackground(Void... params) {
-			return getNewsFeedList(0);
-		}
-
-		@Override
-		protected void onPostExecute(List<NewsFeedItem> result) {
-			super.onPostExecute(result);
-			adapter.updateList(result);
-			adapter.resetPage();
-			lv.onRefreshComplete();
-		}
-	}
-	
-	private class MoreNewsFeedTask extends AsyncTask<Void, Void, List<NewsFeedItem>> {
-		private ProfileAdapter adapter;
-		private PullAndLoadListView lv;
-		
-		public MoreNewsFeedTask(ProfileAdapter adapter, PullAndLoadListView lv) {
-			this.adapter = adapter;
-			this.lv = lv;
-		}
-		@Override
-		protected List<NewsFeedItem> doInBackground(Void... params) {
-			int currentPage = adapter.getCurrentPage() + 1;
-			List<NewsFeedItem> fetchList = getNewsFeedList(currentPage);
-			if(fetchList.size() > 0) adapter.incrementCurrentPage();
-			return fetchList;
-		}
-
-		@Override
-		protected void onPostExecute(List<NewsFeedItem> result) {
-			super.onPostExecute(result);
-			List<NewsFeedItem> currentList = adapter.getItemList();
-			for(NewsFeedItem item: result){
-				currentList.add(item);
-			}
-			adapter.notifyDataSetChanged();
-			int index = lv.getFirstVisiblePosition();
-			View v = lv.getChildAt(0);
-			int top = (v == null) ? 0 : v.getTop();
-
-			lv.setSelectionFromTop(index, top);
-			if (result.size() == 0){
-				lv.notifyNoMore();
-			}
-			lv.onLoadMoreComplete();
-		}
 	}
 	
 	private List<NewsFeedItem> getNewsFeedList(int page){

@@ -1,13 +1,12 @@
 package activity.post;
 
-import com.ebay.ebayfriend.R;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Window;
+
+import com.ebay.ebayfriend.R;
 
 public class PostActivity extends Activity {
 

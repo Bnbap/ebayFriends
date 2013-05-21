@@ -1,9 +1,8 @@
 package activity.login;
 
 import util.LoginUtil;
-import com.ebay.ebayfriend.R;
 import activity.MainActivity;
-import activity.buy.BuyActivity;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +12,14 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.ebay.ebayfriend.R;
 
 public class LoginActivity extends Activity {
-	
+
 	private EditText etUsername, etPassword;
 	private MyHandler myHandler;
 	private Button btLogin;
@@ -26,16 +29,16 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		loginUtil = new LoginUtil(getFilesDir().toString());
 		myHandler = new MyHandler();
-		
+
 		if (loginUtil.isSessionExist()) {
 			String password = loginUtil.getPassword();
 			String username = loginUtil.getUsername();
 			Thread checkThread = new CheckSessionThread(password, username);
 			checkThread.start();
-//			startMainActivity();
+			// startMainActivity();
 		} else {
 			setContentView(R.layout.login);
 			initView();
@@ -76,7 +79,7 @@ public class LoginActivity extends Activity {
 	private void startMainActivity() {
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("NOTIFICATION", false);
-//		Intent intent = new Intent(this, BuyActivity.class);
+		// Intent intent = new Intent(this, BuyActivity.class);
 		startActivity(intent);
 		finish();
 	}
@@ -96,11 +99,12 @@ public class LoginActivity extends Activity {
 			Bundle b = new Bundle();
 			b.putBoolean("isSessionAvailable", isSessionAvailable);
 			msg.setData(b);
-			Log.e("Thread","sessionAvalable"+isSessionAvailable);
+			Log.e("Thread", "sessionAvalable" + isSessionAvailable);
 			LoginActivity.this.myHandler.sendMessage(msg);
 		}
 	}
 
+	@SuppressLint("HandlerLeak")
 	class MyHandler extends Handler {
 		public MyHandler() {
 

@@ -1,7 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#d0d0d0"
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
@@ -23,42 +24,11 @@
         </ImageView>
     </LinearLayout>
 
-    <!--
-        <LinearLayout
-        android:id="@+id/style_linearlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/button_style1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/style1" />
-
-        <Button
-            android:id="@+id/button_style2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/style2" />
-
-        <Button
-            android:id="@+id/button_style3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/style3" />
-
-        <Button
-            android:id="@+id/button_style4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/style4" />
-    -->
-
     <LinearLayout
         android:id="@+id/pic_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical" >
 
         <HorizontalScrollView
@@ -95,4 +65,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -162,7 +162,7 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 		@Override
 		public void onClick(View v) {
 			try {
-				int currentPosition = lv.getPositionForView(v) - 2;
+				int currentPosition = lv.getPositionForView(v) - 1;
 				NewsFeedItem currentItem = newsFeedList.get(currentPosition);
 				if(currentPosition != preparePosition){//Different one
 					if(preparePosition != -1){// last not stop
@@ -231,5 +231,10 @@ public class ProfileAdapter extends ArrayAdapter<NewsFeedItem> {
 		}
 		
 	}
+	
+    public void setList(List<NewsFeedItem> list){
+    	this.newsFeedList = list;
+    	notifyDataSetChanged();
+    }
 	
 }
