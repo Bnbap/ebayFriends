@@ -21,6 +21,7 @@ public class NotificationAccess {
 	private NotifyManyUsersThread nmut = null;
 	private String username;
 	private String password;
+	private String id;
 
 	public String getUsername() {
 		return username;
@@ -72,8 +73,9 @@ public class NotificationAccess {
 		serviceManager.startService();
 	}
 
-	public void notifyUser() {
-		this.notifyUsername = "zhanghang";
+	public void notifyUser(String username, String id) {
+		this.notifyUsername = username;
+		this.id = id;
 		nut = new NotifyUserThread();
 		nut.start();
 
@@ -100,7 +102,7 @@ public class NotificationAccess {
 				// 向服务器发送消息
 				PrintWriter out = new PrintWriter(new BufferedWriter(
 						new OutputStreamWriter(socket.getOutputStream())), true);
-				out.println("notifyUser " + notifyUsername);
+				out.println("notifyUser " + notifyUsername + " " + id);
 				out.flush();
 
 				// 接收来自服务器的消息

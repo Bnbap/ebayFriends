@@ -90,7 +90,9 @@ public class ChatActivity extends Activity implements OnClickListener {
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		receivedMsg = getIntent().getStringExtra("reMsg");
 		if (receivedMsg != null)
-			Log.e(receivedMsg, receivedMsg);
+			otherName = receivedMsg.split(" ")[0];
+		else
+			otherName = getIntent().getStringExtra("otherName");
 		initView();
 		connect();
 
@@ -121,7 +123,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		mSensor = new SoundMeter();
 		mEditTextContent = (EditText) findViewById(R.id.et_sendmessage);
 
-		otherNameText.setText(myName);
+		otherNameText.setText(otherName);
 
 		// 语音文字切换按钮
 		chatting_mode_btn.setOnClickListener(new OnClickListener() {

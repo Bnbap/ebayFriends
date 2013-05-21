@@ -49,7 +49,7 @@ public class NotificationFragment extends ListFragment {
 				false);
 		TextView windowTitleView = (TextView) getActivity().findViewById(
 				R.id.window_title);
-		windowTitleView.setText("Notifications");
+		windowTitleView.setText("Friends");
 
 		return view;
 	}
@@ -59,9 +59,8 @@ public class NotificationFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		mData = getData();
 		na = new NotificationAdapter(getActivity(), mData,
-				R.layout.comments_list,
-				new String[] { "title", "info", "img" }, new int[] {
-						R.id.title, R.id.info, R.id.img });
+				R.layout.comments_list, new String[] { "title", "img" },
+				new int[] { R.id.title, R.id.img });
 		setListAdapter(na);
 	}
 
@@ -80,7 +79,7 @@ public class NotificationFragment extends ListFragment {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
 		/* URL���������� */
-		String uriAPI = "http://192.168.1.100:8080/test/test.jsp?u=wangyi&p=456";
+		String uriAPI = "http://192.168.47.19:8080/users/showFriends";
 		/* ����HTTP Get���� */
 		HttpGet httpRequest = new HttpGet(uriAPI);
 		try {
@@ -111,7 +110,6 @@ public class NotificationFragment extends ListFragment {
 					map = new HashMap<String, Object>();
 					JSONObject jsonObject2 = (JSONObject) jsonArray.opt(i);
 					map.put("title", jsonObject2.getString("username"));
-					map.put("info", jsonObject2.getString("comment"));
 					map.put("img",
 							getBitmapFromUrl(jsonObject2.getString("img")));
 					list.add(map);

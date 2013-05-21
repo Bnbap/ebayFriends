@@ -71,8 +71,8 @@ public class MainActivity extends Activity implements OnTouchListener,
 	/**
 	 * show on the window of different fragments
 	 */
-	protected String windowsTitle[] = { "News Feed", "Notifications",
-			"My Profiles", "Setting", "About" };
+	protected String windowsTitle[] = { "News Feed", "Friends", "My Profiles",
+			"Setting", "About" };
 
 	protected MenuLayout mylaout;
 
@@ -397,10 +397,10 @@ public class MainActivity extends Activity implements OnTouchListener,
 			fragment = new NewsFeedFragment();
 			break;
 		case 1:
-			// fragment = new NotificationFragment();
-			new AsynMove().execute(SPEED);
-			Intent intent = new Intent(this, ChatActivity.class);
-			startActivity(intent);
+			fragment = new NotificationFragment();
+			// new AsynMove().execute(SPEED);
+			// Intent intent = new Intent(this, ChatActivity.class);
+			// startActivity(intent);
 			break;
 		case 2:
 			fragment = new ProfileFragment();
@@ -412,10 +412,10 @@ public class MainActivity extends Activity implements OnTouchListener,
 			fragment = new AboutFragment();
 			break;
 		}
-//		transaction.replace(R.id.content, fragment);
-//		transaction.addToBackStack(null);
-//		transaction.commit();
-//
-//		new AsynMove().execute(SPEED);
+		transaction.replace(R.id.content, fragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
+
+		new AsynMove().execute(SPEED);
 	}
 }

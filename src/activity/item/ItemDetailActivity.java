@@ -38,9 +38,8 @@ public class ItemDetailActivity extends Activity {
 		}
 
 		SimpleAdapter adapter = new SimpleAdapter(this, getData(),
-				R.layout.comments_list,
-				new String[] { "title", "info", "img" }, new int[] {
-						R.id.title, R.id.info, R.id.img });
+				R.layout.comments_list, new String[] { "title", "img" },
+				new int[] { R.id.title, R.id.img });
 		// setListAdapter(adapter);
 		comments_list.setAdapter(adapter);
 	}
@@ -56,7 +55,7 @@ public class ItemDetailActivity extends Activity {
 	}
 
 	/*
-	 * // ListView ÖÐÄ³Ïî±»Ñ¡ÖÐºóµÄÂß¼­
+	 * // ListView ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @Override protected void onListItemClick(ListView l, View v, int
 	 * position, long id) {
@@ -65,16 +64,19 @@ public class ItemDetailActivity extends Activity {
 	 */
 
 	/**
-	 * listviewÖÐµã»÷°´¼üµ¯³ö¶Ô»°¿ò
+	 * listviewï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void showInfo() {
-		new AlertDialog.Builder(this).setTitle("ÎÒµÄlistview")
-				.setMessage("½éÉÜ...")
-				.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).show();
+		new AlertDialog.Builder(this)
+				.setTitle("ï¿½ï¿½ï¿½ï¿½listview")
+				.setMessage("ï¿½ï¿½ï¿½ï¿½...")
+				.setPositiveButton("ï¿½ï¿½ï¿½ï¿½",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+							}
+						}).show();
 
 	}
 

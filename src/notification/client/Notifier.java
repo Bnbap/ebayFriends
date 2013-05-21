@@ -55,7 +55,7 @@ public class Notifier {
 			}
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			notification.when = System.currentTimeMillis();
-			notification.tickerText = message;
+			notification.tickerText = "New comments from " + title;
 
 			// Intent intent;
 			// if (uri != null
@@ -75,10 +75,11 @@ public class Notifier {
 			// }
 
 			Intent intent = new Intent(context, MainActivity.class);
+			// intent.putExtra("NOTIFICATION", true);
 			intent.putExtra(Constants.NOTIFICATION_ID, notificationId);
 			intent.putExtra(Constants.NOTIFICATION_API_KEY, apiKey);
 			intent.putExtra(Constants.NOTIFICATION_TITLE, title);
-			intent.putExtra(Constants.NOTIFICATION_MESSAGE, message);
+			intent.putExtra("NEWSFEED_ID", message);
 			intent.putExtra(Constants.NOTIFICATION_URI, uri);
 			intent.putExtra(Constants.NOTIFICATION_FLAG, true);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -91,8 +92,8 @@ public class Notifier {
 					.getActivity(context, random.nextInt(), intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
 
-			notification.setLatestEventInfo(context, title, message,
-					contentIntent);
+			notification.setLatestEventInfo(context, title,
+					"New comments for you!!", contentIntent);
 			notificationManager.notify(random.nextInt(), notification);
 
 			// Intent clickIntent = new Intent(
