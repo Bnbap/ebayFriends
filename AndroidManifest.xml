@@ -43,6 +43,13 @@
         </activity>
         <activity android:name="activity.post.PostActivity" />
         <activity android:name="activity.newsfeed.ReplyActivity" />
+        <activity
+            android:name="activity.chat.ChatActivity"
+            android:parentActivityName="activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="activity.MainActivity" />
+        </activity>
 
         <service
             android:name="notification.client.NotificationService"

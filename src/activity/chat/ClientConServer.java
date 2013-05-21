@@ -23,6 +23,7 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
+import util.LoginUtil;
 import util.XMPPConnUtil;
 
 import android.content.Context;
@@ -40,7 +41,7 @@ public class ClientConServer {
 	DataOutputStream dos = null;
 	private String reMsg = null;
 	private String chatKey = "chatKey";
-	private String myName = "zhanghang", ip = "10.0.2.2";
+	private String myName = LoginUtil.USERNAME, ip = "192.168.1.105";
 	private boolean isConnect = false;
 	private static int PORT = 5222;
 	private Context context;

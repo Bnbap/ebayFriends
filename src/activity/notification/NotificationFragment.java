@@ -32,6 +32,7 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,11 +64,23 @@ public class NotificationFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mData = getData();
+		Runnable r = new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				mData = getData();
+			}
+		};
+		Thread t = new Thread(r);
+		t.start();
+		while (t.isAlive()) {
+
+		}
 		na = new NotificationAdapter(getActivity(), mData,
 				R.layout.comments_list, new String[] { "title", "img" },
 				new int[] { R.id.title, R.id.img });
 		setListAdapter(na);
+
 	}
 
 	public void onListItemClick(ListView parent, View v, int position, long id) {
@@ -163,7 +176,7 @@ public class NotificationFragment extends ListFragment {
 		GetRequest getRequest = new GetRequest(getURL);
 		String jsonResult = getRequest.getContent();
 		if (jsonResult == null) {
-			Log.e("NewsFeedFragment", "Json Parse Error");
+			Log.e("jlajglkjalkgjlagsk", "Json null");
 		} else {
 			try {
 				JSONArray itemArray = new JSONArray(jsonResult);
@@ -171,9 +184,11 @@ public class NotificationFragment extends ListFragment {
 					map = new HashMap<String, Object>();
 					JSONObject user = itemArray.getJSONObject(i);
 					String portraitURL = user.getString("portrait");
-					String authorName = user.getString("name");
+					String authorName = user.getString("username");
+					Log.e(portraitURL, authorName);
 					map.put("title", authorName);
-					map.put("img", getBitmapFromUrl(portraitURL));
+					map.put("img", new BitmapDrawable(
+							getBitmapFromUrl(portraitURL)));
 					list.add(map);
 				}
 			} catch (JSONException e) {

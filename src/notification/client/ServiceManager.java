@@ -1,5 +1,6 @@
 package notification.client;
 
+import util.LoginUtil;
 import activity.chat.ChatService;
 import activity.notification.*;
 import android.app.Activity;
@@ -65,7 +66,7 @@ public final class ServiceManager {
 			throw new RuntimeException();
 		}
 
-		xmppHost = "10.0.2.2";
+		xmppHost = "192.168.1.105";
 		xmppPort = "5222";
 
 		sharedPrefs = context.getSharedPreferences(
@@ -74,8 +75,8 @@ public final class ServiceManager {
 		editor.putString(Constants.API_KEY, apiKey);
 		editor.putString(Constants.XMPP_HOST, xmppHost);
 		editor.putInt(Constants.XMPP_PORT, Integer.parseInt(xmppPort));
-		editor.putString(Constants.USERNAME, username);
-		editor.putString(Constants.PASSWORD, password);
+		editor.putString(Constants.USERNAME, LoginUtil.USERNAME);
+		editor.putString(Constants.PASSWORD, LoginUtil.USERNAME);
 		editor.putString(Constants.CALLBACK_ACTIVITY_PACKAGE_NAME,
 				callbackActivityPackageName);
 		editor.putString(Constants.CALLBACK_ACTIVITY_CLASS_NAME,

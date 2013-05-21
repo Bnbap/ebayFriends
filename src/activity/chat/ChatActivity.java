@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import util.LoginUtil;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -52,7 +54,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 	DataOutputStream dos = null;
 	private String reMsg = null;
 	private String chatKey = "chatKey";
-	private String otherName = "tangyu", myName = "zhanghang", ip = "10.0.2.2";
+	private String otherName, myName = LoginUtil.USERNAME, ip = "192.168.1.105";
 	private boolean isConnect = false;
 
 	private Button mBtnSend;

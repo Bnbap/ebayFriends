@@ -2,6 +2,7 @@ package activity.chat;
 
 import java.util.List;
 
+import util.LoginUtil;
 import util.PicUtil;
 import util.PicUtil.AnimateFirstDisplayListener;
 import android.content.Context;
@@ -83,13 +84,14 @@ public class ChatMsgViewAdapter extends BaseAdapter {
 			} else {
 				convertView = mInflater.inflate(
 						R.layout.chatting_item_msg_text_right, null);
-				// ImageView iv = (ImageView) convertView
-				// .findViewById(R.id.iv_userhead);
-				// AnimateFirstDisplayListener animateListener =
-				// PicUtil.getAnimateListener();
-				// ImageLoader imageLoader = PicUtil.imageLoader;
-				// DisplayImageOptions option = PicUtil.getIconOption();
-				// imageLoader.displayImage("", iv, option, animateListener);
+				ImageView iv = (ImageView) convertView
+						.findViewById(R.id.iv_userhead);
+				AnimateFirstDisplayListener animateListener = PicUtil
+						.getAnimateListener();
+				ImageLoader imageLoader = PicUtil.imageLoader;
+				DisplayImageOptions option = PicUtil.getIconOption();
+				imageLoader.displayImage(LoginUtil.PORTRAIT, iv, option,
+						animateListener);
 			}
 
 			viewHolder = new ViewHolder();

@@ -20,6 +20,7 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Registration;
 import org.jivesoftware.smack.provider.ProviderManager;
 
+import util.LoginUtil;
 import util.XMPPConnUtil;
 
 import android.content.Context;
@@ -48,9 +49,9 @@ public class XmppManager {
 
 	private XMPPConnection connection;
 
-	private String username;
+	private String username = LoginUtil.USERNAME;
 
-	private String password;
+	private String password = LoginUtil.USERNAME;
 
 	private ConnectionListener connectionListener;
 
@@ -72,10 +73,12 @@ public class XmppManager {
 		taskTracker = notificationService.getTaskTracker();
 		sharedPrefs = notificationService.getSharedPreferences();
 
-		xmppHost = sharedPrefs.getString(Constants.XMPP_HOST, "10.0.2.2");
+		xmppHost = sharedPrefs.getString(Constants.XMPP_HOST, "192.168.1.105");
 		xmppPort = sharedPrefs.getInt(Constants.XMPP_PORT, 5222);
-		username = sharedPrefs.getString(Constants.USERNAME, "zhanghang");
-		password = sharedPrefs.getString(Constants.PASSWORD, "zhanghang");
+		username = sharedPrefs
+				.getString(Constants.USERNAME, LoginUtil.USERNAME);
+		password = sharedPrefs
+				.getString(Constants.PASSWORD, LoginUtil.USERNAME);
 
 		connectionListener = new PersistentConnectionListener(this);
 		notificationPacketListener = new NotificationPacketListener(this);
@@ -308,8 +311,8 @@ public class XmppManager {
 		public void run() {
 
 			if (!xmppManager.isRegistered()) {
-				final String newUsername = "zhanghang";
-				final String newPassword = "zhanghang";
+				final String newUsername = LoginUtil.USERNAME;
+				final String newPassword = LoginUtil.USERNAME;
 
 				Registration registration = new Registration();
 
