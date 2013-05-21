@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -32,7 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="activity.buy.BuyActivity">
+        <activity android:name="activity.buy.BuyActivity" >
         </activity>
         <activity
             android:name="activity.item.ItemDetailActivity"
@@ -41,14 +41,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="activity.MainActivity" />
         </activity>
-        <activity android:name="activity.post.PostActivity"/>
-        <activity android:name="activity.newsfeed.ReplyActivity"/>
+        <activity android:name="activity.post.PostActivity" />
+        <activity android:name="activity.newsfeed.ReplyActivity" />
+
         <service
             android:name="notification.client.NotificationService"
             android:enabled="true"
             android:label="NotificationService" >
             <intent-filter>
                 <action android:name="notification.client.NotificationService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="activity.chat.ChatService"
+            android:enabled="true"
+            android:label="ChatService" >
+            <intent-filter>
+                <action android:name="chat.service" />
             </intent-filter>
         </service>
 
