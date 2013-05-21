@@ -28,5 +28,6 @@
     <string name="next">Next  →</string>
     <string name="comment">Enter comments</string>
     <string name="buy">Buy It Now!</string>
+    <string name="about"></string>
 
 </resources>
