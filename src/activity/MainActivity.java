@@ -1,421 +1,104 @@
 package activity;
 
 import notification.client.NotificationAccess;
-import layout.MenuLayout;
-import layout.MenuLayout.OnScrollListener;
-import activity.about.AboutFragment;
-import activity.chat.ChatActivity;
-import activity.item.ItemDetailActivity;
 import activity.newsfeed.NewsFeedFragment;
-import activity.notification.NotificationFragment;
-import activity.post.AttachItemFragment;
 import activity.post.PostActivity;
-import activity.profile.ProfileFragment;
-import activity.setting.SettingFragment;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Point;
-import android.os.AsyncTask;
+import android.graphics.Canvas;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnPreDrawListener;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.view.animation.Interpolator;
+import android.widget.ImageButton;
 
 import com.ebay.ebayfriend.R;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.CanvasTransformer;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 
-public class MainActivity extends Activity implements OnTouchListener,
-		GestureDetector.OnGestureListener, OnItemClickListener {
-
-	protected boolean hasMeasured = false;
-	protected LinearLayout contentLayout;
-	protected LinearLayout menuLayout;
-	protected ImageView iv_set;
-	protected ListView lv_set;
-	protected Button postButton;
-
-	protected int MAX_WIDTH = 0;
-	protected final static int SPEED = 30;
-
-	protected final static int sleep_time = 5;
-
-	protected GestureDetector mGestureDetector;
-	protected boolean isScrolling = false;
-	protected float mScrollX;
-	protected int window_width;
-
-	protected String TAG = "MainActivity";
-
-	protected View view = null;
-
-	/**
-	 * show on the window of different fragments
-	 */
-	protected String windowsTitle[] = { "News Feed", "Friends", "My Profiles",
-			"Setting", "About" };
-
-	protected MenuLayout mylaout;
-
-	// the global image loader
-	protected ImageLoader imageLoader = ImageLoader.getInstance();
-
-	// change to Item Details activity
-	protected void displayItemDetails(View view) {
-		Intent intent = new Intent(this, ItemDetailActivity.class);
-		startActivity(intent);
-	}
-
-	protected void InitView(Bundle savedInstanceState) {
-		NotificationAccess.getInstance().setCallBackActivity(this);
-		NotificationAccess.getInstance().startNotificationService();
-		contentLayout = (LinearLayout) findViewById(R.id.layout_content);
-		menuLayout = (LinearLayout) findViewById(R.id.layout_menu);
-		iv_set = (ImageView) findViewById(R.id.iv_set);
-		lv_set = (ListView) findViewById(R.id.lv_set);
-		mylaout = (MenuLayout) findViewById(R.id.mylaout);
-		lv_set.setAdapter(new ArrayAdapter<String>(this, R.layout.item,
-				R.id.tv_item, windowsTitle));
-
-		postButton = (Button) findViewById(R.id.mainview_post_bt);
-		postButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-
-				Intent intent = new Intent(view.getContext(),
-						PostActivity.class);
-				view.getContext().startActivity(intent);
-
-			}
-
-		});
-
-		mylaout.setOnScrollListener(new OnScrollListener() {
-			@Override
-			public void doScroll(float distanceX) {
-				doScrolling(distanceX);
-			}
-
-			/**
-			 * when the user's finger move off from the screen
-			 */
-			@Override
-			public void doLoosen() {
-				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-						.getLayoutParams();
-				Log.e("doloosen", "rightMargin=" + layoutParams.rightMargin
-						+ ",  -MAX_WIDTH / 2=" + (-MAX_WIDTH / 2));
-
-				if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
-					new AsynMove().execute(-SPEED);
-				} else {
-					new AsynMove().execute(SPEED);
-				}
-			}
-		});
-
-		lv_set.setOnItemClickListener(this);
-		menuLayout.setOnTouchListener(this);
-		contentLayout.setOnTouchListener(this);
-		iv_set.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				displayItemDetails(v);
-			}
-		});
-		mGestureDetector = new GestureDetector(this, this);
-		mGestureDetector.setIsLongpressEnabled(false);
-		getMAX_WIDTH();
-
-		boolean isNotification = getIntent().getBooleanExtra("NOTIFICATION",
-				false);
-
-		// if is switch from notification, show the notification fragment;
-		// else show the news feed fragment
-		if (isNotification) {
-			changeFragment(1);
-		} else {
-			changeFragment(0);
-		}
-
-	}
+public class MainActivity extends SlidingActivity {
+	private Fragment mContent;
+	private Activity activity;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
+		NotificationAccess.getInstance().setCallBackActivity(this);
+		NotificationAccess.getInstance().startNotificationService();
+		activity = this;
+		// set the Above View
+		if (savedInstanceState != null)
+			mContent = getFragmentManager().getFragment(
+					savedInstanceState, "mContent");
+		if (mContent == null)
+			mContent = new NewsFeedFragment();
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.main);
-		InitView(savedInstanceState);
-		imageLoader.init(ImageLoaderConfiguration.createDefault(this));
-	}
+		// set the Above View
+		setContentView(R.layout.content_frame);
+		getFragmentManager().beginTransaction()
+				.replace(R.id.content, mContent).commit();
 
-	/***
-	 */
-	protected void doScrolling(float distanceX) {
-		isScrolling = true;
-		mScrollX = distanceX;
+		// set the Behind View
+		setBehindContentView(R.layout.menu_frame);
+		getFragmentManager().beginTransaction()
+				.replace(R.id.menu_frame, new MenuFragment()).commit();
 
-		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-				.getLayoutParams();
-		RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
-				.getLayoutParams();
-		layoutParams.rightMargin += mScrollX;
-		layoutParams_1.rightMargin = window_width + layoutParams.rightMargin;
-		if (layoutParams.rightMargin <= -MAX_WIDTH) {
-			isScrolling = false;
-			layoutParams.rightMargin = -MAX_WIDTH;
-			layoutParams_1.rightMargin = window_width - MAX_WIDTH;
-
-		} else if (layoutParams.rightMargin >= 0) {
-			isScrolling = false;
-			layoutParams.rightMargin = 0;
-			layoutParams_1.rightMargin = window_width;
-		}
-		;
-
-		contentLayout.setLayoutParams(layoutParams);
-		menuLayout.setLayoutParams(layoutParams_1);
-	}
-
-	/***
-	 */
-	@SuppressLint("NewApi")
-	protected void getMAX_WIDTH() {
-		ViewTreeObserver viewTreeObserver = contentLayout.getViewTreeObserver();
-		viewTreeObserver.addOnPreDrawListener(new OnPreDrawListener() {
+		// set post listener
+		ImageButton postButton = (ImageButton) findViewById(R.id.mainview_post_bt);
+		postButton.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public boolean onPreDraw() {
-				if (!hasMeasured) {
-					Point p = new Point();
-					getWindowManager().getDefaultDisplay().getSize(p);
-					window_width = p.x;
-					MAX_WIDTH = menuLayout.getWidth();
-					RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-							.getLayoutParams();
-					RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
-							.getLayoutParams();
-					ViewGroup.LayoutParams layoutParams_2 = mylaout
-							.getLayoutParams();
-					layoutParams.width = window_width;
-					contentLayout.setLayoutParams(layoutParams);
-
-					layoutParams_1.rightMargin = window_width;
-					menuLayout.setLayoutParams(layoutParams_1);
-					layoutParams_2.width = MAX_WIDTH;
-					mylaout.setLayoutParams(layoutParams_2);
-
-					hasMeasured = true;
-				}
-				return true;
+			public void onClick(View v) {
+				Intent intent = new Intent(activity, PostActivity.class);
+				startActivity(intent);
 			}
 		});
-
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-					.getLayoutParams();
-			if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
-				new AsynMove().execute(-SPEED);
-				return false;
+		// customize the SlidingMenu
+		final SlidingMenu sm = getSlidingMenu();
+		sm.setShadowWidthRes(R.dimen.shadow_width);
+		sm.setShadowDrawable(R.drawable.shadow);
+		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		sm.setFadeDegree(0.35f);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		sm.setBehindScrollScale(0.0f);
+		sm.setBehindCanvasTransformer(new CanvasTransformer() {
+			private Interpolator interp = new Interpolator() {
+				@Override
+				public float getInterpolation(float t) {
+					t -= 1.0f;
+					return t * t * t + 1.0f;
+				}		
+			};
+			@Override
+			public void transformCanvas(Canvas canvas, float percentOpen) {
+				canvas.translate(0, canvas.getHeight()*(1-interp.getInterpolation(percentOpen)));
 			}
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-
-		view = v;
-
-		if (MotionEvent.ACTION_UP == event.getAction() && isScrolling == true) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-					.getLayoutParams();
-			if (layoutParams.rightMargin > -MAX_WIDTH / 2) {
-				Log.e(TAG, "speed");
-				new AsynMove().execute(SPEED);
-			} else {
-				Log.e(TAG, "-speed");
-				new AsynMove().execute(-SPEED);
+			});
+		// back button listener
+		ImageButton backButton = (ImageButton) findViewById(R.id.iv_set);
+		backButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				sm.showMenu();
 			}
-		}
-
-		return mGestureDetector.onTouchEvent(event);
+		});
 	}
 
 	@Override
-	public boolean onDown(MotionEvent e) {
-
-		int position = lv_set.pointToPosition((int) e.getX(), (int) e.getY());
-		if (position != ListView.INVALID_POSITION) {
-			View child = lv_set.getChildAt(position
-					- lv_set.getFirstVisiblePosition());
-			if (child != null)
-				child.setPressed(true);
-		}
-
-		mScrollX = 0;
-		isScrolling = false;
-		return true;
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		getFragmentManager().putFragment(outState, "mContent", mContent);
 	}
 
-	@Override
-	public void onShowPress(MotionEvent e) {
-
-	}
-
-	/***
-	 */
-	@Override
-	public boolean onSingleTapUp(MotionEvent e) {
-		if (view != null && view == iv_set) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-					.getLayoutParams();
-			Log.e(TAG, "rightMargin=" + layoutParams.rightMargin
-					+ ", -Max_width/2=" + -MAX_WIDTH / 2);
-			if (layoutParams.rightMargin < -MAX_WIDTH / 2) {
-				new AsynMove().execute(-SPEED);
-				lv_set.setSelection(0);
-			} else {
-				new AsynMove().execute(SPEED);
-			}
-		} else if (view != null && view == contentLayout) {
-			RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) contentLayout
-					.getLayoutParams();
-			if (layoutParams.rightMargin >= -MAX_WIDTH / 2) {
-				new AsynMove().execute(SPEED);
-			}
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
-		doScrolling(distanceX);
-		return false;
-	}
-
-	@Override
-	public void onLongPress(MotionEvent e) {
-
-	}
-
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
-		return false;
-	}
-
-	class AsynMove extends AsyncTask<Integer, Integer, Void> {
-
-		@Override
-		protected Void doInBackground(Integer... params) {
-			Log.e(TAG, "AsynMove");
-			int times = 0;
-			if (MAX_WIDTH % Math.abs(params[0]) == 0)
-				times = MAX_WIDTH / Math.abs(params[0]);
-			else
-				times = MAX_WIDTH / Math.abs(params[0]) + 1;
-
-			for (int i = 0; i < times; i++) {
-				publishProgress(params[0]);
-				try {
-					Thread.sleep(sleep_time);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-
-			return null;
-		}
-
-		/**
-		 * update UI
-		 */
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) contentLayout
-					.getLayoutParams();
-			RelativeLayout.LayoutParams layoutParams_1 = (RelativeLayout.LayoutParams) menuLayout
-					.getLayoutParams();
-			if (values[0] > 0) {
-				layoutParams.rightMargin = Math.min(layoutParams.rightMargin
-						+ values[0], 0);
-				layoutParams_1.rightMargin = Math.min(
-						layoutParams_1.rightMargin + values[0], window_width);
-			} else {
-				layoutParams.rightMargin = Math.max(layoutParams.rightMargin
-						+ values[0], -MAX_WIDTH);
-				layoutParams_1.rightMargin = Math.max(
-						layoutParams_1.rightMargin + values[0], window_width
-								- MAX_WIDTH);
-			}
-			menuLayout.setLayoutParams(layoutParams_1);
-			contentLayout.setLayoutParams(layoutParams);
-
-		}
-
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		changeFragment(position);
-	}
-
-	private void changeFragment(int position) {
-		Fragment fragment = null;
-		FragmentTransaction transaction = getFragmentManager()
-				.beginTransaction();
-		switch (position) {
-		case 0:
-			fragment = new NewsFeedFragment();
-			break;
-		case 1:
-			fragment = new NotificationFragment();
-			// new AsynMove().execute(SPEED);
-			// Intent intent = new Intent(this, ChatActivity.class);
-			// startActivity(intent);
-			break;
-		case 2:
-			fragment = new ProfileFragment();
-			break;
-		case 3:
-			fragment = new SettingFragment();
-			break;
-		case 4:
-			fragment = new AboutFragment();
-			break;
-		}
-		transaction.replace(R.id.content, fragment);
-		transaction.addToBackStack(null);
-		transaction.commit();
-
-		new AsynMove().execute(SPEED);
+	public void switchContent(Fragment fragment) {
+		mContent = fragment;
+		getFragmentManager().beginTransaction()
+				.replace(R.id.content, fragment).commit();
+		getSlidingMenu().showContent();
 	}
 }

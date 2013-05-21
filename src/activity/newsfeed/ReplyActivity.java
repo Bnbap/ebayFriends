@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import notification.client.NotificationAccess;
+
 import org.apache.http.client.ClientProtocolException;
 
 import util.AudioUtil;
@@ -157,6 +159,7 @@ public class ReplyActivity extends Activity {
 						}
 
 					}.execute();
+					NotificationAccess.getInstance().notifyUser(newsFeedItem.getName(), newsFeedItem.getComments());
 				}
 			}
 		});
