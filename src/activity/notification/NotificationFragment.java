@@ -19,15 +19,21 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import util.GetRequest;
+
 import activity.chat.ChatActivity;
+import activity.newsfeed.Constants;
+import activity.newsfeed.NewsFeedItem;
 import activity.newsfeed.PullAndLoadListView;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,80 +77,110 @@ public class NotificationFragment extends ListFragment {
 						+ (String) mData.get(position).get("title"),
 				Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(getActivity(), ChatActivity.class);
+		intent.putExtra("otherName", (String) mData.get(position).get("title"));
 		startActivity(intent);
 	}
+
+	// private List<Map<String, Object>> getData() {
+	// Map<String, Object> map;
+	// List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+	//
+	// /* URL���������� */
+	// String uriAPI = "http://192.168.47.19:8080/users/showFriends";
+	// /* ����HTTP Get���� */
+	// HttpGet httpRequest = new HttpGet(uriAPI);
+	// try {
+	// /* ������������������ */
+	// HttpResponse httpResponse = new DefaultHttpClient()
+	// .execute(httpRequest);
+	// /* ����������200 ok */
+	// if (httpResponse.getStatusLine().getStatusCode() == 200) {
+	// /*
+	// * ����������200���������� ����������������json��������������
+	// */
+	// StringBuilder builder = new StringBuilder();
+	// BufferedReader bufferedReader2 = new BufferedReader(
+	// new InputStreamReader(httpResponse.getEntity()
+	// .getContent()));
+	// String str2 = "";
+	// for (String s = bufferedReader2.readLine(); s != null; s =
+	// bufferedReader2
+	// .readLine()) {
+	// builder.append(s);
+	// }
+	// /**
+	// * ������������������������json����������
+	// */
+	// JSONObject jsonObject = new JSONObject(builder.toString())
+	// .getJSONObject("comment");
+	// JSONArray jsonArray = jsonObject.getJSONArray();
+	// for (int i = 0; i < jsonArray.length(); i++) {
+	// map = new HashMap<String, Object>();
+	// JSONObject jsonObject2 = (JSONObject) jsonArray.opt(i);
+	// map.put("title", jsonObject2.getString("username"));
+	// map.put("img",
+	// getBitmapFromUrl(jsonObject2.getString("img")));
+	// list.add(map);
+	//
+	// }
+	//
+	// } else {
+	// System.out.println("Error Response: "
+	// + httpResponse.getStatusLine().toString());
+	// }
+	// } catch (ClientProtocolException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// // map.put("title", "G1");
+	// // map.put("info", "google 1");
+	// // map.put("img", R.drawable.i1);
+	// // list.add(map);
+	// //
+	// // map = new HashMap<String, Object>();
+	// // map.put("title", "G2");
+	// // map.put("info", "google 2");
+	// // map.put("img", R.drawable.i2);
+	// // list.add(map);
+	// //
+	// // map = new HashMap<String, Object>();
+	// // map.put("title", "G3");
+	// // map.put("info", "google 3");
+	// // map.put("img", getBitmapFromUrl(""));
+	// // list.add(map);
+	//
+	// return list;
+	// }
 
 	private List<Map<String, Object>> getData() {
 		Map<String, Object> map;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
-		/* URL���������� */
-		String uriAPI = "http://192.168.47.19:8080/users/showFriends";
-		/* ����HTTP Get���� */
-		HttpGet httpRequest = new HttpGet(uriAPI);
-		try {
-			/* ������������������ */
-			HttpResponse httpResponse = new DefaultHttpClient()
-					.execute(httpRequest);
-			/* ����������200 ok */
-			if (httpResponse.getStatusLine().getStatusCode() == 200) {
-				/*
-				 * ����������200���������� ����������������json��������������
-				 */
-				StringBuilder builder = new StringBuilder();
-				BufferedReader bufferedReader2 = new BufferedReader(
-						new InputStreamReader(httpResponse.getEntity()
-								.getContent()));
-				String str2 = "";
-				for (String s = bufferedReader2.readLine(); s != null; s = bufferedReader2
-						.readLine()) {
-					builder.append(s);
-				}
-				/**
-				 * ������������������������json����������
-				 */
-				JSONObject jsonObject = new JSONObject(builder.toString())
-						.getJSONObject("comment");
-				JSONArray jsonArray = jsonObject.getJSONArray("commentList");
-				for (int i = 0; i < jsonArray.length(); i++) {
+		String getURL = "http://192.168.47.19:8080/users/showFriends";
+		GetRequest getRequest = new GetRequest(getURL);
+		String jsonResult = getRequest.getContent();
+		if (jsonResult == null) {
+			Log.e("NewsFeedFragment", "Json Parse Error");
+		} else {
+			try {
+				JSONArray itemArray = new JSONArray(jsonResult);
+				for (int i = 0; i < itemArray.length(); i++) {
 					map = new HashMap<String, Object>();
-					JSONObject jsonObject2 = (JSONObject) jsonArray.opt(i);
-					map.put("title", jsonObject2.getString("username"));
-					map.put("img",
-							getBitmapFromUrl(jsonObject2.getString("img")));
+					JSONObject user = itemArray.getJSONObject(i);
+					String portraitURL = user.getString("portrait");
+					String authorName = user.getString("name");
+					map.put("title", authorName);
+					map.put("img", getBitmapFromUrl(portraitURL));
 					list.add(map);
-
 				}
-
-			} else {
-				System.out.println("Error Response: "
-						+ httpResponse.getStatusLine().toString());
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.e("NewsFeedFragment", "Parse Json Error");
 			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
-		// map.put("title", "G1");
-		// map.put("info", "google 1");
-		// map.put("img", R.drawable.i1);
-		// list.add(map);
-		//
-		// map = new HashMap<String, Object>();
-		// map.put("title", "G2");
-		// map.put("info", "google 2");
-		// map.put("img", R.drawable.i2);
-		// list.add(map);
-		//
-		// map = new HashMap<String, Object>();
-		// map.put("title", "G3");
-		// map.put("info", "google 3");
-		// map.put("img", getBitmapFromUrl(""));
-		// list.add(map);
-
 		return list;
 	}
 
