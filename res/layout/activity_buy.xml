@@ -6,6 +6,20 @@
     android:orientation="vertical"
     tools:context=".BuyActivity" >
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/nav_bg" >
+
+        <TextView
+            android:id="@+id/buy_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/background_light"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="match_parent" >
@@ -14,24 +28,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp" >
-
-                <TextView
-                    android:id="@+id/buy_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center"
-                    android:textSize="18sp" />
-            </LinearLayout>
 
             <HorizontalScrollView
                 android:id="@+id/buy_horizontalScrollView"
@@ -57,15 +53,16 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp" >
 
-                <Button
+                <ImageView
                     android:id="@+id/buy_buy"
+                    android:src="@drawable/buy_now"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/buy" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/price"

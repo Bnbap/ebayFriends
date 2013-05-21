@@ -16,11 +16,13 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -45,11 +47,12 @@ public class BuyActivity extends Activity {
 	private String goodsId;
 	private GridViewAdapter adapter;
 	private TextView title;
-	private Button buyBt;
+	private ImageView buyBt;
 	private PurchaseHandler purchaseHandler;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		Intent intent = getIntent();
 		Bundle b = intent.getExtras();
@@ -66,7 +69,7 @@ public class BuyActivity extends Activity {
 		gv = (GridView) findViewById(R.id.buy_grid_view);
 		gv.setAdapter(adapter);
 		
-		buyBt = (Button) findViewById(R.id.buy_buy);
+		buyBt = (ImageView) findViewById(R.id.buy_buy);
 		buyBt.setOnClickListener(new OnClickListener(){
 
 			@Override
