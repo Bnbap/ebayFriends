@@ -14,7 +14,7 @@ public class XMPPConnUtil {
 		} else {
 
 			ConnectionConfiguration config = new ConnectionConfiguration(
-					"10.0.2.2", 5222);
+					"192.168.1.105", 5222);
 			/** 是否启用安全验证 */
 			config.setSASLAuthenticationEnabled(false);
 
