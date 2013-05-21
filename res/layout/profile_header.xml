@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:paddingBottom="40dp"
+    android:layout_margin="0dp"
+    android:background="@drawable/bg_tile" >
+
+    <ImageView
+        android:id="@+id/profileIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="26dp"
+        android:src="@drawable/c" />
+
+    <TextView
+        android:id="@+id/profileName"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profileIcon"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@+id/profileIcon"
+        android:text="TextView"
+        android:textSize="20sp"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/profileName"
+        android:layout_below="@+id/profileName"
+        android:layout_marginTop="10dp"
+        android:text="Houston, Texas"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/profileIcon"
+        android:layout_below="@+id/profileIcon"
+        android:layout_marginTop="50dp"
+        android:text="Descript:"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/introContent"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/intro"
+        android:text="I am a student of Software Institute Nanjing University" 
+        android:textColor="@color/gray"/>
+
+    <TextView
+        android:id="@+id/webSiteTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/intro"
+        android:layout_below="@+id/introContent"
+        android:layout_marginTop="14dp"
+        android:text="Website:"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/introContent"
+        android:layout_alignTop="@+id/webSiteTitle"
+        android:text="www.rainite.com"
+        android:textColor="@color/gray" />
+
+    <Button
+        android:id="@+id/followButton"
+        android:layout_width="20dp"
+        android:layout_height="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_above="@+id/introContent"
+        android:layout_alignLeft="@+id/profileIcon"
+        android:layout_alignRight="@+id/webSiteTitle"
+        android:layout_below="@+id/profileIcon"
+        android:background="@drawable/follow" />
+
+</RelativeLayout>

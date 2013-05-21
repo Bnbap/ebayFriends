@@ -3,13 +3,15 @@ package activity.newsfeed;
 import java.util.List;
 
 import util.PicUtil;
+import activity.profile.ProfileFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
+import android.app.FragmentTransaction;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,7 +41,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 	private ListView lv;
 	private OnClickListener playListener;
 	private int currentPage = 0;
-	private ReplyButtonListener replyListener;
 
 	
 	public NewsFeedItemAdapter(Activity activity,
@@ -56,7 +57,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 		mediaPlayer.setOnCompletionListener(new MediaPlayerCompleteListener(this));
 		mediaPlayer.setOnPreparedListener(new MediaPlayerPreparedListener(this));
 		playListener = new PlayButtonListener(this);
-		replyListener =  new ReplyButtonListener();
 	}
 
 	private class ViewHolder {
@@ -64,7 +64,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 		public ImageView image;
 		public ImageView icon;
 		public ImageButton playButton;
-		public ImageView replyButton;
 	}
 
 	public List<NewsFeedItem> getItemList() {
@@ -83,7 +82,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			holder.image = (ImageView) view.findViewById(R.id.image);
 			holder.icon = (ImageView) view.findViewById(R.id.icon);
 			holder.playButton = (ImageButton) view.findViewById(R.id.play);
-			holder.replyButton = (ImageView)view.findViewById(R.id.reply);
 			view.setTag(holder);
 		} else {
 			holder = (ViewHolder) view.getTag();
@@ -98,7 +96,6 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			holder.playButton.setImageResource(R.drawable.playbutton);
 		}
 		
-		holder.replyButton.setOnClickListener(replyListener);
 		// set play config
 		holder.playButton.setOnClickListener(playListener);
 		DisplayImageOptions options = new DisplayImageOptions.Builder()
@@ -117,7 +114,7 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 				.build();
 		imageLoader.displayImage(currentNewsFeed.getIcon(), holder.icon,
 				options, animateFirstListener);
-
+		holder.icon.setOnClickListener(new ProfileIconListener(currentNewsFeed.getName(), currentNewsFeed.getIcon()));
 		return view;
 	}
 	
@@ -153,6 +150,28 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 		currentPage = 0;
 	}
 	
+	private class ProfileIconListener implements OnClickListener{
+		private String username;
+		private String portrait;
+		
+		public ProfileIconListener(String username, String portrait) {
+			this.username = username;
+			this.portrait = portrait;
+		}
+		@Override
+		public void onClick(View v) {
+			ProfileFragment fragment = new ProfileFragment();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("username", username);
+			bundle.putString("portrait", portrait);
+			fragment.setArguments(bundle);
+			FragmentTransaction transaction = activity.getFragmentManager()
+					.beginTransaction();
+			transaction.replace(R.id.content, fragment);
+			transaction.addToBackStack(null);
+			transaction.commit();
+		}
+	}
 	private class PlayButtonListener implements OnClickListener{
 		BaseAdapter adapter;
 		public PlayButtonListener(BaseAdapter adapter) {
@@ -200,8 +219,10 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			this.adapter = adapter;
 		}
 		@Override
-		public void onCompletion(MediaPlayer arg0) {
+		public void onCompletion(MediaPlayer mediaPlayer) {
 			newsFeedList.get(preparePosition).setPlayState(NewsFeedItem.STOP);
+			mediaPlayer.stop();
+			mediaPlayer.reset();
 			preparePosition = -1;
 			adapter.notifyDataSetChanged();
 		}	
@@ -219,15 +240,4 @@ public class NewsFeedItemAdapter extends ArrayAdapter<NewsFeedItem> {
 			adapter.notifyDataSetChanged();
 		}
 	}
-	
-	private class ReplyButtonListener implements OnClickListener{
-
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(activity, ReplyActivity.class);
-			activity.startActivity(intent);
-		}
-		
-	}
-	
 }

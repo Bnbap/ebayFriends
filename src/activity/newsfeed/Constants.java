@@ -3,6 +3,10 @@ package activity.newsfeed;
 public final class Constants {
 
 	public static final String GET_NEWSFEED_URL_PREFIX = "http://192.168.47.19:8080/news/getNewsList?num=";
+	public static final String SEND_COMMENT_URL = "http://192.168.47.19:8080/news/addComment";
+	public static final String GET_PROFILE_URL_PREFIX = "http://192.168.47.19:8080/news/getPersonNews?";
+	public static final String CHANGE_FOLLOW_PREFIX = "http://192.168.47.19:8080/users/changeFollow?username=";
+	public static final String SEARCH_PREFIX = "http://192.168.47.19:8080/users/search?username=";
 	public static final String[] IMAGES = new String[] {
 			// Heavy images
 			"http://cf6.thingd.com/default/287003521_57819ea5f53c.jpg",
@@ -69,7 +73,6 @@ public final class Constants {
 			"http://c.wrzuta.pl/wm16596/a32f1a47002ab3a949afeb4f",
 			"http://macprovid.vo.llnwd.net/o43/hub/media/1090/6882/01_headline_Muse.jpg",
 			// Special cases
-			"file:///sdcard/Universal Image Loader @#&=+-_.,!()~'%20.png", // Image from SD card with encoded symbols
 			"assets://Living Things @#&=+-_.,!()~'%20.jpg", // Image from assets
 			"http://upload.wikimedia.org/wikipedia/ru/b/b6/Как_кот_с_мышами_воевал.png", // Link with UTF-8
 			"https://www.eff.org/sites/default/files/chrome150_0.jpg", // Image from HTTPS

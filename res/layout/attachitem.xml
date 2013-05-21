@@ -3,12 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="0dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingTop="5dp"
     tools:context=".MainActivity" >
 
+    <!--
     <TextView
         android:id="@+id/hint_for_select_item"
         android:layout_width="wrap_content"
@@ -16,11 +13,12 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/selectItem"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    -->
 
     <ListView
         android:id="@+id/purchased_list"
         android:layout_width="match_parent"
-        android:layout_height="421dp" >
+        android:layout_height="match_parent" >
     </ListView>
 
 </LinearLayout>

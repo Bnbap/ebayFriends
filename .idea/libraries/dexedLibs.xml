@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="dexedLibs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/fluent-hc-4.2.5-f22809bc5e1bf7409dfa110bfb740d8a.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/httpclient-cache-4.2.5-dfed4ff65965462a20ea5f8ecaeed3ff.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/universal-image-loader-1.8.2-with-sources-b38f6e7f0c6798eeeed9f10b04814c46.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/httpclient-4.2.5-3fb733967b255f6be056f56208154106.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/android-support-v4-c4f041aa1b7df28cde613e8cc2585401.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/asmack-android-9-0.8.2-409424c8b21d93ca02322802aafeadf7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/httpcore-4.2.4-a0b22fc8e03692ec630125af322f9e10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/commons-codec-1.6-d7981c0d2b3ec2d99cfff066fc650434.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/httpmime-4.2.5-465830f16b0716e5e73a7f344c6a3984.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/commons-logging-1.1.1-5fb63b92cc81a0568c5a2af6c4c21053.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/ImageEditor-f1670009dda8270a34aedd4d1fb641ef.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

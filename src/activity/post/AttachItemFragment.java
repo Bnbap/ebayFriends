@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import util.PostNewUtil;
-
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -17,10 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import bean.PurchasedItem;
-import android.widget.ListView;
 
 import com.ebay.ebayfriend.R;
 
@@ -72,13 +72,17 @@ public class AttachItemFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String name = ((TextView) view
-						.findViewById(R.id.purchasedItem_name)).getText()
-						.toString();
-				String date = ((TextView) view
-						.findViewById(R.id.purchasedItem_date)).getText()
-						.toString();
-				switchToPicProcessFragment(new PurchasedItem(name, date));
+//				String name = ((TextView) view
+//						.findViewById(R.id.purchasedItem_name)).getText()
+//						.toString();
+//				String date = ((TextView) view
+//						.findViewById(R.id.purchasedItem_date)).getText()
+//						.toString();
+
+				HashMap<String, Object> hashMap= itemList.get(position);
+				String name = (String)hashMap.get("name");
+				String url = (String)hashMap.get("url");
+				switchToPicProcessFragment(new PurchasedItem(name, url));
 
 			}
 
@@ -90,10 +94,24 @@ public class AttachItemFragment extends Fragment {
 		@Override
 		public void run() {
 			itemList = PostNewUtil.getItemList();
+			/**
+			 * test codes start
+			 */
+//			itemList = new ArrayList<HashMap<String,Object>>();
+//			HashMap<String, Object> map = new HashMap<String, Object>();
+//			map.put("name", "name");
+//			map.put("url", "id");
+//			map.put("date"," date");
+//			itemList.add(map);
+			/**
+			 * test codes end
+			 */
+			
 			itemListHandler.sendMessage(new Message());
 			
 		}
 	}
+	@SuppressLint("HandlerLeak")
 	class ItemListHandler extends Handler{
 		
 		public ItemListHandler(){
@@ -105,7 +123,6 @@ public class AttachItemFragment extends Fragment {
 		@Override
 		public void handleMessage(Message msg) {
 			showItemList();
-			Log.e("AttachItemFragment","invalidate the listview");
 		}
 	}
 }

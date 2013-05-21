@@ -2,123 +2,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#fff"
-    tools:context=".BuyActivity" 
-    >
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:paddingLeft="5dp"
-	    android:paddingRight="5dp"
-	    android:paddingTop="5dp"
-	    >
+    android:orientation="vertical"
+    tools:context=".BuyActivity" >
 
-		<TextView
-		    android:id="@+id/buy_title"
-		    android:layout_width="wrap_content"
-		    android:layout_height="35dp"
-		    android:gravity="center"
-		    android:text="@string/buy_name"
-		    android:textColor="#000"
-		    android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp" >
 
-	    <LinearLayout 
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="right"
-	        >
-	        <Button 
-	        android:layout_width="70dp"
-	        android:layout_height="35dp"
-	        android:text="@string/buy_it_now"
-	        android:textSize="12sp"
-	        android:background="#0f0"
-	        />
-	    </LinearLayout>
-	    
-	</LinearLayout>
-	<FrameLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:paddingTop="10dp"
-	    >
-    	<LinearLayout 
-        	android:id="@+id/test_layout"
-        	android:layout_width="fill_parent"
-        	android:layout_height="184dp"
-        	android:orientation="horizontal"
-        	>
-        	
-    	</LinearLayout>
-	
-    	<TextView 
-    	    android:id="@+id/pic_text"
-    	    android:layout_width="50dp"
-    	    android:layout_height="40dp"
-    	    android:layout_marginLeft="135dp"
-    	    android:layout_marginTop="144dp"
-    	    android:textColor="#000"
-    	    android:textStyle="bold"
-    	    android:gravity="center"
-    	    android:background="#00000000"
-    	    />
-	</FrameLayout>
-	
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:paddingLeft="5dp"
-	    android:paddingRight="5dp"
-	    >	    
-	    
-	    <TextView 
-    	    android:id="@+id/price"
-    	    android:layout_width="fill_parent"
-    	    android:layout_height="30dp"
-    	    android:text="@string/buy_price"
-    	    android:textColor="#f00"
-    	    android:textSize="18sp"
-    	    android:textStyle="bold"
-    	    android:gravity="right"
-    	    />
-	</LinearLayout>
-	
-	<ScrollView 
-	    android:layout_width="fill_parent"
-	    android:layout_height="match_parent"
-	    >
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:paddingLeft="5dp"
-	    android:paddingRight="5dp"
-	    >	    
-	    
-	    <TextView 
-    	    android:id="@+id/description"
-    	    android:layout_width="fill_parent"
-    	    android:layout_height="wrap_content"
-    	    android:text="@string/buy_discription"
-    	    android:textColor="#000"
-	    	android:paddingLeft="15dp"
-	    	android:paddingRight="15dp"
-	    	android:paddingTop="10dp"
-    	    />
-	    
-	    <ImageView
-	        android:layout_width="fill_parent"
-    	    android:layout_height="wrap_content"
-	        android:background="@drawable/price"
-	        android:layout_marginLeft="20dp"
-	    	android:layout_marginRight="20dp"
-	    	android:layout_marginTop="15dp"
-	    	android:layout_marginBottom="15dp"
-	        >
-	    </ImageView> 
-	</LinearLayout>
-	</ScrollView>
-	
+        <TextView
+            android:id="@+id/buy_title"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/buy_horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:id="@+id/buy_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#D1D1D1"
+            android:orientation="horizontal" >
+
+            <GridView
+                android:id="@+id/buy_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
+
+        <Button
+            android:id="@+id/buy_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buy" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:gravity="right"
+            android:text="@string/buy_price"
+            android:textColor="#f00"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:text="@string/buy_discription"
+                android:textColor="#000" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/price" >
+            </ImageView>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

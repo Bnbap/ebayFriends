@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="10dp" 
+    android:background="@color/smoke">
 
     <ImageView
         android:id="@+id/replyIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
         android:scaleType="centerCrop"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" 
+        android:adjustViewBounds="true"
         android:contentDescription="@string/hello_world"/>
 
+    <TextView android:id="@+id/replyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/replyIcon"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@+id/replyIcon"
+        android:textColor="@color/nameColor"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="@string/hello_world" />
+        
     <TextView
         android:id="@+id/replyContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAlignment="textStart"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
         android:layout_alignTop="@+id/replyIcon"
-        android:layout_marginLeft="60dp"
-        android:layout_toRightOf="@+id/replyIcon"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/replyName"
         android:text="@string/hello_world"
+        android:textSize="15sp"
         android:visibility="gone" />
     
     <ImageButton
@@ -27,8 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/replyIcon"
-        android:layout_marginLeft="60dp"
-        android:layout_toRightOf="@+id/replyIcon"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/replyName"
         android:background="@null"
         android:src="@drawable/playbutton" 
         android:visibility="gone"/>
