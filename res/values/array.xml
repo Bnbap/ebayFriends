@@ -3,7 +3,7 @@
 
     <string-array name="menu_items">
         <item>News Feed</item>
-        <item>Notifications</item>
+        <item>Friends</item>
         <item>My Profiles</item>
         <item>Setting</item>
         <item>Search</item>
