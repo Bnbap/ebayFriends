@@ -33,7 +33,6 @@
             android:layout_height="52dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/i2"
             android:focusable="false" />
 
         <TextView

@@ -11,6 +11,8 @@ import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Collection;
 
+import notification.client.Constants;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
@@ -41,7 +43,7 @@ public class ClientConServer {
 	DataOutputStream dos = null;
 	private String reMsg = null;
 	private String chatKey = "chatKey";
-	private String myName = LoginUtil.USERNAME, ip = "192.168.1.105";
+	private String myName = LoginUtil.USERNAME;
 	private boolean isConnect = false;
 	private static int PORT = 5222;
 	private Context context;
@@ -70,7 +72,7 @@ public class ClientConServer {
 			// TODO Auto-generated method stub
 			try {
 				s = new Socket();
-				isa = new InetSocketAddress(ip, 1235);
+				isa = new InetSocketAddress(Constants.IP, 1235);
 				s.connect(isa, 5000);
 
 				if (s.isConnected()) {

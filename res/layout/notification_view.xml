@@ -5,7 +5,6 @@
     android:layout_margin="10dp"
     android:layout_weight="1"
     android:cacheColorHint="#00000000"
-    android:divider="#00000000"
     android:dividerHeight="1dip"
     android:drawSelectorOnTop="false"
     android:fadingEdge="none"

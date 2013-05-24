@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import notification.client.Constants;
+
 import util.LoginUtil;
 
 import android.app.Activity;
@@ -46,6 +48,7 @@ import com.ebay.ebayfriend.R;
 
 public class ChatActivity extends Activity implements OnClickListener {
 	/** Called when the activity is first created. */
+	public static String IMG = "";
 	private String ipstring = null, nameString = null;
 	Thread thread = null;
 	Socket s = null;
@@ -54,7 +57,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 	DataOutputStream dos = null;
 	private String reMsg = null;
 	private String chatKey = "chatKey";
-	private String otherName, myName = LoginUtil.USERNAME, ip = "192.168.1.105";
+	private String otherName, myName = LoginUtil.USERNAME;
 	private boolean isConnect = false;
 
 	private Button mBtnSend;
@@ -91,9 +94,10 @@ public class ChatActivity extends Activity implements OnClickListener {
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		receivedMsg = getIntent().getStringExtra("reMsg");
-		if (receivedMsg != null)
+		if (receivedMsg != null) {
 			otherName = receivedMsg.split(" ")[0];
-		else
+			ChatActivity.IMG = receivedMsg.split(" ")[2];
+		} else
 			otherName = getIntent().getStringExtra("otherName");
 		initView();
 		connect();
@@ -199,7 +203,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 			System.out.println(s);
 			try {
 				dos.writeUTF(chatKey + "name:" + myName + " " + otherName
-						+ "end;" + contString);
+						+ "end;" + contString + " " + LoginUtil.PORTRAIT);
 
 			} catch (SocketTimeoutException e) {
 				System.out.println("連接超時，服務器未開啟或IP錯誤");
@@ -467,7 +471,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 			// TODO Auto-generated method stub
 			try {
 				s = new Socket();
-				isa = new InetSocketAddress(ip, 1235);
+				isa = new InetSocketAddress(Constants.IP, 1235);
 				s.connect(isa, 5000);
 
 				if (s.isConnected()) {
@@ -575,7 +579,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 				entity.setName(reMsg.split(" ")[0]);
 				entity.setMsgType(true);
 				entity.setText(reMsg.split(" ")[1]);
-
+				ChatActivity.IMG = reMsg.split(" ")[2];
 				mDataArrays.add(entity);
 				mAdapter.notifyDataSetChanged();
 
@@ -600,12 +604,16 @@ public class ChatActivity extends Activity implements OnClickListener {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+		stopService(ChatService.getIntent());
+		connect();
 	}
 
 	@Override
 	protected void onRestart() {
 		// TODO Auto-generated method stub
 		super.onRestart();
+		stopService(ChatService.getIntent());
+		connect();
 	}
 
 	@Override
@@ -628,5 +636,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		stopService(ChatService.getIntent());
+		connect();
 	}
 }

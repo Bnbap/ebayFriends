@@ -45,9 +45,8 @@ import android.widget.Toast;
 import com.ebay.ebayfriend.R;
 
 public class NotificationFragment extends ListFragment {
-	private List<Map<String, Object>> mData;
+	private List<User> mData;
 	private NotificationAdapter na;
-	private PullAndLoadListView lv;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,21 +75,17 @@ public class NotificationFragment extends ListFragment {
 		while (t.isAlive()) {
 
 		}
-		na = new NotificationAdapter(getActivity(), mData,
-				R.layout.comments_list, new String[] { "title", "img" },
-				new int[] { R.id.title, R.id.img });
+		na = new NotificationAdapter(getActivity(), mData);
 		setListAdapter(na);
 
 	}
 
 	public void onListItemClick(ListView parent, View v, int position, long id) {
-		Toast.makeText(
-				getActivity(),
-				"You have selected "
-						+ (String) mData.get(position).get("title"),
+		Toast.makeText(getActivity(),
+				"You have selected " + (String) mData.get(position).getTitle(),
 				Toast.LENGTH_SHORT).show();
 		Intent intent = new Intent(getActivity(), ChatActivity.class);
-		intent.putExtra("otherName", (String) mData.get(position).get("title"));
+		intent.putExtra("otherName", (String) mData.get(position).getTitle());
 		startActivity(intent);
 	}
 
@@ -169,34 +164,32 @@ public class NotificationFragment extends ListFragment {
 	// return list;
 	// }
 
-	private List<Map<String, Object>> getData() {
-		Map<String, Object> map;
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+	private List<User> getData() {
+		List<User> userList = new ArrayList<User>();
+		User users;
 		String getURL = "http://192.168.47.19:8080/users/showFriends";
 		GetRequest getRequest = new GetRequest(getURL);
 		String jsonResult = getRequest.getContent();
 		if (jsonResult == null) {
-			Log.e("jlajglkjalkgjlagsk", "Json null");
+			Log.e("Json null", "Json null");
 		} else {
 			try {
 				JSONArray itemArray = new JSONArray(jsonResult);
 				for (int i = 0; i < itemArray.length(); i++) {
-					map = new HashMap<String, Object>();
 					JSONObject user = itemArray.getJSONObject(i);
 					String portraitURL = user.getString("portrait");
 					String authorName = user.getString("username");
 					Log.e(portraitURL, authorName);
-					map.put("title", authorName);
-					map.put("img", new BitmapDrawable(
-							getBitmapFromUrl(portraitURL)));
-					list.add(map);
+					users = new User(portraitURL, authorName);
+
+					userList.add(users);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 				Log.e("NewsFeedFragment", "Parse Json Error");
 			}
 		}
-		return list;
+		return userList;
 	}
 
 	/**

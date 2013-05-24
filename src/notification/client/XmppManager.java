@@ -73,7 +73,7 @@ public class XmppManager {
 		taskTracker = notificationService.getTaskTracker();
 		sharedPrefs = notificationService.getSharedPreferences();
 
-		xmppHost = sharedPrefs.getString(Constants.XMPP_HOST, "192.168.1.105");
+		xmppHost = sharedPrefs.getString(Constants.XMPP_HOST, Constants.IP);
 		xmppPort = sharedPrefs.getInt(Constants.XMPP_PORT, 5222);
 		username = sharedPrefs
 				.getString(Constants.USERNAME, LoginUtil.USERNAME);

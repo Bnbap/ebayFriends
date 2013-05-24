@@ -97,7 +97,7 @@ public class NotificationAccess {
 		public void run() {
 			// TODO Auto-generated method stub
 			try {
-				socket = new Socket("192.168.1.105", 1234);
+				socket = new Socket(Constants.IP, 1234);
 
 				// 向服务器发送消息
 				PrintWriter out = new PrintWriter(new BufferedWriter(
@@ -134,7 +134,7 @@ public class NotificationAccess {
 		public void run() {
 			// TODO Auto-generated method stub
 			try {
-				socket = new Socket("192.168.1.105", 1234);
+				socket = new Socket(Constants.IP, 1234);
 
 				// 向服务器发送消息
 				PrintWriter out = new PrintWriter(new BufferedWriter(

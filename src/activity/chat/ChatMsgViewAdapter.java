@@ -81,6 +81,14 @@ public class ChatMsgViewAdapter extends BaseAdapter {
 			if (isComMsg) {
 				convertView = mInflater.inflate(
 						R.layout.chatting_item_msg_text_left, null);
+				ImageView iv = (ImageView) convertView
+						.findViewById(R.id.iv_userhead);
+				AnimateFirstDisplayListener animateListener = PicUtil
+						.getAnimateListener();
+				ImageLoader imageLoader = PicUtil.imageLoader;
+				DisplayImageOptions option = PicUtil.getIconOption();
+				imageLoader.displayImage(ChatActivity.IMG, iv, option,
+						animateListener);
 			} else {
 				convertView = mInflater.inflate(
 						R.layout.chatting_item_msg_text_right, null);
