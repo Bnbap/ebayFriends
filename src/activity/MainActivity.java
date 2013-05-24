@@ -55,6 +55,7 @@ public class MainActivity extends SlidingActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(activity, PostActivity.class);
 				startActivity(intent);
+				overridePendingTransition(R.anim.activity_slide_in,R.anim.activity_slide_out);  
 			}
 		});
 		// customize the SlidingMenu

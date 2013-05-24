@@ -333,6 +333,7 @@ public class PicProcessFragment extends Fragment {
 		fragment.setArguments(bundle);
 		FragmentTransaction transaction = getFragmentManager()
 				.beginTransaction();
+		transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
 		transaction.replace(R.id.post_content, fragment);
 		transaction.addToBackStack(null);
 		transaction.commit();

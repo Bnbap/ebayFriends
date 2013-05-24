@@ -66,7 +66,7 @@ public final class ServiceManager {
 			throw new RuntimeException();
 		}
 
-		xmppHost = "192.168.1.105";
+		xmppHost = Constants.IP;
 		xmppPort = "5222";
 
 		sharedPrefs = context.getSharedPreferences(

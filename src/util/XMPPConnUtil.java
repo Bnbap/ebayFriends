@@ -1,8 +1,10 @@
 package util;
 
+import notification.client.Constants;
+
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
+import org.jivesoftware.smack.XMPPConnection;
 
 public class XMPPConnUtil {
 
@@ -14,7 +16,7 @@ public class XMPPConnUtil {
 		} else {
 
 			ConnectionConfiguration config = new ConnectionConfiguration(
-					"192.168.1.105", 5222);
+					Constants.IP, 5222);
 			/** 是否启用安全验证 */
 			config.setSASLAuthenticationEnabled(false);
 

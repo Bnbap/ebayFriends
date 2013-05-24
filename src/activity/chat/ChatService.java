@@ -59,6 +59,18 @@ public class ChatService extends Service {
 	}
 
 	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		executorService.submit(new Runnable() {
+			public void run() {
+				ChatService.this.unregisterChatReceiver();
+				ccs.disConnect();
+			}
+		});
+	}
+
+	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
