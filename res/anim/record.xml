@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <animation-list android:oneshot="false"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:duration="50" android:drawable="@drawable/record1" />
-    <item android:duration="50" android:drawable="@drawable/record3" />
-    <item android:duration="50" android:drawable="@drawable/record5" />
-    <item android:duration="50" android:drawable="@drawable/record7" />
-    <item android:duration="50" android:drawable="@drawable/record9" />
-    <item android:duration="50" android:drawable="@drawable/record11" />
-    <item android:duration="50" android:drawable="@drawable/record13" />
+    <item android:duration="100" android:drawable="@drawable/record1" />
+    <item android:duration="100" android:drawable="@drawable/record3" />
+    <item android:duration="100" android:drawable="@drawable/record5" />
+    <item android:duration="100" android:drawable="@drawable/record7" />
+    <item android:duration="100" android:drawable="@drawable/record9" />
+    <item android:duration="100" android:drawable="@drawable/record11" />
+    <item android:duration="100" android:drawable="@drawable/record13" />
+    <item android:duration="100" android:drawable="@drawable/record15" />
+    <item android:duration="100" android:drawable="@drawable/record17" />
+    <item android:duration="100" android:drawable="@drawable/record19" />
+    <item android:duration="100" android:drawable="@drawable/record21" />
+    <item android:duration="100" android:drawable="@drawable/record23" />
+    <item android:duration="100" android:drawable="@drawable/record25" />
+    <item android:duration="100" android:drawable="@drawable/record27" />
+    <item android:duration="100" android:drawable="@drawable/record29" />
+    <item android:duration="100" android:drawable="@drawable/record31" />
+    <item android:duration="100" android:drawable="@drawable/record33" />
+    <item android:duration="100" android:drawable="@drawable/record35" />
+    <item android:duration="100" android:drawable="@drawable/record37" />
+    <item android:duration="100" android:drawable="@drawable/record39" />
+    <item android:duration="100" android:drawable="@drawable/record41" />
+    <item android:duration="100" android:drawable="@drawable/record43" />
+    <item android:duration="100" android:drawable="@drawable/record45" />
+    <item android:duration="100" android:drawable="@drawable/record47" />
+    <item android:duration="100" android:drawable="@drawable/record49" />
+    <item android:duration="100" android:drawable="@drawable/record51" />
+    <item android:duration="100" android:drawable="@drawable/record53" />
+    <item android:duration="100" android:drawable="@drawable/record55" />
+    <item android:duration="100" android:drawable="@drawable/record57" />
+    <item android:duration="100" android:drawable="@drawable/record59" />
+    <item android:duration="100" android:drawable="@drawable/record61" />
+    <item android:duration="100" android:drawable="@drawable/record63" />
 </animation-list>

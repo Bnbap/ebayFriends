@@ -2,18 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d0d0d0"
+    android:background="#ffffff"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+    
     <ImageView
         android:id="@+id/play_record"
         android:layout_centerHorizontal="true"
-        android:layout_width="278dp"
-        android:layout_height="222dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
         android:background="@anim/record" />
     
 
@@ -22,7 +22,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/play_record"
+            android:layout_marginTop="80dp"
             android:layout_centerHorizontal="true"
+            android:width="100dp"
+            android:height="70dp"
             android:text="@string/record" />
 
     <LinearLayout
